@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Models;
+using Poslannik.DataBase.Repositories.Interfaces;
 
 namespace Poslannik.DataBase.Repo
 {
