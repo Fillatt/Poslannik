@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Poslannik.DataBase.Repo
 {
-    public class UserRepo
+    public class UserRepo : IUserRepo
     {
         private readonly ApplicationContext _dbContext;
 
@@ -17,12 +12,18 @@ namespace Poslannik.DataBase.Repo
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Получает пользователя по идентификатору
+        /// </summary>
         public Task<User?> GetUserById(Guid id, CancellationToken cancellationToken)
         {
             return _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         }
 
+        /// <summary>
+        /// Получает идентификатор пользователя по логину
+        /// </summary>
         public Task<Guid?> GetUserIdByLogin(string login, CancellationToken cancellationToken)
         {
             return _dbContext.Users
@@ -31,12 +32,18 @@ namespace Poslannik.DataBase.Repo
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Получает пользователя по логину
+        /// </summary>
         public Task<User?> GetUserByLogin(string login, CancellationToken cancellationToken)
         {
             return _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Login == login, cancellationToken);
         }
 
+        /// <summary>
+        /// Получает список пользователей по списку идентификаторов
+        /// </summary>
         public Task<List<User>> GetUsersByIds(List<Guid> userIds, CancellationToken cancellationToken)
         {
             return _dbContext.Users
@@ -44,6 +51,9 @@ namespace Poslannik.DataBase.Repo
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Создает нового пользователя
+        /// </summary>
         public async Task<User> CreateUser(User user, CancellationToken cancellationToken)
         {
             _dbContext.Users.Add(user);
@@ -51,12 +61,18 @@ namespace Poslannik.DataBase.Repo
             return user;
         }
 
+        /// <summary>
+        /// Обновляет данные пользователя
+        /// </summary>
         public async Task UpdateUser(User user, CancellationToken cancellationToken)
         {
             _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Удаляет пользователя по идентификатору
+        /// </summary>
         public async Task DeleteUser(Guid userId, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
@@ -69,6 +85,9 @@ namespace Poslannik.DataBase.Repo
             }
         }
 
+        /// <summary>
+        /// Проверяет существование пользователя с указанным логином
+        /// </summary>
         public Task<bool> UserExists(string login, CancellationToken cancellationToken)
         {
             return _dbContext.Users

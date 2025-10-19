@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Poslannik.DataBase.Repo
 {
-    public class ChatRepo
+    public class ChatRepo : IChatRepo
     {
         private readonly ApplicationContext _dbContext;
 
@@ -17,14 +12,20 @@ namespace Poslannik.DataBase.Repo
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Получает чат по идентификатору
+        /// </summary>
         public Task<Chat?> GetChatById(Guid id, CancellationToken cancellationToken)
         {
             return _dbContext.Chats
-                .Include(c => c.Participants) // Добавляем включение Participants
-                    .ThenInclude(p => p.User) // И их User
+                .Include(c => c.Participants)
+                    .ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
 
+        /// <summary>
+        /// Получает все чаты пользователя
+        /// </summary>
         public Task<List<Chat>> GetUserChats(Guid userId, CancellationToken cancellationToken)
         {
             return _dbContext.ChatParticipants
@@ -36,6 +37,9 @@ namespace Poslannik.DataBase.Repo
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Получает приватный чат между двумя пользователями
+        /// </summary>
         public Task<Chat?> GetPrivateChatBetweenUsers(Guid user1Id, Guid user2Id, CancellationToken cancellationToken)
         {
             return _dbContext.Chats
@@ -48,6 +52,9 @@ namespace Poslannik.DataBase.Repo
                     cancellationToken);
         }
 
+        /// <summary>
+        /// Создает новый чат
+        /// </summary>
         public async Task<Chat> CreateChat(Chat chat, CancellationToken cancellationToken)
         {
             _dbContext.Chats.Add(chat);
@@ -55,6 +62,9 @@ namespace Poslannik.DataBase.Repo
             return chat;
         }
 
+        /// <summary>
+        /// Удаляет чат по идентификатору
+        /// </summary>
         public async Task DeleteChat(Guid chatId, CancellationToken cancellationToken)
         {
             var chat = await _dbContext.Chats

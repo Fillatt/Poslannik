@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Poslannik.DataBase.Repo
 {
-    public class MessageRepo
+    public class MessageRepo : IMessageRepo
     {
         private readonly ApplicationContext _dbContext;
 
@@ -17,6 +12,9 @@ namespace Poslannik.DataBase.Repo
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Получает сообщение по идентификатору
+        /// </summary>
         public Task<Message?> GetMessageById(Guid id, CancellationToken cancellationToken)
         {
             return _dbContext.Messages
@@ -25,6 +23,9 @@ namespace Poslannik.DataBase.Repo
                 .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
         }
 
+        /// <summary>
+        /// Получает все сообщения чата
+        /// </summary>
         public Task<List<Message>> GetChatMessages(Guid chatId, CancellationToken cancellationToken)
         {
             return _dbContext.Messages
@@ -34,6 +35,9 @@ namespace Poslannik.DataBase.Repo
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Получает сообщения чата с пагинацией
+        /// </summary>
         public Task<List<Message>> GetChatMessagesPaged(Guid chatId, int skip, int take, CancellationToken cancellationToken)
         {
             return _dbContext.Messages
@@ -45,6 +49,9 @@ namespace Poslannik.DataBase.Repo
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Получает все сообщения пользователя
+        /// </summary>
         public Task<List<Message>> GetUserMessages(Guid userId, CancellationToken cancellationToken)
         {
             return _dbContext.Messages
@@ -54,6 +61,9 @@ namespace Poslannik.DataBase.Repo
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Создает новое сообщение
+        /// </summary>
         public async Task<Message> CreateMessage(Message message, CancellationToken cancellationToken)
         {
             _dbContext.Messages.Add(message);
@@ -61,6 +71,9 @@ namespace Poslannik.DataBase.Repo
             return message;
         }
 
+        /// <summary>
+        /// Удаляет сообщение по идентификатору
+        /// </summary>
         public async Task DeleteMessage(Guid messageId, CancellationToken cancellationToken)
         {
             var message = await _dbContext.Messages
@@ -73,6 +86,9 @@ namespace Poslannik.DataBase.Repo
             }
         }
 
+        /// <summary>
+        /// Удаляет все сообщения чата
+        /// </summary>
         public async Task DeleteChatMessages(Guid chatId, CancellationToken cancellationToken)
         {
             var messages = await _dbContext.Messages
