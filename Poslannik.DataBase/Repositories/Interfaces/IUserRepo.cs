@@ -1,6 +1,6 @@
 ﻿using Poslannik.DataBase.Models;
 
-namespace Poslannik.DataBase.Repo
+namespace Poslannik.DataBase.Repositories.Interfaces
 {
     public interface IUserRepo
     {
