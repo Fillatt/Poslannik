@@ -1,0 +1,182 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+             x:Class="Poslannik.Client.Ui.Android.Views.ProfileView">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        
+        <Border Grid.Row="0" 
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1"
+                Padding="15,10">
+            <TextBlock Text="Профиль"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </Border>
+        
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="20" Margin="20,30">
+                
+                <Border Width="120" Height="120"
+                        CornerRadius="60"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="2"
+                        HorizontalAlignment="Center">
+                    <Viewbox Width="60" Height="60">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="#999999" 
+                                  Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </Canvas>
+                    </Viewbox>
+                </Border>
+                
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="Я Я"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Button Grid.Column="1"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="5"
+                                Name="EditNameButton"
+                                HorizontalAlignment="Right">
+                            <Viewbox Width="20" Height="20">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="#999999" 
+                                          Data="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                </Canvas>
+                            </Viewbox>
+                        </Button>
+                    </Grid>
+                    
+                    <TextBlock Text="id12042423"
+                               FontSize="14"
+                               Foreground="#999999"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+                <StackPanel Spacing="15">
+                    
+                    <Border Background="#F5F5F5"
+                            CornerRadius="10"
+                            Padding="15,12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel>
+                                <TextBlock Text="Логин: Vivo"
+                                           FontSize="16"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="5"
+                                    Name="EditLoginButton">
+                                <Viewbox Width="20" Height="20">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="#999999" 
+                                              Data="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                    <Border Background="#F5F5F5"
+                            CornerRadius="10"
+                            Padding="15,12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel>
+                                <TextBlock Text="Группа: ПИ6-02-2оп-22"
+                                           FontSize="16"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="5"
+                                    Name="EditGroupButton">
+                                <Viewbox Width="20" Height="20">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="#999999" 
+                                              Data="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                </StackPanel>
+                
+                <Button Background="#E57373"
+                        Foreground="White"
+                        Content="Выход"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        CornerRadius="10"
+                        Padding="0,15"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Margin="0,20,0,0"
+                        Name="LogoutButton"/>
+                
+            </StackPanel>
+        </ScrollViewer>
+        
+        <Border Grid.Row="2"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0"
+                Padding="0,8">
+            <Grid ColumnDefinitions="*,*">
+                
+                <Button Grid.Column="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="0,8"
+                        Name="ChatsTabButton">
+                    <StackPanel Spacing="4">
+                        <Viewbox Width="28" Height="28"
+                                 HorizontalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path Fill="#999999" 
+                                      Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock Text="Чаты"
+                                   FontSize="12"
+                                   Foreground="#999999"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                
+                <Button Grid.Column="1"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="0,8"
+                        Name="ProfileTabButton">
+                    <StackPanel Spacing="4">
+                        <Viewbox Width="28" Height="28"
+                                 HorizontalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path Fill="#7B86CB" 
+                                      Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock Text="Профиль"
+                                   FontSize="12"
+                                   Foreground="#7B86CB"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                
+            </Grid>
+        </Border>
+        
+    </Grid>
+</UserControl>

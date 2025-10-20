@@ -1,0 +1,214 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+             x:Class="Poslannik.Client.Ui.Android.Views.GroupChatView">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        
+        <Border Grid.Row="0" 
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1"
+                Padding="10">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                
+                <Button Grid.Column="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="5"
+                        Margin="0,0,10,0"
+                        Name="BackButton">
+                    <Viewbox Width="24" Height="24">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="#000000" 
+                                  Data="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+                
+                <TextBlock Grid.Column="1"
+                           Text="бьр№ђєюэ тштю"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                
+                <Button Grid.Column="2"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="5"
+                        Name="GroupInfoButton">
+                    <Viewbox Width="24" Height="24">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="#7B86CB" 
+                                  Data="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+                
+            </Grid>
+        </Border>
+        
+        <ScrollViewer Grid.Row="1"
+                      Background="#F5F5F5"
+                      Name="MessagesScrollViewer">
+            <StackPanel Margin="10" Spacing="10">
+                
+                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
+                    <TextBlock Text="Штрэ Штрэют"
+                               FontSize="12"
+                               Foreground="#666666"
+                               Margin="10,0,0,4"/>
+                    <Border Background="White"
+                            CornerRadius="15,15,15,5"
+                            Padding="12,8">
+                        <TextBlock Text="Тттттттттттттттт?"
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+                
+                <Border HorizontalAlignment="Right"
+                        Background="#7B86CB"
+                        CornerRadius="15,15,5,15"
+                        Padding="12,8"
+                        MaxWidth="200">
+                    <TextBlock Text="Тттттттттттттттт."
+                               TextWrapping="Wrap"
+                               Foreground="White"
+                               FontSize="14"/>
+                </Border>
+                
+                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
+                    <TextBlock Text="Яхђ№ Яхђ№ют"
+                               FontSize="12"
+                               Foreground="#666666"
+                               Margin="10,0,0,4"/>
+                    <Border Background="White"
+                            CornerRadius="15,15,15,5"
+                            Padding="12,8">
+                        <TextBlock Text="Тттттттттттттттттт тттттттттттттт тттттттт тттттттттттттттт."
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+                
+                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
+                    <TextBlock Text="Штрэ Штрэют"
+                               FontSize="12"
+                               Foreground="#666666"
+                               Margin="10,0,0,4"/>
+                    <Border Background="White"
+                            CornerRadius="15,15,15,5"
+                            Padding="12,8">
+                        <TextBlock Text="Тттттттттттттттттт тттттттттттт тттттттттт тттттттттттттт тттттттттттт."
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+                
+                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
+                    <TextBlock Text="Штрэ Штрэют"
+                               FontSize="12"
+                               Foreground="#666666"
+                               Margin="10,0,0,4"/>
+                    <Border Background="White"
+                            CornerRadius="15,15,15,5"
+                            Padding="12,8">
+                        <TextBlock Text="Тттттттт."
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+                
+                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
+                    <TextBlock Text="Штрэ Штрэют"
+                               FontSize="12"
+                               Foreground="#666666"
+                               Margin="10,0,0,4"/>
+                    <Border Background="White"
+                            CornerRadius="15,15,15,5"
+                            Padding="12,8">
+                        <TextBlock Text="Тттттттттттттттттт тттттттттттттт тттттттттт тттттттттттт ттттттттттт?"
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+                
+                <Border HorizontalAlignment="Right"
+                        Background="#7B86CB"
+                        CornerRadius="15,15,5,15"
+                        Padding="12,8"
+                        MaxWidth="200">
+                    <TextBlock Text="Тт."
+                               TextWrapping="Wrap"
+                               Foreground="White"
+                               FontSize="14"/>
+                </Border>
+                
+                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
+                    <TextBlock Text="Штрэ Штрэют"
+                               FontSize="12"
+                               Foreground="#666666"
+                               Margin="10,0,0,4"/>
+                    <Border Background="White"
+                            CornerRadius="15,15,15,5"
+                            Padding="12,8">
+                        <TextBlock Text="Тттттттттттттттттт."
+                                   TextWrapping="Wrap"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+                
+                <Border HorizontalAlignment="Right"
+                        Background="#7B86CB"
+                        CornerRadius="15,15,5,15"
+                        Padding="12,8"
+                        MaxWidth="200">
+                    <TextBlock Text="Тттттттттттттттттт."
+                               TextWrapping="Wrap"
+                               Foreground="White"
+                               FontSize="14"/>
+                </Border>
+                
+            </StackPanel>
+        </ScrollViewer>
+        
+        <Border Grid.Row="2"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0"
+                Padding="10">
+            <Grid ColumnDefinitions="*,Auto">
+                
+                <TextBox Grid.Column="0"
+                         Watermark="бююсљхэшх..."
+                         Background="#F5F5F5"
+                         BorderThickness="0"
+                         CornerRadius="20"
+                         Padding="15,10"
+                         VerticalAlignment="Center"
+                         Name="MessageTextBox"/>
+                
+                <Button Grid.Column="1"
+                        Background="#7B86CB"
+                        Width="40"
+                        Height="40"
+                        CornerRadius="20"
+                        Margin="8,0,0,0"
+                        Padding="0"
+                        Name="SendButton">
+                    <Viewbox Width="20" Height="20">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="White" 
+                                  Data="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+                
+            </Grid>
+        </Border>
+        
+    </Grid>
+</UserControl>
