@@ -3,26 +3,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
-             x:Class="Poslannik.Client.Ui.Android.Views.ChatsView">
+             x:Class="Poslannik.Client.Ui.Android.Views.ParticipantsView">
     
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
         
         <Border Grid.Row="0" 
                 Background="White"
                 BorderBrush="#E0E0E0"
                 BorderThickness="0,0,0,1"
-                Padding="15,10">
-            <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Text="Чаты"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"/>
-                
-                <Button Grid.Column="1"
+                Padding="10">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0"
                         Background="Transparent"
                         BorderThickness="0"
                         Padding="5"
-                        Name="AddChatButton">
+                        Margin="0,0,10,0"
+                        Name="BackButton">
+                    <Viewbox Width="24" Height="24">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="#000000" 
+                                  Data="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+                
+                <TextBlock Grid.Column="1"
+                           Text="Участники"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                
+                <Button Grid.Column="2"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="5"
+                        Name="AddParticipantButton">
                     <Viewbox Width="24" Height="24">
                         <Canvas Width="24" Height="24">
                             <Path Fill="#7B86CB" 
@@ -32,9 +47,9 @@
                 </Button>
             </Grid>
         </Border>
-
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Name="ChatsListPanel">
+        
+        <ScrollViewer Grid.Row="1" Padding="0,10">
+            <StackPanel>
                 
                 <Button Background="White"
                         BorderThickness="0,0,0,1"
@@ -42,7 +57,7 @@
                         Padding="15,12"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Stretch"
-                        Name="Chat1Button">
+                        Name="MyProfileButton">
                     <Grid ColumnDefinitions="Auto,*">
                         <Border Width="40" Height="40"
                                 CornerRadius="20"
@@ -55,9 +70,8 @@
                                 </Canvas>
                             </Viewbox>
                         </Border>
-
                         <TextBlock Grid.Column="1"
-                                   Text="Иван Иванов"
+                                   Text="Я Я"
                                    FontSize="16"
                                    VerticalAlignment="Center"/>
                     </Grid>
@@ -69,8 +83,8 @@
                         Padding="15,12"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Stretch"
-                        Name="Chat2Button">
-                    <Grid ColumnDefinitions="Auto,*">
+                        Name="Participant1Button">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
                         <Border Width="40" Height="40"
                                 CornerRadius="20"
                                 Background="#E0E0E0"
@@ -86,6 +100,18 @@
                                    Text="Петр Петров"
                                    FontSize="16"
                                    VerticalAlignment="Center"/>
+                        <Button Grid.Column="2"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="5"
+                                Name="RemoveParticipant1">
+                            <Viewbox Width="20" Height="20">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="#E57373" 
+                                          Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
+                                </Canvas>
+                            </Viewbox>
+                        </Button>
                     </Grid>
                 </Button>
                 
@@ -95,8 +121,8 @@
                         Padding="15,12"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Stretch"
-                        Name="Chat3Button">
-                    <Grid ColumnDefinitions="Auto,*">
+                        Name="Participant2Button">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
                         <Border Width="40" Height="40"
                                 CornerRadius="20"
                                 Background="#E0E0E0"
@@ -109,68 +135,54 @@
                             </Viewbox>
                         </Border>
                         <TextBlock Grid.Column="1"
-                                   Text="Сидр Сидоров"
+                                   Text="Иван Иванов"
                                    FontSize="16"
                                    VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Name="GroupChatButton">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
+                        <Button Grid.Column="2"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="5"
+                                Name="RemoveParticipant2">
+                            <Viewbox Width="20" Height="20">
                                 <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                    <Path Fill="#E57373" 
+                                          Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
                                 </Canvas>
                             </Viewbox>
-                        </Border>
-                        <TextBlock Grid.Column="1"
-                                   Text="Смартфон виво"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Name="Chat5Button">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
-                                <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Border>
-                        <TextBlock Grid.Column="1"
-                                   Text="Олег Олегов"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
+                        </Button>
                     </Grid>
                 </Button>
                 
             </StackPanel>
         </ScrollViewer>
         
-        <Border Grid.Row="2"
+        <Border Grid.Row="2" Padding="15,10">
+            <StackPanel Spacing="10">
+                <Button Background="#E57373"
+                        Foreground="White"
+                        Content="Удалить чат"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        CornerRadius="20"
+                        Padding="0,12"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Name="DeleteChatButton"/>
+                
+                <Button Background="#7B86CB"
+                        Foreground="White"
+                        Content="Покинуть чат"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        CornerRadius="20"
+                        Padding="0,12"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Name="LeaveChatButton"/>
+            </StackPanel>
+        </Border>
+        
+        <Border Grid.Row="3"
                 Background="White"
                 BorderBrush="#E0E0E0"
                 BorderThickness="0,1,0,0"

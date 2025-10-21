@@ -13,7 +13,6 @@ namespace Poslannik.Client.Ui.Android.Views
         {
             AvaloniaXamlLoader.Load(this);
 
-            // Начинаем с экрана входа
             NavigateTo(new LoginView());
         }
 
@@ -29,7 +28,6 @@ namespace Poslannik.Client.Ui.Android.Views
             _currentView = view;
             contentPanel.Children.Add(_currentView);
 
-            // Подключаем обработчики для навигации
             ConnectNavigationHandlers(view);
         }
 

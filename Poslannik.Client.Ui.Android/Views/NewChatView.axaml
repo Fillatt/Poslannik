@@ -1,0 +1,226 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+             x:Class="Poslannik.Client.Ui.Android.Views.NewChatView">
+    
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+        <Border Grid.Row="0" 
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1"
+                Padding="10">
+            <Grid ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="5"
+                        Margin="0,0,10,0"
+                        Name="BackButton">
+                    <Viewbox Width="24" Height="24">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="#000000" 
+                                  Data="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+                
+                <TextBlock Grid.Column="1"
+                           Text="Новый чат"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+        
+        <ScrollViewer Grid.Row="1" Padding="15,20">
+            <StackPanel Spacing="15">
+                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Название:"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+                    <TextBox Watermark="МобПрог ПИМ2"
+                             Background="White"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1"
+                             CornerRadius="8"
+                             Padding="12,10"
+                             Name="ChatNameTextBox"/>
+                </StackPanel>
+                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Добавить всех участников группы:"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+                    <ComboBox PlaceholderText="ПИМ6-02-2оп-22"
+                              Background="White"
+                              BorderBrush="#E0E0E0"
+                              BorderThickness="1"
+                              CornerRadius="8"
+                              Padding="12,10"
+                              HorizontalAlignment="Stretch"
+                              Name="GroupComboBox">
+                        <ComboBoxItem Content="ПИМ6-02-2оп-22"/>
+                        <ComboBoxItem Content="ПИ-01"/>
+                        <ComboBoxItem Content="ПИ-02"/>
+                    </ComboBox>
+                </StackPanel>
+                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Добавить участника:"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+                    <TextBox Watermark="Иван Иванов"
+                             Background="White"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1"
+                             CornerRadius="8"
+                             Padding="12,10"
+                             Name="SearchParticipantTextBox">
+                        <TextBox.InnerRightContent>
+                            <Viewbox Width="20" Height="20" Margin="0,0,8,0">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="#999999" 
+                                          Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                </Canvas>
+                            </Viewbox>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+                </StackPanel>
+                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Список участников:"
+                               FontSize="14"
+                               FontWeight="SemiBold"/>
+                    
+                    <Border Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Иван Иванов ПИМ6-02-2оп-22 id32Xx2o32"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                            <Button Grid.Column="1"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="5"
+                                    Name="RemoveParticipant1Button">
+                                <Viewbox Width="20" Height="20">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="#E57373" 
+                                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                    <Border Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Сидр Сидоров ПИМ5-02-2оп-22 id3808022323"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                            <Button Grid.Column="1"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="5"
+                                    Name="RemoveParticipant2Button">
+                                <Viewbox Width="20" Height="20">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="#E57373" 
+                                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                </StackPanel>
+                
+            </StackPanel>
+        </ScrollViewer>
+        
+        <Border Grid.Row="2" Padding="15,10">
+            <Button Background="#7B86CB"
+                    Foreground="White"
+                    Content="Создать чат"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    CornerRadius="20"
+                    Padding="0,12"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Name="CreateChatButton"/>
+        </Border>
+        
+        <Border Grid.Row="3"
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0"
+                Padding="0,8">
+            <Grid ColumnDefinitions="*,*">
+                
+                <Button Grid.Column="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="0,8"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Name="ChatsTabButton">
+                    <StackPanel Spacing="4" HorizontalAlignment="Center">
+                        <Viewbox Width="28" Height="28"
+                                 HorizontalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path Fill="#7B86CB" 
+                                      Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock Text="Чаты"
+                                   FontSize="12"
+                                   Foreground="#7B86CB"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   MinWidth="70"/>
+                    </StackPanel>
+                </Button>
+                
+                <Button Grid.Column="1"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="0,8"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Name="ProfileTabButton">
+                    <StackPanel Spacing="4" HorizontalAlignment="Center">
+                        <Viewbox Width="28" Height="28"
+                                 HorizontalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path Fill="#999999" 
+                                      Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock Text="Профиль"
+                                   FontSize="12"
+                                   Foreground="#999999"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   MinWidth="70"/>
+                    </StackPanel>
+                </Button>
+                
+            </Grid>
+        </Border>
+        
+    </Grid>
+</UserControl>

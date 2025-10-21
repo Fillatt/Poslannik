@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+ï»¿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -29,7 +29,7 @@
                 </Button>
                 
                 <TextBlock Grid.Column="1"
-                           Text="Èâàí Èâàíîâ"
+                           Text="Ð˜Ð²Ð°Ð½ Ð˜Ð²Ð°Ð½Ð¾Ð²"
                            FontSize="18"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"/>
@@ -55,14 +55,14 @@
             <StackPanel Margin="10" Spacing="10">
                 
                 <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Èâàí Èâàíîâ"
+                    <TextBlock Text="Ð˜Ð²Ð°Ð½ Ð˜Ð²Ð°Ð½Ð¾Ð²"
                                FontSize="12"
                                Foreground="#666666"
                                Margin="10,0,0,4"/>
                     <Border Background="White"
                             CornerRadius="15,15,15,5"
                             Padding="12,8">
-                        <TextBlock Text="ÀÀÀÀââââââââââââ?"
+                        <TextBlock Text="ÐÐÐÐÐ²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²?"
                                    TextWrapping="Wrap"
                                    FontSize="14"/>
                     </Border>
@@ -73,21 +73,21 @@
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
-                    <TextBlock Text="Ââââââââââââââ."
+                    <TextBlock Text="Ð’Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²."
                                TextWrapping="Wrap"
                                Foreground="White"
                                FontSize="14"/>
                 </Border>
                 
                 <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Èâàí Èâàíîâ"
+                    <TextBlock Text="Ð˜Ð²Ð°Ð½ Ð˜Ð²Ð°Ð½Ð¾Ð²"
                                FontSize="12"
                                Foreground="#666666"
                                Margin="10,0,0,4"/>
                     <Border Background="White"
                             CornerRadius="15,15,15,5"
                             Padding="12,8">
-                        <TextBlock Text="ÀÀÀÀÀââââââââââââââ ââââââââââââââ ââââââââââ."
+                        <TextBlock Text="ÐÐÐÐÐÐ²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²."
                                    TextWrapping="Wrap"
                                    FontSize="14"/>
                     </Border>
@@ -98,21 +98,21 @@
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
-                    <TextBlock Text="Ââââââââââââââââââââ ââââââââââââââââââââ ââââââââââ."
+                    <TextBlock Text="Ð’Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²."
                                TextWrapping="Wrap"
                                Foreground="White"
                                FontSize="14"/>
                 </Border>
                 
                 <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Èâàí Èâàíîâ"
+                    <TextBlock Text="Ð˜Ð²Ð°Ð½ Ð˜Ð²Ð°Ð½Ð¾Ð²"
                                FontSize="12"
                                Foreground="#666666"
                                Margin="10,0,0,4"/>
                     <Border Background="White"
                             CornerRadius="15,15,15,5"
                             Padding="12,8">
-                        <TextBlock Text="ÀÀÀÀÀÀâââââââââââ ââââââââââââ ââââââââââââ ââââââââââââââ?"
+                        <TextBlock Text="ÐÐÐÐÐÐÐ²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð² Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²?"
                                    TextWrapping="Wrap"
                                    FontSize="14"/>
                     </Border>
@@ -123,21 +123,21 @@
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
-                    <TextBlock Text="Ââ."
+                    <TextBlock Text="Ð’Ð²."
                                TextWrapping="Wrap"
                                Foreground="White"
                                FontSize="14"/>
                 </Border>
                 
                 <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Èâàí Èâàíîâ"
+                    <TextBlock Text="Ð˜Ð²Ð°Ð½ Ð˜Ð²Ð°Ð½Ð¾Ð²"
                                FontSize="12"
                                Foreground="#666666"
                                Margin="10,0,0,4"/>
                     <Border Background="White"
                             CornerRadius="15,15,15,5"
                             Padding="12,8">
-                        <TextBlock Text="Ââââââââââââââââ."
+                        <TextBlock Text="Ð’Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²Ð²."
                                    TextWrapping="Wrap"
                                    FontSize="14"/>
                     </Border>
@@ -154,7 +154,7 @@
             <Grid ColumnDefinitions="*,Auto">
                 
                 <TextBox Grid.Column="0"
-                         Watermark="Ñîîáùåíèå..."
+                         Watermark="Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ..."
                          Background="#F5F5F5"
                          BorderThickness="0"
                          CornerRadius="20"

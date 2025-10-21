@@ -11,27 +11,35 @@
 		<AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <Debugger>Native</Debugger>
+		<Debugger>Xamarin</Debugger>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <Debugger>Native</Debugger>
+		<Debugger>Xamarin</Debugger>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<AndroidResource Include="Icon.png">
 			<Link>Resources\drawable\Icon.png</Link>
 		</AndroidResource>
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Android" Version="11.2.0" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
 		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
 	</ItemGroup>
-
-	<!-- Если нужна общая логика из другого проекта -->
 	<ItemGroup>
 		<ProjectReference Include="..\Poslannik.Client.Ui\Poslannik.Client.Ui.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Views\NewChatView.axaml.cs">
+			<DependentUpon>NewChatView.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\ParticipantsView.axaml.cs">
+			<DependentUpon>ParticipantsView.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\UserProfileView.axaml.cs">
+			<DependentUpon>UserProfileView.axaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 </Project>

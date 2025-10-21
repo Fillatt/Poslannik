@@ -1,24 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- основа -->
-	<color name="primary">#7B86CB</color>
-	<color name="primary_dark">#6B76BB</color>
-	<color name="primary_light">#8B96DB</color>
-
-	<!-- фончик -->
-	<color name="background_white">#FFFFFF</color>
-	<color name="background_gray">#F5F5F5</color>
-
-	<!-- тхт -->
-	<color name="text_white">#FFFFFF</color>
-	<color name="text_black">#000000</color>
-	<color name="text_gray">#666666</color>
-
-	<!-- сообщения -->
-	<color name="message_incoming">#F0F0F0</color>
-	<color name="message_outgoing">#7B86CB</color>
-
-	<!-- кнопочки -->
-	<color name="button_primary">#FFFFFF</color>
-	<color name="button_logout">#E57373</color>
+  <color name="splash_background">#FFFFFF</color>
 </resources>
