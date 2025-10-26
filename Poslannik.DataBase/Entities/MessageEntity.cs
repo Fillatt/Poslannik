@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Poslannik.DataBase.Models
+namespace Poslannik.DataBase.Entities
 {
-    public class ChatParticipant
+    public class MessageEntity
     {
         [Key]
         public Guid Id { get; set; }
@@ -18,13 +18,16 @@ namespace Poslannik.DataBase.Models
         public Guid ChatId { get; set; }
 
         [Required]
-        [ForeignKey("User")]
-        public Guid UserId { get; set; }
+        [ForeignKey("Sender")]
+        public Guid SenderId { get; set; }
 
-        public byte[]? UserEncryptedKey { get; set; }
+        [Required]
+        public required byte[] EncryptedMessage { get; set; }
 
         // Навигационные свойства
-        public virtual Chat Chat { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
+        public virtual ChatEntity Chat { get; set; } = null!;
+
+        [ForeignKey("SenderId")]
+        public virtual UserEntity Sender { get; set; } = null!;
     }
 }
