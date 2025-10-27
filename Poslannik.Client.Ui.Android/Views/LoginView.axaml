@@ -31,13 +31,15 @@
     
     <Grid>
         <Panel>
-            <Panel.Background>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                    <GradientStop Color="#8B96DB" Offset="0"/>
-                    <GradientStop Color="#7B86CB" Offset="1"/>
-                </LinearGradientBrush>
-            </Panel.Background>
-        </Panel>
+    <Panel.Background>
+        <LinearGradientBrush StartPoint="50%,0%" EndPoint="50%,100%">
+            <GradientStop Color="#7B87D0" Offset="0"/>
+            <GradientStop Color="#6B79C9" Offset="0.4"/>
+            <GradientStop Color="#5B6BC2" Offset="0.7"/>
+            <GradientStop Color="#4B5DBB" Offset="1"/>
+        </LinearGradientBrush>
+    </Panel.Background>
+</Panel>
         
         <StackPanel HorizontalAlignment="Center" 
                     VerticalAlignment="Center"

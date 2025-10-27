@@ -70,10 +70,15 @@
                 </StackPanel>
                 
                 <Border HorizontalAlignment="Right"
-                        Background="#7B86CB"
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Color="#7B86CB" Offset="0"/>
+                            <GradientStop Color="#5B6EBB" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
                     <TextBlock Text="Вввввввввввввввв."
                                TextWrapping="Wrap"
                                Foreground="White"
@@ -137,10 +142,15 @@
                 </StackPanel>
                 
                 <Border HorizontalAlignment="Right"
-                        Background="#7B86CB"
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Color="#7B86CB" Offset="0"/>
+                            <GradientStop Color="#5B6EBB" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
                     <TextBlock Text="Вв."
                                TextWrapping="Wrap"
                                Foreground="White"
@@ -162,10 +172,15 @@
                 </StackPanel>
                 
                 <Border HorizontalAlignment="Right"
-                        Background="#7B86CB"
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Color="#7B86CB" Offset="0"/>
+                            <GradientStop Color="#5B6EBB" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
                     <TextBlock Text="Вввввввввввввввввв."
                                TextWrapping="Wrap"
                                Foreground="White"
@@ -192,13 +207,18 @@
                          Name="MessageTextBox"/>
                 
                 <Button Grid.Column="1"
-                        Background="#7B86CB"
                         Width="40"
                         Height="40"
                         CornerRadius="20"
                         Margin="8,0,0,0"
                         Padding="0"
                         Name="SendButton">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Color="#7B86CB" Offset="0"/>
+                            <GradientStop Color="#5B6EBB" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
                     <Viewbox Width="20" Height="20">
                         <Canvas Width="24" Height="24">
                             <Path Fill="White" 

@@ -37,7 +37,8 @@
                 <Border Grid.Column="2"
                         Width="35" Height="35"
                         CornerRadius="17.5"
-                        Background="#E0E0E0">
+                        Background="#E0E0E0"
+                        Name="UserAvatarBorder">
                     <Viewbox Width="20" Height="20">
                         <Canvas Width="24" Height="24">
                             <Path Fill="#999999" 
