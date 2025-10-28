@@ -1,4 +1,4 @@
-﻿using Poslannik.DataBase.Entities;
+using Poslannik.DataBase.Entities;
 using Poslannik.Framework.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,6 @@ namespace Poslannik.DataBase.Repositories
         Task<User?> GetByConnectionIdAsync(string connectionId);
         Task UpdateConnectionIdAsync(Guid userId, string connectionId);
         Task<IEnumerable<User>> SearchUsersAsync(string searchTerm);
-        Task<User?> GetByIdAsync(Guid id);
     }
 
     public interface IChatRepository : IRepository<ChatEntity, Chat>

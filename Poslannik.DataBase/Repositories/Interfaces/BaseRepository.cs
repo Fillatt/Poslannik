@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,19 +11,13 @@ namespace Poslannik.DataBase.Repositories
         where TEntity : class
         where TModel : class
     {
-        protected readonly ApplicationDbContext _context;
+        protected readonly ApplicationContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
-        protected BaseRepository(ApplicationDbContext context)
+        protected BaseRepository(ApplicationContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
-        }
-
-        public virtual async Task<TModel?> GetByIdAsync(long id)
-        {
-            var entity = await _dbSet.FindAsync(id);
-            return entity != null ? MapToModel(entity) : null;
         }
 
         public virtual async Task<IEnumerable<TModel>> GetAllAsync()
