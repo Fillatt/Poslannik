@@ -1,0 +1,101 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+             x:Class="Poslannik.Client.Ui.Android.Views.LoginView">
+    
+    <UserControl.Styles>
+        <Style Selector="TextBox.auth-input">
+            <Setter Property="Background" Value="#8B96DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Watermark" Value=""/>
+        </Style>
+        
+        <Style Selector="Button.auth-button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#7B86CB"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid>
+        <Panel>
+    <Panel.Background>
+        <LinearGradientBrush StartPoint="50%,0%" EndPoint="50%,100%">
+            <GradientStop Color="#7B87D0" Offset="0"/>
+            <GradientStop Color="#6B79C9" Offset="0.4"/>
+            <GradientStop Color="#5B6BC2" Offset="0.7"/>
+            <GradientStop Color="#4B5DBB" Offset="1"/>
+        </LinearGradientBrush>
+    </Panel.Background>
+</Panel>
+        
+        <StackPanel HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Width="200"
+                    Spacing="15">
+            
+            <Viewbox Width="60" Height="60" 
+                     HorizontalAlignment="Center"
+                     Margin="0,0,0,10">
+                <Canvas Width="24" Height="24">
+                    <Path Fill="White" 
+                          Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                </Canvas>
+            </Viewbox>
+            
+            <TextBlock Text="ЧГУ Посланник"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+            
+            <TextBox Classes="auth-input"
+                     Watermark="Имя пользователя"
+                     Name="UsernameTextBox"/>
+            
+            <TextBox Classes="auth-input"
+                     Watermark="Пароль"
+                     PasswordChar="●"
+                     Name="PasswordTextBox"/>
+            
+            <Button Classes="auth-button"
+                    Content="Войти"
+                    Margin="0,10,0,0"
+                    Name="LoginButton"/>
+            
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center"
+                        Margin="0,10,0,0">
+                <TextBlock Text="Нет аккаунта? " 
+                           Foreground="White"
+                           FontSize="12"/>
+                <Button Content="Зарегистрироваться"
+                        Background="Transparent"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Padding="0"
+                        FontSize="12"
+                        Name="RegisterLinkButton"/>
+            </StackPanel>
+            
+            <TextBlock Text="Посланник v1.0 © 2025"
+                       Foreground="#AAAAAA"
+                       FontSize="10"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,0"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

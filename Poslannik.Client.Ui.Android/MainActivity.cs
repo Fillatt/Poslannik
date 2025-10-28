@@ -1,24 +1,24 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content.PM;
-
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
 
-namespace Poslannik.Client.Ui.Android;
-
-[Activity(
-    Label = "Poslannik.Client.Ui.Android",
-    Theme = "@style/MyTheme.NoActionBar",
-    Icon = "@drawable/icon",
-    MainLauncher = true,
-    ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
-public class MainActivity : AvaloniaMainActivity<App>
+namespace Poslannik.Client.Ui.Android
 {
-    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+    [Activity(
+        Label = "ЧГУ Посланник",
+        Theme = "@style/MyTheme.NoActionBar",
+        Icon = "@drawable/poslanik",
+        MainLauncher = true,
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
+    public class MainActivity : AvaloniaMainActivity<App>
     {
-        return base.CustomizeAppBuilder(builder)
-            .WithInterFont()
-            .UseReactiveUI();
+        protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+        {
+            return base.CustomizeAppBuilder(builder)
+                .WithInterFont()
+                .UseReactiveUI();
+        }
     }
 }
