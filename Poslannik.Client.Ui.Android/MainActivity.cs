@@ -1,16 +1,15 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
-using Poslannik.Client.Ui.Android.Views;
 
 namespace Poslannik.Client.Ui.Android
 {
     [Activity(
         Label = "ЧГУ Посланник",
         Theme = "@style/MyTheme.NoActionBar",
-        Icon = "@drawable/icon",
+        Icon = "@drawable/poslanik",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
     public class MainActivity : AvaloniaMainActivity<App>
