@@ -5,15 +5,13 @@ VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Api", "Poslannik.Api\Poslannik.Api.csproj", "{380058B2-F8F7-47FA-9B64-8501CD4A8E39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Client.Ui", "Poslannik.Client.Ui\Poslannik.Client.Ui.csproj", "{E8F42B2E-7AC5-EA76-78E7-3B2A7B28A704}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Client.Ui.Android", "Poslannik.Client.Ui.Android\Poslannik.Client.Ui.Android.csproj", "{0D3DB371-70EC-60F3-56BF-160F4BAF43FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Client.Ui.Desktop", "Poslannik.Client.Ui.Desktop\Poslannik.Client.Ui.Desktop.csproj", "{475A7C1C-139C-67D5-10E4-3229B6053DDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.DataBase", "Poslannik.DataBase\Poslannik.DataBase.csproj", "{D53A96E4-5E81-47CD-968B-F239D6E3EE56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Framework", "Poslannik.Framework\Poslannik.Framework.csproj", "{80ED9B40-1132-4438-B04C-125472B77AAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Client.Ui.Controls", "Poslannik.Client.Ui.Controls\Poslannik.Client.Ui.Controls.csproj", "{ED3205F6-7915-483B-95C8-F600B99CA3FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,18 +23,11 @@ Global
 		{380058B2-F8F7-47FA-9B64-8501CD4A8E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{380058B2-F8F7-47FA-9B64-8501CD4A8E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{380058B2-F8F7-47FA-9B64-8501CD4A8E39}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8F42B2E-7AC5-EA76-78E7-3B2A7B28A704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8F42B2E-7AC5-EA76-78E7-3B2A7B28A704}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8F42B2E-7AC5-EA76-78E7-3B2A7B28A704}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8F42B2E-7AC5-EA76-78E7-3B2A7B28A704}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D3DB371-70EC-60F3-56BF-160F4BAF43FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D3DB371-70EC-60F3-56BF-160F4BAF43FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D3DB371-70EC-60F3-56BF-160F4BAF43FD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{0D3DB371-70EC-60F3-56BF-160F4BAF43FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D3DB371-70EC-60F3-56BF-160F4BAF43FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{475A7C1C-139C-67D5-10E4-3229B6053DDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{475A7C1C-139C-67D5-10E4-3229B6053DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{475A7C1C-139C-67D5-10E4-3229B6053DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{475A7C1C-139C-67D5-10E4-3229B6053DDD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D53A96E4-5E81-47CD-968B-F239D6E3EE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D53A96E4-5E81-47CD-968B-F239D6E3EE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D53A96E4-5E81-47CD-968B-F239D6E3EE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +36,10 @@ Global
 		{80ED9B40-1132-4438-B04C-125472B77AAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80ED9B40-1132-4438-B04C-125472B77AAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80ED9B40-1132-4438-B04C-125472B77AAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED3205F6-7915-483B-95C8-F600B99CA3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED3205F6-7915-483B-95C8-F600B99CA3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED3205F6-7915-483B-95C8-F600B99CA3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED3205F6-7915-483B-95C8-F600B99CA3FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

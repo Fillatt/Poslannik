@@ -16,12 +16,10 @@
 		</AndroidResource>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Avalonia.Android" Version="11.2.0" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
-		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
-		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Poslannik.Client.Ui\Poslannik.Client.Ui.csproj" />
+		<PackageReference Include="Avalonia.Android" Version="11.3.8" />
+		<PackageReference Include="Avalonia.ReactiveUI" Version="11.3.8" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8" />
+		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.17" />
 	</ItemGroup>
 </Project>
