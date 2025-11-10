@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Entities;
 using Poslannik.DataBase.Repositories.Interfaces;
 using Poslannik.Framework.Models;
@@ -56,7 +56,7 @@ namespace Poslannik.DataBase.Repositories
             return new ChatEntity
             {
                 Id = model.Id,
-                ChatType = model.ChatType,
+                ChatType = (int)model.ChatType,
                 User1Id = model.User1Id,
                 User2Id = model.User2Id,
                 Name = model.Name,
@@ -67,7 +67,7 @@ namespace Poslannik.DataBase.Repositories
 
         private void MapToEntity(Chat model, ChatEntity entity)
         {
-            entity.ChatType = model.ChatType;
+            entity.ChatType = (int)model.ChatType;
             entity.User1Id = model.User1Id;
             entity.User2Id = model.User2Id;
             entity.Name = model.Name;
@@ -80,7 +80,7 @@ namespace Poslannik.DataBase.Repositories
             return new Chat
             {
                 Id = entity.Id,
-                ChatType = entity.ChatType,
+                ChatType = (ChatType)entity.ChatType,
                 User1Id = entity.User1Id,
                 User2Id = entity.User2Id,
                 Name = entity.Name,

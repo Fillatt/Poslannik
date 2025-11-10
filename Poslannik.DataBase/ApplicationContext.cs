@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Entities;
-using Poslannik.DataBase.Models;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Poslannik.DataBase

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +21,7 @@ namespace Poslannik.Framework.Models
         /// <summary>
         /// Идентификатор пользователя, отправившего сообщение
         /// </summary>
-        public Guid SenderId { get; init; }
+        public Guid SenderId { get; init; } 
 
         /// <summary>
         /// Зашифрованное содержимое сообщения
