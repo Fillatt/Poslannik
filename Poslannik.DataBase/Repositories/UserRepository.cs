@@ -20,6 +20,12 @@ namespace Poslannik.DataBase.Repositories
             return entities.Select(MapToModel);
         }
 
+        public async Task<User?> GetUserByLoginAsync(string login) {
+            var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Login == login);
+            if (userEntity != null) return MapToModel(userEntity);
+            return null;
+        }
+
         public async Task AddAsync(User model)
         {
             var entity = MapToEntity(model);
