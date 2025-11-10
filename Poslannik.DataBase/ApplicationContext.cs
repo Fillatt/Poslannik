@@ -4,7 +4,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Poslannik.DataBase
 {
-    public class ApplicationContext:DbContext
+    public class ApplicationContext : DbContext
     {
         public DbSet<UserEntity> Users => Set<UserEntity>();
         public DbSet<MessageEntity> Messages => Set<MessageEntity>();
