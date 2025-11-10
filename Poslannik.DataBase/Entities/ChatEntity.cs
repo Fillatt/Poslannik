@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Poslannik.DataBase.Models
+namespace Poslannik.DataBase.Entities
 {
-    public class Chat
+    public class ChatEntity
     {
         [Key]
         public Guid Id { get; set; }
@@ -28,7 +28,7 @@ namespace Poslannik.DataBase.Models
         public Guid? AdminId { get; set; }
 
         // Навигационные свойства
-        public virtual ICollection<ChatParticipant> Participants { get; set; } = new List<ChatParticipant>();
-        public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+        public virtual ICollection<ChatParticipantEntity> Participants { get; set; } = new List<ChatParticipantEntity>();
+        public virtual ICollection<MessageEntity> Messages { get; set; } = new List<MessageEntity>();
     }
 }

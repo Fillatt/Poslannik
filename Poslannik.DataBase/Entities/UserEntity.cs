@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Poslannik.DataBase.Models
+namespace Poslannik.DataBase.Entities
 {
-    public class User
+    public class UserEntity
     {
         [Key]
         public Guid Id { get; set; }
