@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.8" />
+    <Content Include="..\Poslannik.Client.Ui.Controls\Icon.png" Link="Resources\drawable\Icon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Main\" />
+    <PackageReference Include="Avalonia" Version="11.3.8" />
+    <PackageReference Include="ReactiveUI" Version="20.1.1" />
   </ItemGroup>
 
 </Project>
