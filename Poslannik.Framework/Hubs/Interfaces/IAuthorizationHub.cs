@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Poslannik.Framework.Requests;
+using Poslannik.Framework.Responses;
 
-namespace Poslannik.Framework.Hubs.Interfaces
+namespace Poslannik.Framework.Hubs.Interfaces;
+
+public interface IAuthorizationHub
 {
-    public interface IAuthorizationHub
-    {
-        /// <summary>
-        /// Верификация пароля
-        /// </summary>
-        /// <param name="request">Данные запроса для верификации</param>
-        public Task<bool> VerifyAsync(VerifyRequest request);
-    }
+    /// <summary>
+    /// Верификация пароля
+    /// </summary>
+    /// <param name="request">Данные запроса для верификации</param>
+    public Task<AuthorizationResponse> AuthorizeAsync(AuthorizationRequest request);
 }
