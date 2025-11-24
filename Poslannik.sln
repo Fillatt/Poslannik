@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Client.Ui.Control
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Client.Services", "Poslannik.Client.Services\Poslannik.Client.Services.csproj", "{EE85CBF5-C60C-4D92-A275-26D3B1D2C823}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poslannik.Tests", "Poslannik.Tests\Poslannik.Tests.csproj", "{6D32C65A-B74E-41D9-8303-34FB55C13CE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{EE85CBF5-C60C-4D92-A275-26D3B1D2C823}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE85CBF5-C60C-4D92-A275-26D3B1D2C823}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE85CBF5-C60C-4D92-A275-26D3B1D2C823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D32C65A-B74E-41D9-8303-34FB55C13CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D32C65A-B74E-41D9-8303-34FB55C13CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D32C65A-B74E-41D9-8303-34FB55C13CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D32C65A-B74E-41D9-8303-34FB55C13CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

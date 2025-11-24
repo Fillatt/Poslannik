@@ -1,5 +1,4 @@
-﻿using Poslannik.Framework.Hubs.Interfaces;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 using Poslannik.Framework.Requests;
 using Poslannik.Framework.Responses;
 namespace Poslannik.Client.Services

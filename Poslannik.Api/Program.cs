@@ -13,6 +13,8 @@ var dbContextOptions = new DbContextOptionsBuilder().UseNpgsql(configuration.Get
 
 // Регистрация зависимостей
 
+
+
 builder.Services
     .AddTransient(x => configuration)
     .AddTransient(x => dbContextOptions)
