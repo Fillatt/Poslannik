@@ -11,6 +11,11 @@ namespace Poslannik.Client.Ui.Android
         private NavigationService? _navigationService;
         private MainViewModel? _mainViewModel;
 
+        /// <summary>
+        /// Статический доступ к NavigationService для обработки системной кнопки "Назад"
+        /// </summary>
+        public static INavigationService? NavigationService { get; private set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -22,6 +27,7 @@ namespace Poslannik.Client.Ui.Android
             {
                 // Создание и настройка NavigationService
                 _navigationService = new NavigationService();
+                NavigationService = _navigationService;
 
                 // Регистрация всех ViewModels в NavigationService
                 _navigationService.RegisterViewModel(() => new LoginViewModel(_navigationService));

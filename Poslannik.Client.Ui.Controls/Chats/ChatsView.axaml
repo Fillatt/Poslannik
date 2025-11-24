@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
              x:Class="Poslannik.Client.Ui.Controls.ChatsView">
-    
-    <Grid RowDefinitions="Auto,*,Auto">
+
+    <Grid RowDefinitions="Auto,*,Auto" Background="#FAFAFA">
         
         <Border Grid.Row="0" 
                 Background="White"
@@ -26,7 +26,7 @@
                         Name="AddChatButton">
                     <Viewbox Width="24" Height="24">
                         <Canvas Width="24" Height="24">
-                            <Path Fill="#7B86CB" 
+                            <Path Fill="#EF3C45"
                                   Data="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
                         </Canvas>
                     </Viewbox>
@@ -184,9 +184,10 @@
             <Grid ColumnDefinitions="*,*">
                 
                 <Button Grid.Column="0"
-                        Background="Transparent"
+                        Background="#EF3C45"
                         BorderThickness="0"
                         Padding="0,8"
+                        CornerRadius="8"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         Name="ChatsTabButton">
@@ -194,23 +195,24 @@
                         <Viewbox Width="28" Height="28"
                                  HorizontalAlignment="Center">
                             <Canvas Width="24" Height="24">
-                                <Path Fill="#7B86CB" 
+                                <Path Fill="White"
                                       Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
                             </Canvas>
                         </Viewbox>
                         <TextBlock Text="Чаты"
                                    FontSize="12"
-                                   Foreground="#7B86CB"
+                                   Foreground="White"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    MinWidth="70"/>
                     </StackPanel>
                 </Button>
-                
+
                 <Button Grid.Column="1"
-                        Background="Transparent"
+                        Background="White"
                         BorderThickness="0"
                         Padding="0,8"
+                        CornerRadius="8"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         Command="{Binding NavigateToProfileCommand}"
@@ -219,13 +221,13 @@
                         <Viewbox Width="28" Height="28"
                                  HorizontalAlignment="Center">
                             <Canvas Width="24" Height="24">
-                                <Path Fill="#999999" 
+                                <Path Fill="#EF3C45"
                                       Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                             </Canvas>
                         </Viewbox>
                         <TextBlock Text="Профиль"
                                    FontSize="12"
-                                   Foreground="#999999"
+                                   Foreground="#EF3C45"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    MinWidth="70"/>

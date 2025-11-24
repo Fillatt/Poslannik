@@ -4,8 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
              x:Class="Poslannik.Client.Ui.Controls.ChatView">
-    
-    <Grid RowDefinitions="Auto,*,Auto">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox#MessageTextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#EF3C45"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto" Background="#FAFAFA">
         
         <Border Grid.Row="0" 
                 Background="White"
@@ -74,7 +81,7 @@
                 </StackPanel>
                 
                 <Border HorizontalAlignment="Right"
-                        Background="#7B86CB"
+                        Background="#EF3C45"
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
@@ -83,7 +90,7 @@
                                Foreground="White"
                                FontSize="14"/>
                 </Border>
-                
+
                 <StackPanel HorizontalAlignment="Left" MaxWidth="200">
                     <TextBlock Text="Иван Иванов"
                                FontSize="12"
@@ -97,9 +104,9 @@
                                    FontSize="14"/>
                     </Border>
                 </StackPanel>
-                
+
                 <Border HorizontalAlignment="Right"
-                        Background="#7B86CB"
+                        Background="#EF3C45"
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
@@ -108,7 +115,7 @@
                                Foreground="White"
                                FontSize="14"/>
                 </Border>
-                
+
                 <StackPanel HorizontalAlignment="Left" MaxWidth="200">
                     <TextBlock Text="Иван Иванов"
                                FontSize="12"
@@ -122,9 +129,9 @@
                                    FontSize="14"/>
                     </Border>
                 </StackPanel>
-                
+
                 <Border HorizontalAlignment="Right"
-                        Background="#7B86CB"
+                        Background="#EF3C45"
                         CornerRadius="15,15,5,15"
                         Padding="12,8"
                         MaxWidth="200">
@@ -161,24 +168,27 @@
                 <TextBox Grid.Column="0"
                          Watermark="Сообщение..."
                          Background="#F5F5F5"
-                         BorderThickness="0"
+                         BorderBrush="#EF3C45"
+                         BorderThickness="2"
                          CornerRadius="20"
                          Padding="15,10"
                          VerticalAlignment="Center"
                          Name="MessageTextBox"/>
                 
                 <Button Grid.Column="1"
-                        Background="#7B86CB"
+                        Background="#EF3C45"
                         Width="40"
                         Height="40"
                         CornerRadius="20"
                         Margin="8,0,0,0"
                         Padding="0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Command="{Binding SendMessageCommand}"
                         Name="SendButton">
                     <Viewbox Width="20" Height="20">
                         <Canvas Width="24" Height="24">
-                            <Path Fill="White" 
+                            <Path Fill="White"
                                   Data="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                         </Canvas>
                     </Viewbox>

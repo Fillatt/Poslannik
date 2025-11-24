@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Content.PM;
+using Android.Views;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
@@ -11,6 +12,7 @@ namespace Poslannik.Client.Ui.Android
         Theme = "@style/MyTheme.NoActionBar",
         Icon = "@drawable/poslanik",
         MainLauncher = true,
+        WindowSoftInputMode = SoftInput.AdjustResize,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
     public class MainActivity : AvaloniaMainActivity<App>
     {
@@ -19,6 +21,26 @@ namespace Poslannik.Client.Ui.Android
             return base.CustomizeAppBuilder(builder)
                 .WithInterFont()
                 .UseReactiveUI();
+        }
+
+        /// <summary>
+        /// Обработка системной кнопки "Назад" на Android
+        /// </summary>
+        [System.Obsolete]
+        public override void OnBackPressed()
+        {
+            var navigationService = App.NavigationService;
+
+            if (navigationService != null && navigationService.CanNavigateBack)
+            {
+                // Если есть куда вернуться - выполняем навигацию назад
+                navigationService.NavigateBack();
+            }
+            else
+            {
+                // Если вернуться некуда - стандартное поведение (выход из приложения)
+                base.OnBackPressed();
+            }
         }
     }
 }
