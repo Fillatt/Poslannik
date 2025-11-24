@@ -6,10 +6,12 @@
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
              x:Class="Poslannik.Client.Ui.Controls.MainView">
 
-    <ContentControl Content="{Binding CurrentViewModel}">
-        <ContentControl.ContentTemplate>
-            <controls:ViewLocator />
-        </ContentControl.ContentTemplate>
-    </ContentControl>
+    <Grid Background="#FAFAFA">
+        <ContentControl Content="{Binding CurrentViewModel}">
+            <ContentControl.ContentTemplate>
+                <controls:ViewLocator />
+            </ContentControl.ContentTemplate>
+        </ContentControl>
+    </Grid>
 
 </UserControl>

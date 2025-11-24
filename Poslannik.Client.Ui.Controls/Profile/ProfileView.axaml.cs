@@ -9,5 +9,9 @@ namespace Poslannik.Client.Ui.Controls
         {
             AvaloniaXamlLoader.Load(this);
         }
+
+        private void ProfileTabButton_ActualThemeVariantChanged(object? sender, System.EventArgs e)
+        {
+        }
     }
 }
