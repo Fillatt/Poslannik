@@ -5,6 +5,6 @@ namespace Poslannik.DataBase.Repositories.Interfaces
 {
     public interface IUserRepository : IRepository<UserEntity, User>
     {
-
+        Task<User?> GetUserByLoginAsync (string login);
     }
 }
