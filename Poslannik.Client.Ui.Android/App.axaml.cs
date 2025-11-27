@@ -1,61 +1,45 @@
-﻿using Avalonia;
+using Autofac;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Poslannik.Client.Ui.Android.AutofacModules;
 using Poslannik.Client.Ui.Controls;
 using Poslannik.Client.Ui.Controls.Services;
 
-namespace Poslannik.Client.Ui.Android
+namespace Poslannik.Client.Ui.Android;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    private IContainer? _container;
+
+    public override void Initialize()
     {
-        private NavigationService? _navigationService;
-        private MainViewModel? _mainViewModel;
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        /// <summary>
-        /// Статический доступ к NavigationService для обработки системной кнопки "Назад"
-        /// </summary>
-        public static INavigationService? NavigationService { get; private set; }
-
-        public override void Initialize()
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            AvaloniaXamlLoader.Load(this);
-        }
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<UIModule>();
+            builder.RegisterModule<ServicesModule>();
 
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+            _container = builder.Build();
+
+            // Создание и настройка MainView
+            var mainViewModel = _container.Resolve<MainViewModel>();
+            var mainView = new MainView
             {
-                // Создание и настройка NavigationService
-                _navigationService = new NavigationService();
-                NavigationService = _navigationService;
+                DataContext = mainViewModel
+            };
 
-                // Регистрация всех ViewModels в NavigationService
-                _navigationService.RegisterViewModel(() => new LoginViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new ChatsViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new ProfileViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new ChatViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new GroupChatViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new NewChatViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new ParticipantsViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new UserProfileViewModel(_navigationService));
-                _navigationService.RegisterViewModel(() => new AddParticipantsViewModel(_navigationService));
+            // Инициализация приложения (переход к LoginView)
+            mainViewModel.Initialize();
 
-                // Создание MainViewModel
-                _mainViewModel = new MainViewModel(_navigationService);
-
-                // Создание и настройка MainView
-                var mainView = new MainView
-                {
-                    DataContext = _mainViewModel
-                };
-
-                // Инициализация приложения (переход к LoginView)
-                _mainViewModel.Initialize();
-
-                singleViewPlatform.MainView = mainView;
-            }
-
-            base.OnFrameworkInitializationCompleted();
+            singleViewPlatform.MainView = mainView;
         }
+
+        base.OnFrameworkInitializationCompleted();
     }
 }

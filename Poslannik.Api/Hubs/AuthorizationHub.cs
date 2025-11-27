@@ -5,10 +5,11 @@ using Poslannik.DataBase.Repositories.Interfaces;
 using Poslannik.Framework.Responses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Poslannik.Api.Hubs;
 
-public class AuthorizationHub (IUserRepository userRepository) : IAuthorizationHub
+public class AuthorizationHub (IUserRepository userRepository) : Hub, IAuthorizationHub
 {
     ///<Inheritdoc/>
     public async Task<AuthorizationResponse> AuthorizeAsync(AuthorizationRequest request)
