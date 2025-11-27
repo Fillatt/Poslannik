@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
@@ -13,8 +13,8 @@ namespace Poslannik.Client.Ui.Controls
         private object? _currentViewModel;
 
         public MainViewModel(INavigationService navigationService)
-            : base(navigationService)
         {
+            NavigationService = navigationService;
             navigationService.CurrentViewModel.Subscribe(vm => CurrentViewModel = vm);
         }
 

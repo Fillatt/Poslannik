@@ -1,4 +1,4 @@
-﻿using System.Reactive;
+using System.Reactive;
 using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
@@ -10,8 +10,7 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class GroupChatViewModel : ViewModelBase
     {
-        public GroupChatViewModel(INavigationService navigationService)
-            : base(navigationService)
+        public GroupChatViewModel()
         {
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToParticipantsCommand = ReactiveCommand.Create(OnNavigateToParticipants);

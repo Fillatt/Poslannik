@@ -1,4 +1,4 @@
-﻿using System.Reactive;
+using System.Reactive;
 using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
@@ -10,8 +10,7 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class ProfileViewModel : ViewModelBase
     {
-        public ProfileViewModel(INavigationService navigationService)
-            : base(navigationService)
+        public ProfileViewModel()
         {
             LogoutCommand = ReactiveCommand.Create(OnLogout);
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
