@@ -13,10 +13,39 @@ namespace Poslannik.Client.Ui.Controls.Services
         private readonly Stack<object> _navigationStack;
         private object? _currentViewModel;
 
-        public NavigationService()
+        public NavigationService(
+            LoginViewModel loginViewModel,
+            ChatsViewModel chatsViewModel,
+            ProfileViewModel profileViewModel,
+            ChatViewModel chatViewModel,
+            GroupChatViewModel groupChatViewModel,
+            NewChatViewModel newChatViewModel,
+            ParticipantsViewModel participantsViewModel,
+            UserProfileViewModel userProfileViewModel,
+            AddParticipantsViewModel addParticipantsViewModel)
         {
             _viewModelFactory = new Dictionary<Type, Func<object>>();
             _navigationStack = new Stack<object>();
+
+            loginViewModel.NavigationService = this;
+            chatsViewModel.NavigationService = this;
+            profileViewModel.NavigationService = this;
+            chatViewModel.NavigationService = this;
+            groupChatViewModel.NavigationService = this;
+            newChatViewModel.NavigationService = this;
+            participantsViewModel.NavigationService = this;
+            userProfileViewModel.NavigationService = this;
+            addParticipantsViewModel.NavigationService = this;
+
+            RegisterViewModel<LoginViewModel>(() => loginViewModel);
+            RegisterViewModel<ChatsViewModel>(() => chatsViewModel);
+            RegisterViewModel<ProfileViewModel>(() => profileViewModel);
+            RegisterViewModel<ChatViewModel>(() => chatViewModel);
+            RegisterViewModel<GroupChatViewModel>(() => groupChatViewModel);
+            RegisterViewModel<NewChatViewModel>(() => newChatViewModel);
+            RegisterViewModel<ParticipantsViewModel>(() => participantsViewModel);
+            RegisterViewModel<UserProfileViewModel>(() => userProfileViewModel);
+            RegisterViewModel<AddParticipantsViewModel>(() => addParticipantsViewModel);
         }
 
         /// <summary>

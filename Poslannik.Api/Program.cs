@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Poslannik.Api.Hubs;
 using Poslannik.DataBase;
 using Poslannik.DataBase.Repositories;
 using Poslannik.DataBase.Repositories.Interfaces;
+using Poslannik.Framework.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,6 @@ builder.Services
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapHub<AuthorizationHub>(HubConstants.AuthorizationHubPath);
 
 app.Run();

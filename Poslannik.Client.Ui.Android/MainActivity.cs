@@ -1,9 +1,11 @@
 using Android.App;
 using Android.Content.PM;
 using Android.Views;
+using Autofac;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
+using Poslannik.Client.Ui.Controls.Services;
 
 namespace Poslannik.Client.Ui.Android
 {
@@ -29,7 +31,7 @@ namespace Poslannik.Client.Ui.Android
         [System.Obsolete]
         public override void OnBackPressed()
         {
-            var navigationService = App.NavigationService;
+            var navigationService = App.Container?.Resolve<INavigationService>();
 
             if (navigationService != null && navigationService.CanNavigateBack)
             {

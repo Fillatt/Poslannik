@@ -1,4 +1,4 @@
-﻿using System.Reactive;
+using System.Reactive;
 using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
@@ -11,7 +11,6 @@ namespace Poslannik.Client.Ui.Controls
     public class RegisterViewModel : ViewModelBase
     {
         public RegisterViewModel(INavigationService navigationService)
-            : base(navigationService)
         {
             RegisterCommand = ReactiveCommand.Create(OnRegister);
             NavigateToLoginCommand = ReactiveCommand.Create(OnNavigateToLogin);

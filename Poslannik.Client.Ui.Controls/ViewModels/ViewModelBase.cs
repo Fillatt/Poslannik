@@ -8,11 +8,7 @@ namespace Poslannik.Client.Ui.Controls.ViewModels
     /// </summary>
     public abstract class ViewModelBase : ReactiveObject
     {
-        protected INavigationService NavigationService { get; }
-
-        protected ViewModelBase(INavigationService navigationService)
-        {
-            NavigationService = navigationService;
-        }
+        /// <summary>Сервис навигации.</summary>
+        public INavigationService NavigationService { get; set; }
     }
 }
