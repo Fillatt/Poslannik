@@ -9,6 +9,6 @@ namespace Poslannik.Client.Ui.Controls.ViewModels
     public abstract class ViewModelBase : ReactiveObject
     {
         /// <summary>Сервис навигации.</summary>
-        public INavigationService NavigationService { get; set; }
+        public INavigationService? NavigationService { get; set; }
     }
 }

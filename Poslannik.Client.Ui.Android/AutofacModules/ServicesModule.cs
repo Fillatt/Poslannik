@@ -1,4 +1,6 @@
 using Autofac;
+using Poslannik.Client.Services;
+using Poslannik.Client.Services.Interfaces;
 using Poslannik.Client.Ui.Controls.Services;
 
 namespace Poslannik.Client.Ui.Android.AutofacModules;
@@ -10,6 +12,11 @@ public sealed class ServicesModule : Module
         builder
             .RegisterType<NavigationService>()
             .As<INavigationService>()
+            .AsSelf();
+
+        builder
+            .RegisterType<AuthorizationService>()
+            .As<IAutorizationService>()
             .AsSelf();
     }
 }

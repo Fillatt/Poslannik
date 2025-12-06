@@ -1,85 +1,97 @@
-﻿using Poslannik.Framework.Hubs.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Configuration;
+using Poslannik.Client.Services.Interfaces;
+using Poslannik.Framework.Hubs;
 using Poslannik.Framework.Requests;
 using Poslannik.Framework.Responses;
-namespace Poslannik.Client.Services
+
+namespace Poslannik.Client.Services;
+
+public class AuthorizationService : IAutorizationService
 {
-    public class AuthorizationService
+    private HubConnection _hubConnection;
+    private string _url;
+
+    public string? JwtToken { get; set; }
+
+    public bool IsAuthorizated { get; set; }
+
+    public AuthorizationService(IConfiguration configuration)
     {
-        string? JwtToken { get; set; }
-        bool IsAuthorizated { get; set; }
-        
-        string HubUrl { get; set; }
+        var apiUrl = configuration.GetRequiredSection("apiUrl").Value!;
+        _url = apiUrl + HubConstants.AuthorizationHubPath;
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(_url, options =>
+            {
+                options.HttpMessageHandlerFactory = handler =>
+                {
+                    if (handler is HttpClientHandler httpClientHandler)
+                    {
+                        // Отключаем проверку SSL
+                        httpClientHandler.ServerCertificateCustomValidationCallback =
+                            (message, cert, chain, errors) => true;
+                    }
+                    return handler;
+                };
+            })
+            .WithAutomaticReconnect() // Автоматическое переподключение
+            .Build();
+    }
 
-        HubConnection HubConnection { get; set; }
-
-        public AuthorizationService(string hubUrl) {
-            HubUrl = hubUrl;
-            InitializeConnection();
-        }
-
-        private void InitializeConnection() {
-            HubConnection = new HubConnectionBuilder()
-                .WithUrl(HubUrl)
-                .WithAutomaticReconnect() // Автоматическое переподключение
-                .Build();
-        }
-
-        public async Task<bool> ConnectAsync()
+    public async Task<AuthorizationResponse> AuthorizeAsync(string login, string password, CancellationToken cancellationToken)
+    {
+        try
         {
-            try
+            if (_hubConnection.State != HubConnectionState.Connected)
             {
-                if (HubConnection.State == HubConnectionState.Disconnected)
-                {
-                    await HubConnection.StartAsync();
-                }
-                return true;
+                var connected = await ConnectAsync(cancellationToken);
+                if (!connected) return new AuthorizationResponse { IsSuccess = false};
             }
-            catch (Exception ex)
+
+            var request = new AuthorizationRequest { Login = login, Password = password };
+            var response = await _hubConnection.InvokeAsync<AuthorizationResponse>("AuthorizeAsync", request);
+
+            if (response.IsSuccess && !string.IsNullOrEmpty(response.Token))
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка подключения: {ex.Message}");
-                return false;
+                JwtToken = response.Token;
+                IsAuthorizated = true;
             }
-        }
-
-        public async Task<AuthorizationResponse> AuthorizeAsync(string login, string password)
-        {
-            try
-            {
-                if (HubConnection.State != HubConnectionState.Connected)
-                {
-                    var connected = await ConnectAsync();
-                    if (!connected) return new AuthorizationResponse { IsSuccess = false};
-                }
-
-                var request = new AuthorizationRequest { Login = login, Password = password };
-                var response = await HubConnection.InvokeAsync<AuthorizationResponse>("AuthorizeAsync", request);
-
-                if (response.IsSuccess && !string.IsNullOrEmpty(response.Token))
-                {
-                    JwtToken = response.Token;
-                    IsAuthorizated = true;
-                }
-                else
-                {
-                    JwtToken = null;
-                    IsAuthorizated = false;
-                }
-
-                return response;
-            }
-            catch (Exception)
+            else
             {
                 JwtToken = null;
                 IsAuthorizated = false;
-                return new AuthorizationResponse { IsSuccess = false};
             }
-        }
 
-        public void Logout()
+            return response;
+        }
+        catch (Exception ex)
         {
             JwtToken = null;
             IsAuthorizated = false;
+            return new AuthorizationResponse { IsSuccess = false};
+        }
+    }
+
+    public async Task LogoutAsync(CancellationToken cancellationToken)
+    {
+        JwtToken = null;
+        IsAuthorizated = false;
+    }
+
+    private async Task<bool> ConnectAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (_hubConnection.State == HubConnectionState.Disconnected)
+            {
+                await _hubConnection.StartAsync(cancellationToken);
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка подключения: {ex.Message}");
+            return false;
         }
     }
 }

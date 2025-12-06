@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0-android</TargetFramework>
+		<TargetFramework>net9.0-android</TargetFramework>
 		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
 		<Nullable>enable</Nullable>
 		<ApplicationId>com.poslannik.messenger</ApplicationId>
@@ -16,6 +16,9 @@
 		</AndroidResource>
 		<AndroidResource Include="Resources\drawable\poslanik.png" />
 		<AndroidResource Include="Resources\values\styles.xml" />
+		<EmbeddedResource Include="appsettings.json">
+			<LogicalName>$(AssemblyName).appsettings.json</LogicalName>
+		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="9.0.0" />
@@ -23,9 +26,13 @@
 		<PackageReference Include="Avalonia.ReactiveUI" Version="11.3.8" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
 		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.17" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Poslannik.Client.Services\Poslannik.Client.Services.csproj" />
 		<ProjectReference Include="..\Poslannik.Client.Ui.Controls\Poslannik.Client.Ui.Controls.csproj" />
 	</ItemGroup>
 </Project>

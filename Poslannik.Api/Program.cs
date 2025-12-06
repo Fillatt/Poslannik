@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Poslannik.Api.Hubs;
 using Poslannik.DataBase;
@@ -11,21 +12,26 @@ IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-var dbContextOptions = new DbContextOptionsBuilder().UseNpgsql(configuration.GetConnectionString("PostgreSQL")).Options;
+builder.Services.AddSignalR(options => options.MaximumParallelInvocationsPerClient = 10);
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
-// Регистрация зависимостей
+builder.Services.AddTransient(x => configuration);
 
-builder.Services
-    .AddTransient(x => configuration)
-    .AddTransient(x => dbContextOptions)
-    // Регистрация БД
-    .AddDbContext<ApplicationContext>()
-    .AddTransient<IUserRepository, UserRepository>()
-    .AddTransient<IMessageRepository, MessageRepository>()
-    .AddTransient<IChatRepository, ChatRepository>()
-    .AddTransient<IChatParticipantRepository, ChatParticipantRepository>();
+builder.Services.AddDbContext<ApplicationContext>(option => option.UseNpgsql(configuration.GetConnectionString("PostgreSQL")));
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IMessageRepository, MessageRepository>();
+builder.Services.AddTransient<IChatRepository, ChatRepository>();
+builder.Services.AddTransient<IChatParticipantRepository, ChatParticipantRepository>();
 
 var app = builder.Build();
+
+//var userRepo = app.Services.CreateScope().ServiceProvider.GetRequiredService<IUserRepository>();
+//var userRepoImp = (UserRepository)userRepo;
+//await userRepoImp.AddTestUserAsync();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHub<AuthorizationHub>(HubConstants.AuthorizationHubPath);
 

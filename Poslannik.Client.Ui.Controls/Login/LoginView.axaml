@@ -1,8 +1,14 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+
+             xmlns:local="using:Poslannik.Client.Ui.Controls"
+
+             x:Name="Login"
+             x:DataType="local:LoginViewModel"
              x:Class="Poslannik.Client.Ui.Controls.LoginView">
 
     <UserControl.Styles>
@@ -53,16 +59,19 @@
 
             <TextBox Classes="auth-input"
                      Watermark="Имя пользователя"
-                     Name="UsernameTextBox"/>
+                     Name="UsernameTextBox"
+                     Text="{Binding Login}"/>
 
             <TextBox Classes="auth-input"
                      Watermark="Пароль"
                      PasswordChar="●"
-                     Name="PasswordTextBox"/>
+                     Name="PasswordTextBox"
+                     Text="{Binding Password}"/>
 
             <Button Classes="auth-button"
                     Content="Войти"
                     Margin="0,10,0,0"
+                    IsEnabled="{Binding CanLogin}"
                     Command="{Binding LoginCommand}"
                     Name="LoginButton"/>
 
