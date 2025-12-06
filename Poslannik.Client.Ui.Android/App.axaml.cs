@@ -10,7 +10,7 @@ namespace Poslannik.Client.Ui.Android;
 
 public partial class App : Application
 {
-    private IContainer? _container;
+    public static IContainer? Container { get; private set; } 
 
     public override void Initialize()
     {
@@ -25,10 +25,10 @@ public partial class App : Application
             builder.RegisterModule<UIModule>();
             builder.RegisterModule<ServicesModule>();
 
-            _container = builder.Build();
+            Container = builder.Build();
 
             // Создание и настройка MainView
-            var mainViewModel = _container.Resolve<MainViewModel>();
+            var mainViewModel = Container.Resolve<MainViewModel>();
             var mainView = new MainView
             {
                 DataContext = mainViewModel
