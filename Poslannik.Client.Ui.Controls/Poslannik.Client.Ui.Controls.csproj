@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Content Include="..\Poslannik.Client.Ui.Controls\Icon.png" Link="Resources\drawable\Icon.png" />
+    <AvaloniaResource Include="Resources\drawable\poslanik.png" />
+    <AvaloniaResource Include="Resources\Fonts\**" />
   </ItemGroup>
 
   <ItemGroup>
