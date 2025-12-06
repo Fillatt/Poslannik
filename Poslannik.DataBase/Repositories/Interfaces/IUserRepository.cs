@@ -1,10 +1,11 @@
-﻿using Poslannik.DataBase.Entities;
+using Poslannik.DataBase.Entities;
 using Poslannik.Framework.Models;
 
-namespace Poslannik.DataBase.Repositories.Interfaces
+namespace Poslannik.DataBase.Repositories.Interfaces;
+
+public interface IUserRepository
 {
-    public interface IUserRepository : IRepository<UserEntity, User>
-    {
-        Task<User?> GetUserByLoginAsync (string login);
-    }
+    Task<bool> HasUserByLoginAsync(string login);
+
+    Task<Dictionary<PasswordDataType, byte[]>?> GetPasswordDataByLoginAsync(string login);
 }

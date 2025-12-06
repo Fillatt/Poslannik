@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +11,6 @@ namespace Poslannik.Framework.Hubs
 {
     public class UserHubRepository(IUserRepository userRepository) : IUserHubRepository
     {
-        public Task AddAsync(User model) => userRepository.AddAsync(model);
-
-        public Task DeleteAsync(long id) => userRepository.DeleteAsync(id);
-
-        public Task<IEnumerable<User>> GetAllAsync() => userRepository.GetAllAsync();
-
-        public Task UpdateAsync(User model) => userRepository.UpdateAsync(model);
+       
     }
 }

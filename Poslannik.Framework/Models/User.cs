@@ -21,6 +21,9 @@ namespace Poslannik.Framework.Models
         /// </summary>
         public required string Login { get; set; }
 
+        /// <summary>Пароль.</summary>
+        public required string Password { get; set; }
+
         /// <summary>
         /// Отображаемое имя пользователя
         /// </summary>
@@ -30,16 +33,6 @@ namespace Poslannik.Framework.Models
         /// Группа пользователя (для системных целей)
         /// </summary>
         public string? GroupUser { get; set; }
-
-        /// <summary>
-        /// Хеш пароля пользователя
-        /// </summary>
-        public required byte[] PasswordHash { get; set; }
-
-        /// <summary>
-        /// Соль для хеширования пароля
-        /// </summary>
-        public required byte[] PasswordSalt { get; set; }
 
         /// <summary>
         /// Публичный ключ для end-to-end шифрования

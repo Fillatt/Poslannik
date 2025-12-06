@@ -15,46 +15,6 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
-    {
-        var entities = await _context.Users.ToListAsync();
-        return entities.Select(MapToModel);
-    }
-
-    public async Task<User?> GetUserByLoginAsync(string login) {
-        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Login == login);
-        if (userEntity != null) return MapToModel(userEntity);
-        return null;
-    }
-
-    public async Task AddAsync(User model)
-    {
-        var entity = MapToEntity(model);
-        await _context.Users.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(User model)
-    {
-        var entity = await _context.Users.FindAsync(model.Id);
-        if (entity != null)
-        {
-            MapToEntity(model, entity);
-            _context.Users.Update(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task DeleteAsync(long id)
-    {
-        var entity = await _context.Users.FindAsync((Guid)(object)id);
-        if (entity != null)
-        {
-            _context.Users.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
     public async Task AddTestUserAsync()
     {
         var password = "123";
@@ -75,42 +35,35 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    private UserEntity MapToEntity(User model)
+    public async Task<Dictionary<PasswordDataType, byte[]>?> GetPasswordDataByLoginAsync(string login)
     {
+        var entity = await _context.Users.Where(x => x.Login == login).FirstOrDefaultAsync();
+        if (entity != null) return new Dictionary<PasswordDataType, byte[]>()
+        {
+            { PasswordDataType.Hash, entity.PasswordHash},
+            { PasswordDataType.Salt, entity.PasswordSalt} 
+        };
+        else return null;
+    }
+
+    public Task<bool> HasUserByLoginAsync(string login) => _context.Users.Where(x => x.Login == login).AnyAsync();
+    
+
+    private UserEntity MapToEntity(User user)
+    {
+        byte[] passwordHash;
+        byte[] passwordSalt;
+        PasswordHasher.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
+
         return new UserEntity
         {
-            Id = model.Id,
-            Login = model.Login,
-            UserName = model.UserName,
-            GroupUser = model.GroupUser,
-            PasswordHash = model.PasswordHash,
-            PasswordSalt = model.PasswordSalt,
-            PublicKey = model.PublicKey
+            Id = user.Id,
+            Login = user.Login,
+            PasswordHash = passwordHash,
+            PasswordSalt = passwordSalt,
+            UserName = user.UserName,
+            GroupUser = user.GroupUser,
+            PublicKey = user.PublicKey
         };
     }
-
-    private void MapToEntity(User model, UserEntity entity)
-    {
-        entity.Login = model.Login;
-        entity.UserName = model.UserName;
-        entity.GroupUser = model.GroupUser;
-        entity.PasswordHash = model.PasswordHash;
-        entity.PasswordSalt = model.PasswordSalt;
-        entity.PublicKey = model.PublicKey;
-    }
-
-    private User MapToModel(UserEntity entity)
-    {
-        return new User
-        {
-            Id = entity.Id,
-            Login = entity.Login,
-            UserName = entity.UserName,
-            GroupUser = entity.GroupUser,
-            PasswordHash = entity.PasswordHash,
-            PasswordSalt = entity.PasswordSalt,
-            PublicKey = entity.PublicKey
-        };
-    }
-
 }

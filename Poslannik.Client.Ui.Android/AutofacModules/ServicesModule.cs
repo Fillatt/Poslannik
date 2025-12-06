@@ -12,7 +12,8 @@ public sealed class ServicesModule : Module
         builder
             .RegisterType<NavigationService>()
             .As<INavigationService>()
-            .AsSelf();
+            .AsSelf()
+            .SingleInstance();
 
         builder
             .RegisterType<AuthorizationService>()
