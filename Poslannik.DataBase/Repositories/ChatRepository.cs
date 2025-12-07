@@ -51,6 +51,21 @@ namespace Poslannik.DataBase.Repositories
             }
         }
 
+        public async Task<IEnumerable<Chat>> GetChatsByUserIdAsync(Guid userId)
+        {
+            var entities = await _context.ChatParticipants
+                .Where(cp => cp.UserId == userId)
+                .Include(cp => cp.Chat)
+                    .ThenInclude(c => c.Participants)
+                .Include(cp => cp.Chat)
+                    .ThenInclude(c => c.Messages)
+                .Select(cp => cp.Chat)
+                .Distinct()
+                .ToListAsync();
+
+            return entities.Select(MapToModel);
+        }
+
         private ChatEntity MapToEntity(Chat model)
         {
             return new ChatEntity

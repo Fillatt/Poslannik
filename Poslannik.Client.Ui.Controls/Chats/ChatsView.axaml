@@ -2,7 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Poslannik.Client.Ui.Controls"
+             xmlns:models="using:Poslannik.Framework.Models"
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+             x:DataType="local:ChatsViewModel"
              x:Class="Poslannik.Client.Ui.Controls.ChatsView">
 
     <Grid RowDefinitions="Auto,*,Auto" Background="#FAFAFA">
@@ -35,145 +38,45 @@
         </Border>
 
         <ScrollViewer Grid.Row="1">
-            <StackPanel Name="ChatsListPanel">
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Command="{Binding NavigateToChatCommand}"
-                        Name="Chat1Button">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
-                                <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Border>
+            <ItemsControl ItemsSource="{Binding Chats}" Name="ChatsListPanel">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:Chat">
+                        <Button Background="White"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="#F0F0F0"
+                                Padding="15,12"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Command="{Binding $parent[UserControl].((local:ChatsViewModel)DataContext).NavigateToChatCommand}"
+                                CommandParameter="{Binding}">
+                            <Grid ColumnDefinitions="Auto,*">
+                                <Border Width="40" Height="40"
+                                        CornerRadius="20"
+                                        Background="#E0E0E0"
+                                        Margin="0,0,12,0">
+                                    <Viewbox Width="24" Height="24">
+                                        <Canvas Width="24" Height="24">
+                                            <!-- Иконка для приватного чата -->
+                                            <Path Fill="#999999"
+                                                  IsVisible="{Binding ChatType, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ChatType.Private}}"
+                                                  Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                            <!-- Иконка для группового чата -->
+                                            <Path Fill="#999999"
+                                                  IsVisible="{Binding ChatType, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ChatType.Group}}"
+                                                  Data="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                        </Canvas>
+                                    </Viewbox>
+                                </Border>
 
-                        <TextBlock Grid.Column="1"
-                                   Text="Иван Иванов"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Command="{Binding NavigateToChatCommand}"
-                        Name="Chat2Button">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
-                                <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Border>
-                        <TextBlock Grid.Column="1"
-                                   Text="Петр Петров"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Command="{Binding NavigateToChatCommand}"
-                        Name="Chat3Button">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
-                                <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Border>
-                        <TextBlock Grid.Column="1"
-                                   Text="Сидр Сидоров"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Command="{Binding NavigateToGroupChatCommand}"
-                        Name="GroupChatButton">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
-                                <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Border>
-                        <TextBlock Grid.Column="1"
-                                   Text="Смартфон виво"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-                <Button Background="White"
-                        BorderThickness="0,0,0,1"
-                        BorderBrush="#F0F0F0"
-                        Padding="15,12"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Command="{Binding NavigateToChatCommand}"
-                        Name="Chat5Button">
-                    <Grid ColumnDefinitions="Auto,*">
-                        <Border Width="40" Height="40"
-                                CornerRadius="20"
-                                Background="#E0E0E0"
-                                Margin="0,0,12,0">
-                            <Viewbox Width="24" Height="24">
-                                <Canvas Width="24" Height="24">
-                                    <Path Fill="#999999" 
-                                          Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </Canvas>
-                            </Viewbox>
-                        </Border>
-                        <TextBlock Grid.Column="1"
-                                   Text="Олег Олегов"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
-            </StackPanel>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Name}"
+                                           FontSize="16"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
         
         <Border Grid.Row="2"

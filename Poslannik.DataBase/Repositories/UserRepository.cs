@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
     public async Task AddTestUserAsync()
     {
         var password = "123";
-        var login = "maxim";
+        var login = "vlad";
 
         byte[] passwordHash;
         byte[] passwordSalt;
@@ -47,7 +47,12 @@ public class UserRepository : IUserRepository
     }
 
     public Task<bool> HasUserByLoginAsync(string login) => _context.Users.Where(x => x.Login == login).AnyAsync();
-    
+
+    public async Task<Guid?> GetUserIdByLoginAsync(string login)
+    {
+        var entity = await _context.Users.Where(x => x.Login == login).FirstOrDefaultAsync();
+        return entity?.Id;
+    }
 
     private UserEntity MapToEntity(User user)
     {

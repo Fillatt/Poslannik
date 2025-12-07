@@ -13,9 +13,25 @@ namespace Poslannik.Framework.Hubs.Interfaces
     /// </summary>
     public interface IChatHubRepository
     {
-        Task<IEnumerable<Chat>> GetAllAsync();
-        Task AddAsync(Chat model);
-        Task UpdateAsync(Chat model);
-        Task DeleteAsync(long id);
+        /// <summary>
+        /// Получает все чаты пользователя
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns>Список чатов пользователя</returns>
+        Task<IEnumerable<Chat>> GetUserChatsAsync(Guid userId);
+
+        /// <summary>
+        /// Создает новый чат
+        /// </summary>
+        /// <param name="chat">Данные чата</param>
+        /// <returns>Созданный чат с идентификатором</returns>
+        Task<Chat> CreateChatAsync(Chat chat);
+
+        /// <summary>
+        /// Уведомляет участников чата о событии
+        /// </summary>
+        /// <param name="chatId">Идентификатор чата</param>
+        /// <param name="chat">Данные чата для отправки</param>
+        Task NotifyChatParticipantsAsync(Guid chatId, Chat chat);
     }
 }

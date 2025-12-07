@@ -14,13 +14,14 @@ public class LoginViewModel : ViewModelBase
 {
     private IAutorizationService _autorizationService;
 
+    private ChatsViewModel _chatsViewModel;
     private string? _login;
     private string? _password;
 
     private bool _canLogin;
+    private string? _errorMessage;
 
     /// <summary>Логин.</summary>
-    [Required(ErrorMessage = "Поле не может быть пустым")]
     public string? Login
     {
         get => _login;
@@ -28,7 +29,6 @@ public class LoginViewModel : ViewModelBase
     }
 
     /// <summary>Пароль.</summary>
-    [Required(ErrorMessage = "Поле не может быть пустым")]
     public string? Password
     {
         get => _password;
@@ -42,11 +42,20 @@ public class LoginViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _canLogin, value);
     }
 
+    /// <summary>Сообщение об ошибке.</summary>
+    public string? ErrorMessage
+    {
+        get => _errorMessage;
+        set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
+    }
+
     /// <summary>Команда входа в систему.</summary>
     public ReactiveCommand<Unit, Task> LoginCommand { get; }
 
-    public LoginViewModel(IAutorizationService autorizationService)
+    public LoginViewModel(IAutorizationService autorizationService, ChatsViewModel chatsViewModel)
     {
+        _chatsViewModel = chatsViewModel;
+
         _autorizationService = autorizationService;
 
         PropertyChanged += (o, e) => CanLogin = CheckCanLogin();
@@ -57,8 +66,17 @@ public class LoginViewModel : ViewModelBase
     /// <summary>Обработчик входа в систему.</summary>
     private async Task OnLoginAsync()
     {
+        ErrorMessage = null;
         var result = await _autorizationService.AuthorizeAsync(Login!, Password!, CancellationToken.None);
-        if(result.IsSuccess) NavigationService?.NavigateTo<ChatsViewModel>();
+        if(result.IsSuccess)
+        {
+            await _chatsViewModel.InitializeAsync();
+            NavigationService?.NavigateTo<ChatsViewModel>();
+        }
+        else
+        {
+            ErrorMessage = "Неверный логин или пароль";
+        }
     }
 
     private bool CheckCanLogin() => _login != null && _password != null;

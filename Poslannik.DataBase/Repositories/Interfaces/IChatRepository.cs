@@ -5,5 +5,11 @@ namespace Poslannik.DataBase.Repositories.Interfaces
 {
     public interface IChatRepository : IRepository<ChatEntity, Chat>
     {
+        /// <summary>
+        /// Получает все чаты пользователя по его идентификатору
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns>Список чатов пользователя</returns>
+        Task<IEnumerable<Chat>> GetChatsByUserIdAsync(Guid userId);
     }
 }
