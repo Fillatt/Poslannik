@@ -15,14 +15,14 @@ namespace Poslannik.Client.Ui.Controls
     public class ChatsViewModel : ViewModelBase
     {
         private readonly IChatService _chatService;
-        private readonly IAutorizationService _authorizationService;
+       
         private ObservableCollection<Chat> _chats;
         private bool _isLoading;
 
-        public ChatsViewModel(IChatService chatService, IAutorizationService authorizationService)
+        public ChatsViewModel(IChatService chatService)
         {
             _chatService = chatService;
-            _authorizationService = authorizationService;
+       
             _chats = new ObservableCollection<Chat>();
 
             NavigateToProfileCommand = ReactiveCommand.Create(OnNavigateToProfile);
@@ -115,17 +115,6 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         public async Task InitializeAsync()
         {
-            if (!_authorizationService.IsAuthorizated || _authorizationService.UserId == null)
-            {
-                return;
-            }
-
-            // Подключаемся к ChatHub
-            if (!_chatService.IsConnected && !string.IsNullOrEmpty(_authorizationService.JwtToken))
-            {
-                await _chatService.ConnectAsync(_authorizationService.JwtToken);
-            }
-
             // Загружаем чаты
             await LoadChatsAsync();
         }
@@ -135,16 +124,11 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private async Task LoadChatsAsync()
         {
-            if (_authorizationService.UserId == null)
-            {
-                return;
-            }
-
             IsLoading = true;
 
             try
             {
-                var chats = await _chatService.GetUserChatsAsync(_authorizationService.UserId.Value);
+                var chats = await _chatService.GetUserChatsAsync();
 
                 Chats.Clear();
                 foreach (var chat in chats)

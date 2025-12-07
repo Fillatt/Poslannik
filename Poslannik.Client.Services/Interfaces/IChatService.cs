@@ -13,7 +13,7 @@ public interface IChatService
     Task<bool> ConnectAsync(string jwtToken, CancellationToken cancellationToken = default);
     Task DisconnectAsync(CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Chat>> GetUserChatsAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Chat>> GetUserChatsAsync(CancellationToken cancellationToken = default);
     Task<Chat?> CreateChatAsync(Chat chat, IEnumerable<Guid>? participantUserIds = null, CancellationToken cancellationToken = default);
     Task UpdateChatAsync(Chat chat, CancellationToken cancellationToken = default);
     Task DeleteChatAsync(Guid chatId, CancellationToken cancellationToken = default);

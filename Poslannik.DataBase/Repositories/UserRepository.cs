@@ -54,13 +54,13 @@ public class UserRepository : IUserRepository
         return entity?.Id;
     }
 
-    public async Task<IEnumerable<User>> SearchUsersByNameAsync(string searchQuery)
+    public async Task<IEnumerable<User>> SearchUsersByNameAsync(string userName)
     {
-        if (string.IsNullOrWhiteSpace(searchQuery))
+        if (string.IsNullOrWhiteSpace(userName))
             return Enumerable.Empty<User>();
 
         var entities = await _context.Users
-            .Where(x => x.UserName != null && x.UserName.ToLower().Contains(searchQuery.ToLower()))
+            .Where(x => x.UserName != null && x.UserName.ToLower().Contains(userName.ToLower()))
             .Take(10)
             .ToListAsync();
 

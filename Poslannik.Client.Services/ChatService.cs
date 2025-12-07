@@ -11,6 +11,7 @@ public class ChatService : IChatService
     private HubConnection? _hubConnection;
     private readonly string _url;
     private bool _isConnected;
+    private IAutorizationService _autorizationService;
 
     public bool IsConnected => _isConnected && _hubConnection?.State == HubConnectionState.Connected;
 
@@ -18,10 +19,11 @@ public class ChatService : IChatService
     public event Action<Chat>? OnChatUpdated;
     public event Action<Guid>? OnChatDeleted;
 
-    public ChatService(IConfiguration configuration)
+    public ChatService(IConfiguration configuration, IAutorizationService authorizationService)
     {
         var apiUrl = configuration.GetRequiredSection("apiUrl").Value!;
         _url = apiUrl + HubConstants.ChatHubPath;
+        _autorizationService = authorizationService;
     }
 
     public async Task<bool> ConnectAsync(string jwtToken, CancellationToken cancellationToken = default)
@@ -82,18 +84,18 @@ public class ChatService : IChatService
         }
     }
 
-    public async Task<IEnumerable<Chat>> GetUserChatsAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Chat>> GetUserChatsAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
             {
-                throw new InvalidOperationException("Не подключено к ChatHub");
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
             }
 
             var chats = await _hubConnection.InvokeAsync<IEnumerable<Chat>>(
                 "GetUserChatsAsync",
-                userId,
+                _autorizationService.UserId,
                 cancellationToken);
 
             return chats ?? Enumerable.Empty<Chat>();
@@ -111,7 +113,7 @@ public class ChatService : IChatService
         {
             if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
             {
-                throw new InvalidOperationException("Не подключено к ChatHub");
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
             }
 
             var createdChat = await _hubConnection.InvokeAsync<Chat>(
@@ -135,7 +137,7 @@ public class ChatService : IChatService
         {
             if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
             {
-                throw new InvalidOperationException("Не подключено к ChatHub");
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
             }
 
             await _hubConnection.InvokeAsync(

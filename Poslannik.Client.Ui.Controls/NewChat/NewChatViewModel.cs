@@ -1,12 +1,14 @@
-using System.Reactive;
-using ReactiveUI;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Poslannik.Client.Services.Interfaces;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
-using Poslannik.Client.Services.Interfaces;
 using Poslannik.Framework.Models;
-using System.Threading.Tasks;
+using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -47,13 +49,7 @@ namespace Poslannik.Client.Ui.Controls
             RemoveParticipantCommand = ReactiveCommand.Create<User>(OnRemoveParticipant);
             SelectUserCommand = ReactiveCommand.Create<User>(OnSelectUser);
             AddParticipantCommand = ReactiveCommand.Create<User>(OnAddParticipant);
-
-            // Подписываемся на изменения поисковых запросов
-            this.WhenAnyValue(x => x.UserSearchQuery)
-                .Subscribe(async query => await SearchUsersAsync(query));
-
-            this.WhenAnyValue(x => x.ParticipantSearchQuery)
-                .Subscribe(async query => await SearchParticipantsAsync(query));
+            KeyDownCommand = ReactiveCommand.Create<string?, Task>(SearchUsersAsync);
         }
 
         /// <summary>
@@ -176,6 +172,8 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         public ReactiveCommand<User, Unit> AddParticipantCommand { get; }
 
+        public ReactiveCommand<string?, Task> KeyDownCommand { get; }
+
         /// <summary>
         /// Обработчик возврата назад
         /// </summary>
@@ -187,9 +185,9 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Поиск пользователей для личного чата
         /// </summary>
-        private async Task SearchUsersAsync(string? query)
+        private async Task SearchUsersAsync(string? userName)
         {
-            if (string.IsNullOrWhiteSpace(query))
+            if (string.IsNullOrWhiteSpace(userName))
             {
                 FoundUsers.Clear();
                 return;
@@ -197,7 +195,7 @@ namespace Poslannik.Client.Ui.Controls
 
             try
             {
-                var users = await _userService.SearchUsersAsync(query);
+                var users = await _userService.SearchUsersAsync(userName);
                 FoundUsers.Clear();
                 foreach (var user in users.Where(u => u.Id != _authorizationService.UserId))
                 {

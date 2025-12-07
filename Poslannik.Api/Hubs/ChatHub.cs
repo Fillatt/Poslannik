@@ -52,7 +52,7 @@ public class ChatHub : Hub, IChatHubRepository
         }
 
         // Уведомляем всех участников о создании чата
-        await NotifyChatParticipantsAsync(newChat.Id, newChat);
+        await NotifyChatParticipantsAsync(newChat);
 
         return newChat;
     }
@@ -60,7 +60,7 @@ public class ChatHub : Hub, IChatHubRepository
     /// <summary>
     /// Уведомляет всех участников чата о событии
     /// </summary>
-    public async Task NotifyChatParticipantsAsync(Guid chatId, Chat chat)
+    public async Task NotifyChatParticipantsAsync(Chat chat)
     {
         // Для личного чата уведомляем обоих пользователей
         if (chat.ChatType == ChatType.Private && chat.User1Id.HasValue && chat.User2Id.HasValue)
@@ -74,7 +74,7 @@ public class ChatHub : Hub, IChatHubRepository
         else if (chat.ChatType == ChatType.Group)
         {
             var participants = await _chatParticipantRepository.GetAllAsync();
-            var chatParticipants = participants.Where(p => p.ChatId == chatId).ToList();
+            var chatParticipants = participants.Where(p => p.ChatId == chat.Id).ToList();
 
             foreach (var participant in chatParticipants)
             {
@@ -92,7 +92,7 @@ public class ChatHub : Hub, IChatHubRepository
         await _chatRepository.UpdateAsync(chat);
 
         // Уведомляем участников об обновлении
-        await NotifyUpdateAsync(chat.Id, chat);
+        await NotifyUpdateAsync(chat);
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public class ChatHub : Hub, IChatHubRepository
     /// <summary>
     /// Уведомляет участников об обновлении чата
     /// </summary>
-    private async Task NotifyUpdateAsync(Guid chatId, Chat chat)
+    private async Task NotifyUpdateAsync(Chat chat)
     {
         var participants = await _chatParticipantRepository.GetAllAsync();
-        var chatParticipants = participants.Where(p => p.ChatId == chatId).ToList();
+        var chatParticipants = participants.Where(p => p.ChatId == chat.Id).ToList();
 
         foreach (var participant in chatParticipants)
         {

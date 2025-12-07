@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
@@ -9,6 +9,10 @@ namespace Poslannik.Client.Ui.Controls
         public NewChatView()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void UserControl_ActualThemeVariantChanged(object? sender, System.EventArgs e)
+        {
         }
     }
 }

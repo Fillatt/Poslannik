@@ -11,5 +11,5 @@ public interface IUserRepository
 
     Task<Guid?> GetUserIdByLoginAsync(string login);
 
-    Task<IEnumerable<User>> SearchUsersByNameAsync(string searchQuery);
+    Task<IEnumerable<User>> SearchUsersByNameAsync(string userName);
 }

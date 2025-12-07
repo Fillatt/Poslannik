@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +33,6 @@ namespace Poslannik.Framework.Hubs.Interfaces
         /// </summary>
         /// <param name="chatId">Идентификатор чата</param>
         /// <param name="chat">Данные чата для отправки</param>
-        Task NotifyChatParticipantsAsync(Guid chatId, Chat chat);
+        Task NotifyChatParticipantsAsync(Chat chat);
     }
 }

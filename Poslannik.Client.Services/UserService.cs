@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Poslannik.Client.Services.Interfaces;
 using Poslannik.Framework.Hubs;
+using Poslannik.Framework.Hubs.Interfaces;
 using Poslannik.Framework.Models;
 
 namespace Poslannik.Client.Services;
@@ -12,10 +13,13 @@ public class UserService : IUserService
     private HubConnection? _hubConnection;
     private bool _isConnected;
 
-    public UserService(IConfiguration configuration)
+    private IAutorizationService _autorizationService;
+
+    public UserService(IConfiguration configuration, IAutorizationService autorizationService)
     {
         var apiUrl = configuration.GetRequiredSection("apiUrl").Value!;
         _url = apiUrl + HubConstants.UserHubPath;
+        _autorizationService = autorizationService;
     }
 
     public async Task<IEnumerable<User>> SearchUsersAsync(string searchQuery, CancellationToken cancellationToken = default)
@@ -24,10 +28,10 @@ public class UserService : IUserService
         {
             if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
             {
-                return Enumerable.Empty<User>();
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
             }
 
-            var users = await _hubConnection.InvokeAsync<IEnumerable<User>>("SearchUsersAsync", searchQuery, cancellationToken);
+            var users = await _hubConnection.InvokeAsync<IEnumerable<User>>(nameof(IUserHubRepository.SearchUsersAsync), searchQuery, cancellationToken);
             return users ?? Enumerable.Empty<User>();
         }
         catch (Exception ex)
