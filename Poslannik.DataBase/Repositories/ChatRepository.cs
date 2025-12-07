@@ -59,6 +59,9 @@ namespace Poslannik.DataBase.Repositories
                 if (entity.User1Id != userId) entity.Name = _context.Users.Where(x => x.Id == entity.User1Id).First().UserName;
                 else entity.Name = _context.Users.Where(x => x.Id == entity.User2Id).First().UserName;
             }
+            var chatParticipantEntities = _context.ChatParticipants.Where(x => x.UserId == userId).ToList();
+            var groupChats = _context.Chats.Where(x => x.Participants.Any(i => i.UserId == userId)).ToList();
+            entities.AddRange(groupChats);
             return entities.Select(MapToModel);
         }
 
