@@ -105,7 +105,7 @@ public class ChatService : IChatService
         }
     }
 
-    public async Task<Chat?> CreateChatAsync(Chat chat, CancellationToken cancellationToken = default)
+    public async Task<Chat?> CreateChatAsync(Chat chat, IEnumerable<Guid>? participantUserIds = null, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -117,6 +117,7 @@ public class ChatService : IChatService
             var createdChat = await _hubConnection.InvokeAsync<Chat>(
                 "CreateChatAsync",
                 chat,
+                participantUserIds,
                 cancellationToken);
 
             return createdChat;

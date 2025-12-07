@@ -26,5 +26,11 @@ public sealed class ServicesModule : Module
             .As<IChatService>()
             .AsSelf()
             .SingleInstance();
+
+        builder
+            .RegisterType<UserService>()
+            .As<IUserService>()
+            .AsSelf()
+            .SingleInstance();
     }
 }

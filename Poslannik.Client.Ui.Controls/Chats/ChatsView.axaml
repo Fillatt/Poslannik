@@ -40,14 +40,14 @@
         <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Chats}" Name="ChatsListPanel">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="models:Chat">
+                    <DataTemplate>
                         <Button Background="White"
                                 BorderThickness="0,0,0,1"
                                 BorderBrush="#F0F0F0"
                                 Padding="15,12"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
-                                Command="{Binding $parent[UserControl].((local:ChatsViewModel)DataContext).NavigateToChatCommand}"
+                                Command="{Binding $parent[UserControl].DataContext.NavigateToChatCommand}"
                                 CommandParameter="{Binding}">
                             <Grid ColumnDefinitions="Auto,*">
                                 <Border Width="40" Height="40"

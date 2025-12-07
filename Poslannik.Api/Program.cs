@@ -46,7 +46,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 // Если запрос к SignalR хабу и есть токен в query string
                 if (!string.IsNullOrEmpty(accessToken) &&
                     (path.StartsWithSegments(HubConstants.ChatHubPath) ||
-                     path.StartsWithSegments(HubConstants.AuthorizationHubPath)))
+                     path.StartsWithSegments(HubConstants.AuthorizationHubPath) ||
+                     path.StartsWithSegments(HubConstants.UserHubPath)))
                 {
                     context.Token = accessToken;
                 }
@@ -75,5 +76,6 @@ app.UseAuthorization();
 
 app.MapHub<AuthorizationHub>(HubConstants.AuthorizationHubPath);
 app.MapHub<ChatHub>(HubConstants.ChatHubPath);
+app.MapHub<UserHub>(HubConstants.UserHubPath);
 
 app.Run();

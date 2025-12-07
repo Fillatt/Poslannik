@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
     public async Task AddTestUserAsync()
     {
         var password = "123";
-        var login = "vlad";
+        var login = "Dima";
 
         byte[] passwordHash;
         byte[] passwordSalt;
@@ -54,6 +54,19 @@ public class UserRepository : IUserRepository
         return entity?.Id;
     }
 
+    public async Task<IEnumerable<User>> SearchUsersByNameAsync(string searchQuery)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+            return Enumerable.Empty<User>();
+
+        var entities = await _context.Users
+            .Where(x => x.UserName != null && x.UserName.ToLower().Contains(searchQuery.ToLower()))
+            .Take(10)
+            .ToListAsync();
+
+        return entities.Select(MapToModel);
+    }
+
     private UserEntity MapToEntity(User user)
     {
         byte[] passwordHash;
@@ -69,6 +82,19 @@ public class UserRepository : IUserRepository
             UserName = user.UserName,
             GroupUser = user.GroupUser,
             PublicKey = user.PublicKey
+        };
+    }
+
+    private User MapToModel(UserEntity entity)
+    {
+        return new User
+        {
+            Id = entity.Id,
+            Login = entity.Login,
+            Password = "", // Не возвращаем пароль
+            UserName = entity.UserName,
+            GroupUser = entity.GroupUser,
+            PublicKey = entity.PublicKey
         };
     }
 }

@@ -65,6 +65,44 @@ namespace Poslannik.DataBase.Repositories
             return entities.Select(MapToModel);
         }
 
+        public async Task AddChatWithParticipantsAsync(Chat chat, IEnumerable<Guid> participantUserIds)
+        {
+            var chatEntity = MapToEntity(chat);
+            await _context.Chats.AddAsync(chatEntity);
+            await _context.SaveChangesAsync();
+
+            // Добавляем участников чата
+            if (participantUserIds != null && participantUserIds.Any())
+            {
+                foreach (var userId in participantUserIds)
+                {
+                    var participant = new ChatParticipantEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        ChatId = chatEntity.Id,
+                        UserId = userId,
+                        UserEncryptedKey = null // TODO: Генерация через Signal-протокол
+                    };
+                    await _context.ChatParticipants.AddAsync(participant);
+                }
+
+                // Добавляем создателя чата как участника
+                if (chat.AdminId.HasValue && !participantUserIds.Contains(chat.AdminId.Value))
+                {
+                    var adminParticipant = new ChatParticipantEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        ChatId = chatEntity.Id,
+                        UserId = chat.AdminId.Value,
+                        UserEncryptedKey = null
+                    };
+                    await _context.ChatParticipants.AddAsync(adminParticipant);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
         private ChatEntity MapToEntity(Chat model)
         {
             return new ChatEntity

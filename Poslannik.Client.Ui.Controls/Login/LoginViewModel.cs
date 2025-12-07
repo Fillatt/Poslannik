@@ -19,6 +19,7 @@ public class LoginViewModel : ViewModelBase
     private string? _password;
 
     private bool _canLogin;
+    private bool _isLoading;
     private string? _errorMessage;
 
     /// <summary>Логин.</summary>
@@ -49,6 +50,13 @@ public class LoginViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
     }
 
+    /// <summary>Флаг процесса загрузки.</summary>
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+    }
+
     /// <summary>Команда входа в систему.</summary>
     public ReactiveCommand<Unit, Task> LoginCommand { get; }
 
@@ -66,18 +74,34 @@ public class LoginViewModel : ViewModelBase
     /// <summary>Обработчик входа в систему.</summary>
     private async Task OnLoginAsync()
     {
+        if (IsLoading) return;
+
+        IsLoading = true;
         ErrorMessage = null;
-        var result = await _autorizationService.AuthorizeAsync(Login!, Password!, CancellationToken.None);
-        if(result.IsSuccess)
+
+        try
         {
-            await _chatsViewModel.InitializeAsync();
-            NavigationService?.NavigateTo<ChatsViewModel>();
+            var result = await _autorizationService.AuthorizeAsync(Login!, Password!, CancellationToken.None);
+            if (result.IsSuccess)
+            {
+                await _chatsViewModel.InitializeAsync();
+                NavigationService?.NavigateTo<ChatsViewModel>();
+            }
+            else
+            {
+                ErrorMessage = "Неверный логин или пароль";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ErrorMessage = "Неверный логин или пароль";
+            ErrorMessage = "Ошибка подключения к серверу";
+            System.Diagnostics.Debug.WriteLine($"Ошибка авторизации: {ex.Message}");
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 
-    private bool CheckCanLogin() => _login != null && _password != null;
+    private bool CheckCanLogin() => _login != null && _password != null && !_isLoading;
 }

@@ -4,6 +4,7 @@ public static class HubConstants
 {
     public static string AuthorizationHubPath = "/authorizationHub";
     public static string ChatHubPath = "/chatHub";
+    public static string UserHubPath = "/userHub";
 
     public static class ChatEvents
     {

@@ -24,8 +24,9 @@ namespace Poslannik.Framework.Hubs.Interfaces
         /// Создает новый чат
         /// </summary>
         /// <param name="chat">Данные чата</param>
+        /// <param name="participantUserIds">Идентификаторы участников (для групповых чатов)</param>
         /// <returns>Созданный чат с идентификатором</returns>
-        Task<Chat> CreateChatAsync(Chat chat);
+        Task<Chat> CreateChatAsync(Chat chat, IEnumerable<Guid>? participantUserIds = null);
 
         /// <summary>
         /// Уведомляет участников чата о событии

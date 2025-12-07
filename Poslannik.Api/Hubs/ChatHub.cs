@@ -35,13 +35,21 @@ public class ChatHub : Hub, IChatHubRepository
     /// <summary>
     /// Создает новый чат и уведомляет всех участников
     /// </summary>
-    public async Task<Chat> CreateChatAsync(Chat chat)
+    public async Task<Chat> CreateChatAsync(Chat chat, IEnumerable<Guid>? participantUserIds = null)
     {
         // Создаем новый чат с уникальным идентификатором
         var newChat = chat with { Id = Guid.NewGuid() };
 
-        // Сохраняем чат в базе данных
-        await _chatRepository.AddAsync(newChat);
+        // Для группового чата с участниками используем специальный метод
+        if (newChat.ChatType == ChatType.Group && participantUserIds != null && participantUserIds.Any())
+        {
+            await _chatRepository.AddChatWithParticipantsAsync(newChat, participantUserIds);
+        }
+        else
+        {
+            // Для личных чатов используем стандартный метод
+            await _chatRepository.AddAsync(newChat);
+        }
 
         // Уведомляем всех участников о создании чата
         await NotifyChatParticipantsAsync(newChat.Id, newChat);
@@ -54,16 +62,25 @@ public class ChatHub : Hub, IChatHubRepository
     /// </summary>
     public async Task NotifyChatParticipantsAsync(Guid chatId, Chat chat)
     {
-        // Получаем всех участников чата
-        var participants = await _chatParticipantRepository.GetAllAsync();
-        var chatParticipants = participants.Where(p => p.ChatId == chatId).ToList();
-
-        // Отправляем уведомление каждому участнику
-        foreach (var participant in chatParticipants)
+        // Для личного чата уведомляем обоих пользователей
+        if (chat.ChatType == ChatType.Private && chat.User1Id.HasValue && chat.User2Id.HasValue)
         {
-            // Отправляем уведомление конкретному пользователю
-            await Clients.User(participant.UserId.ToString())
+            await Clients.User(chat.User1Id.Value.ToString())
                 .SendAsync(HubConstants.ChatEvents.ChatCreated, chat);
+            await Clients.User(chat.User2Id.Value.ToString())
+                .SendAsync(HubConstants.ChatEvents.ChatCreated, chat);
+        }
+        // Для группового чата уведомляем всех участников
+        else if (chat.ChatType == ChatType.Group)
+        {
+            var participants = await _chatParticipantRepository.GetAllAsync();
+            var chatParticipants = participants.Where(p => p.ChatId == chatId).ToList();
+
+            foreach (var participant in chatParticipants)
+            {
+                await Clients.User(participant.UserId.ToString())
+                    .SendAsync(HubConstants.ChatEvents.ChatCreated, chat);
+            }
         }
     }
 
