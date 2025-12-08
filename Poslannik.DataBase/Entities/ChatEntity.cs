@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,8 +22,6 @@ namespace Poslannik.DataBase.Entities
         // Поля для групповых чатов
         [MaxLength(200)]
         public string? Name { get; set; }
-
-        public byte[]? EncryptedGroupKey { get; set; }
 
         public Guid? AdminId { get; set; }
 

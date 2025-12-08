@@ -1,6 +1,5 @@
 using System.Reactive;
 using ReactiveUI;
-using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
 using Poslannik.Client.Services.Interfaces;
 

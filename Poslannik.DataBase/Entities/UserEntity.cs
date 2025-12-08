@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -27,7 +27,5 @@ namespace Poslannik.DataBase.Entities
 
         [Required]
         public required byte[] PasswordSalt { get; set; }
-
-        public byte[]? PublicKey { get; set; }
     }
 }

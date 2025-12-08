@@ -67,9 +67,13 @@ builder.Services.AddTransient<IChatParticipantRepository, ChatParticipantReposit
 
 var app = builder.Build();
 
-//var userRepo = app.Services.CreateScope().ServiceProvider.GetRequiredService<IUserRepository>();
-//var userRepoImp = (UserRepository)userRepo;
-//await userRepoImp.AddTestUserAsync();
+var userRepo = app.Services.CreateScope().ServiceProvider.GetRequiredService<IUserRepository>();
+var userRepoImp = (UserRepository)userRepo;
+await userRepoImp.AddTestUserAsync("vlad", "Влад Александров", "123");
+await userRepoImp.AddTestUserAsync("maxim", "Овчин Максинников", "123");
+await userRepoImp.AddTestUserAsync("dima", "Дима Милавин", "123");
+await userRepoImp.AddTestUserAsync("huesos(andrey)", "Андрей Остроумов", "123");
+await userRepoImp.AddTestUserAsync("sanya", "Александр Симаньков", "123");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -333,7 +333,6 @@ namespace Poslannik.Client.Ui.Controls
                         User1Id = _authorizationService.UserId.Value,
                         User2Id = SelectedUser.Id,
                         Name = SelectedUser.UserName,
-                        EncryptedGroupKey = null,
                         AdminId = null
                     };
                 }
@@ -374,7 +373,6 @@ namespace Poslannik.Client.Ui.Controls
                         Id = Guid.NewGuid(),
                         ChatType = ChatType.Group,
                         Name = ChatName,
-                        EncryptedGroupKey = encryptedGroupKey,
                         AdminId = _authorizationService.UserId.Value,
                         User1Id = null,
                         User2Id = null

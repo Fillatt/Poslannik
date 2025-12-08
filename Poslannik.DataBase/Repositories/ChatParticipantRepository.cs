@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Poslannik.DataBase.Entities;
 using Poslannik.DataBase.Repositories.Interfaces;
 using Poslannik.Framework.Models;
@@ -57,8 +57,7 @@ namespace Poslannik.DataBase.Repositories
             {
                 Id = model.Id,
                 ChatId = model.ChatId,
-                UserId = model.UserId,
-                UserEncryptedKey = model.UserEncryptedKey
+                UserId = model.UserId
             };
         }
 
@@ -66,7 +65,6 @@ namespace Poslannik.DataBase.Repositories
         {
             entity.ChatId = model.ChatId;
             entity.UserId = model.UserId;
-            entity.UserEncryptedKey = model.UserEncryptedKey;
         }
 
         private ChatParticipant MapToModel(ChatParticipantEntity entity)
@@ -75,8 +73,7 @@ namespace Poslannik.DataBase.Repositories
             {
                 Id = entity.Id,
                 ChatId = entity.ChatId,
-                UserId = entity.UserId,
-                UserEncryptedKey = entity.UserEncryptedKey
+                UserId = entity.UserId
             };
         }
     }

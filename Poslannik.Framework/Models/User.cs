@@ -33,10 +33,5 @@ namespace Poslannik.Framework.Models
         /// Группа пользователя (для системных целей)
         /// </summary>
         public string? GroupUser { get; set; }
-
-        /// <summary>
-        /// Публичный ключ для end-to-end шифрования
-        /// </summary>
-        public byte[]? PublicKey { get; set; }
     }
 }
