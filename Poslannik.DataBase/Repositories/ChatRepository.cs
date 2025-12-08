@@ -135,4 +135,12 @@ public class ChatRepository : IChatRepository
             AdminId = entity.AdminId
         };
     }
+
+    public async Task<Chat?> GetChatByIdAsync(Guid chatId)
+    {
+        var entity = await _context.Chats.FirstOrDefaultAsync(x => x.Id == chatId);
+
+        if (entity != null) return MapToModel(entity);
+        else return null;
+    }
 }

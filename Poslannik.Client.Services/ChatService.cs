@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Poslannik.Client.Services.Interfaces;
 using Poslannik.Framework.Hubs;
+using Poslannik.Framework.Hubs.Interfaces;
 using Poslannik.Framework.Models;
 
 namespace Poslannik.Client.Services;
@@ -94,7 +95,7 @@ public class ChatService : IChatService
             }
 
             var chats = await _hubConnection.InvokeAsync<IEnumerable<Chat>>(
-                "GetUserChatsAsync",
+                nameof(IChatHub.GetUserChatsAsync),
                 _autorizationService.UserId,
                 cancellationToken);
 
@@ -117,7 +118,7 @@ public class ChatService : IChatService
             }
 
             var createdChat = await _hubConnection.InvokeAsync<Chat>(
-                "CreateChatAsync",
+                nameof(IChatHub.CreateChatAsync),
                 chat,
                 participantUserIds,
                 cancellationToken);
@@ -141,7 +142,7 @@ public class ChatService : IChatService
             }
 
             await _hubConnection.InvokeAsync(
-                "UpdateChatAsync",
+                nameof(IChatHub.UpdateChatAsync),
                 chat,
                 cancellationToken);
         }
@@ -161,7 +162,7 @@ public class ChatService : IChatService
             }
 
             await _hubConnection.InvokeAsync(
-                "DeleteChatAsync",
+                nameof(IChatHub.DeleteChatAsync),
                 chatId,
                 cancellationToken);
         }

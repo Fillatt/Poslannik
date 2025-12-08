@@ -11,7 +11,7 @@ namespace Poslannik.Api.Hubs;
 /// SignalR хаб для управления чатами в реальном времени
 /// </summary>
 [Authorize]
-public class ChatHub : Hub, IChatHubRepository
+public class ChatHub : Hub, IChatHub
 {
     private readonly IChatRepository _chatRepository;
     private readonly IChatParticipantRepository _chatParticipantRepository;

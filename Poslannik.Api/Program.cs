@@ -81,5 +81,6 @@ app.UseAuthorization();
 app.MapHub<AuthorizationHub>(HubConstants.AuthorizationHubPath);
 app.MapHub<ChatHub>(HubConstants.ChatHubPath);
 app.MapHub<UserHub>(HubConstants.UserHubPath);
+app.MapHub<MessageHub>(HubConstants.MessageHubPath);
 
 app.Run();
