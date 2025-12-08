@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using ReactiveUI;
-using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
 using Poslannik.Client.Services.Interfaces;
 using Poslannik.Framework.Models;
@@ -21,6 +20,7 @@ namespace Poslannik.Client.Ui.Controls
         private readonly Dictionary<Guid, string> _userNamesCache = new();
         private IReadOnlyList<Message> _messages;
         private string? _chatName;
+        private bool _isGroupChat;
 
         public ChatViewModel(
             IMessageService messageService,
@@ -48,14 +48,25 @@ namespace Poslannik.Client.Ui.Controls
             set
             {
                 this.RaiseAndSetIfChanged(ref _currentChat, value);
-                if(_currentChat?.ChatType == ChatType.Private)
+                if (_currentChat?.ChatType == ChatType.Private)
                 {
+                    IsGroupChat = true;
                     ChatName = _authorizationService.UserId == _currentChat.User1Id
                         ? _userNamesCache.GetValueOrDefault(_currentChat.User2Id.Value)
                         : _userNamesCache.GetValueOrDefault(_currentChat.User1Id.Value);
                 }
-                else ChatName = _currentChat?.Name;
+                else
+                {
+                    IsGroupChat = false;
+                    ChatName = _currentChat?.Name;
+                }
             }
+        }
+
+        public bool IsGroupChat
+        {
+            get => _isGroupChat;
+            set => this.RaiseAndSetIfChanged(ref _isGroupChat, value);
         }
 
         public string? ChatName

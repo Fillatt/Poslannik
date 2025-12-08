@@ -81,7 +81,8 @@
                                 <TextBlock Text="{Binding SenderName}"
                                            FontSize="12"
                                            Foreground="#666666"
-                                           Margin="10,0,0,4"/>
+                                           Margin="10,0,0,4"
+                                           IsVisible="{Binding $parent[UserControl].DataContext.IsPrivateChat}"/>
                                 <Border Background="White"
                                         CornerRadius="15,15,15,5"
                                         Padding="12,8">

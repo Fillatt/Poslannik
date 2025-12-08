@@ -12,6 +12,7 @@ namespace Poslannik.Client.Ui.Controls
         private string _text = string.Empty;
         private string? _senderName;
         private bool _isOwnMessage;
+        private bool _isPrivateChat;
         private DateTime _dateTime;
 
         /// <summary>
@@ -30,6 +31,12 @@ namespace Poslannik.Client.Ui.Controls
         {
             get => _senderName;
             set => this.RaiseAndSetIfChanged(ref _senderName, value);
+        }
+
+        public bool IsPrivateChat
+        {
+            get => _isPrivateChat;
+            set => this.RaiseAndSetIfChanged(ref _isPrivateChat, value);
         }
 
         /// <summary>
