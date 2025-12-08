@@ -54,6 +54,7 @@ namespace Poslannik.Client.Ui.Controls
                         ? _userNamesCache.GetValueOrDefault(_currentChat.User2Id.Value)
                         : _userNamesCache.GetValueOrDefault(_currentChat.User1Id.Value);
                 }
+                else ChatName = _currentChat?.Name;
             }
         }
 
