@@ -20,6 +20,7 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IAutorizationService _authorizationService;
         private readonly Dictionary<Guid, string> _userNamesCache = new();
         private IReadOnlyList<Message> _messages;
+        private string? _chatName;
 
         public ChatViewModel(
             IMessageService messageService,
@@ -44,7 +45,22 @@ namespace Poslannik.Client.Ui.Controls
         public Chat? CurrentChat
         {
             get => _currentChat;
-            set => this.RaiseAndSetIfChanged(ref _currentChat, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _currentChat, value);
+                if(_currentChat?.ChatType == ChatType.Private)
+                {
+                    ChatName = _authorizationService.UserId == _currentChat.User1Id
+                        ? _userNamesCache.GetValueOrDefault(_currentChat.User2Id.Value)
+                        : _userNamesCache.GetValueOrDefault(_currentChat.User1Id.Value);
+                }
+            }
+        }
+
+        public string? ChatName
+        {
+            get => _chatName;
+            set => this.RaiseAndSetIfChanged(ref _chatName, value);
         }
 
         /// <summary>

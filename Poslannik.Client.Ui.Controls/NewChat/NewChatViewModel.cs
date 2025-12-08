@@ -410,6 +410,7 @@ namespace Poslannik.Client.Ui.Controls
                     else
                     {
                         _groupChatViewModel.CurrentChat = createdChat;
+                        await _chatViewModel.InitializeAsync();
                         NavigationService.NavigateToWithHistory<GroupChatViewModel>();
                     }
                 }

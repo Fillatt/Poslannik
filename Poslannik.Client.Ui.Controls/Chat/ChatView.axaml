@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,14 +13,14 @@
     </UserControl.Styles>
 
     <Grid RowDefinitions="Auto,*,Auto" Background="#FAFAFA">
-        
-        <Border Grid.Row="0" 
+
+        <Border Grid.Row="0"
                 Background="White"
                 BorderBrush="#E0E0E0"
                 BorderThickness="0,0,0,1"
                 Padding="10">
             <Grid ColumnDefinitions="Auto,*,Auto">
-                
+
                 <Button Grid.Column="0"
                         Background="Transparent"
                         BorderThickness="0"
@@ -30,18 +30,18 @@
                         Name="BackButton">
                     <Viewbox Width="24" Height="24">
                         <Canvas Width="24" Height="24">
-                            <Path Fill="#000000" 
+                            <Path Fill="#000000"
                                   Data="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                         </Canvas>
                     </Viewbox>
                 </Button>
-                
+
                 <TextBlock Grid.Column="1"
-                           Text = "{Binding DisplayName}"
+                           Text="{Binding ChatName}"
                            FontSize="18"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"/>
-                
+
                 <Button Grid.Column="2"
                         Width="35" Height="35"
                         CornerRadius="17.5"
@@ -52,15 +52,15 @@
                         Name="UserAvatarButton">
                     <Viewbox Width="20" Height="20">
                         <Canvas Width="24" Height="24">
-                            <Path Fill="#999999" 
+                            <Path Fill="#999999"
                                   Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                         </Canvas>
                     </Viewbox>
                 </Button>
-                
+
             </Grid>
         </Border>
-        
+
         <ScrollViewer Grid.Row="1"
                       Background="#F5F5F5"
                       Name="MessagesScrollViewer">
@@ -108,14 +108,14 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        
+
         <Border Grid.Row="2"
                 Background="White"
                 BorderBrush="#E0E0E0"
                 BorderThickness="0,1,0,0"
                 Padding="10">
             <Grid ColumnDefinitions="*,Auto">
-                
+
                 <TextBox Grid.Column="0"
                          Text="{Binding MessageText}"
                          Watermark="Сообщение..."
@@ -126,7 +126,7 @@
                          Padding="15,10"
                          VerticalAlignment="Center"
                          Name="MessageTextBox"/>
-                
+
                 <Button Grid.Column="1"
                         Background="#EF3C45"
                         Width="40"
@@ -145,9 +145,9 @@
                         </Canvas>
                     </Viewbox>
                 </Button>
-                
+
             </Grid>
         </Border>
-        
+
     </Grid>
 </UserControl>
