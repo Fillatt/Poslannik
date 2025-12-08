@@ -399,6 +399,7 @@ namespace Poslannik.Client.Ui.Controls
 
                     // Очищаем стек и добавляем ChatsViewModel в основу
                     NavigationService.ClearNavigationStack();
+                    await _chatViewModel.InitializeAsync();
                     NavigationService.NavigateToWithHistory<ChatsViewModel>();
 
                     // Передаем созданный чат в соответствующий ViewModel и переходим к нему
