@@ -34,7 +34,6 @@ namespace Poslannik.Client.Ui.Controls
 
             NavigateToProfileCommand = ReactiveCommand.Create(OnNavigateToProfile);
             NavigateToChatCommand = ReactiveCommand.Create<Chat>(OnNavigateToChat);
-            NavigateToGroupChatCommand = ReactiveCommand.Create<Chat>(OnNavigateToGroupChat);
             NavigateToNewChatCommand = ReactiveCommand.Create(OnNavigateToNewChat);
 
             SubscribeToChatEvents();
@@ -69,11 +68,6 @@ namespace Poslannik.Client.Ui.Controls
         public ReactiveCommand<Chat, Unit> NavigateToChatCommand { get; }
 
         /// <summary>
-        /// Команда перехода к групповому чату
-        /// </summary>
-        public ReactiveCommand<Chat, Unit> NavigateToGroupChatCommand { get; }
-
-        /// <summary>
         /// Команда перехода к созданию нового чата
         /// </summary>
         public ReactiveCommand<Unit, Unit> NavigateToNewChatCommand { get; }
@@ -101,15 +95,6 @@ namespace Poslannik.Client.Ui.Controls
                 _groupChatViewModel.CurrentChat = chat;
                 NavigationService.NavigateToWithHistory<GroupChatViewModel>();
             }
-        }
-
-        /// <summary>
-        /// Обработчик перехода к групповому чату
-        /// </summary>
-        private void OnNavigateToGroupChat(Chat chat)
-        {
-            _groupChatViewModel.CurrentChat = chat;
-            NavigationService.NavigateToWithHistory<GroupChatViewModel>();
         }
 
         /// <summary>

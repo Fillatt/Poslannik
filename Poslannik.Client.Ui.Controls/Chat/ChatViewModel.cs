@@ -111,7 +111,7 @@ namespace Poslannik.Client.Ui.Controls
                 ChatId = CurrentChat.Id,
                 SenderId = currentUserId.Value,
                 Data = MessageText.Trim(),
-                DateTime = DateTime.Now
+                DateTime = DateTime.UtcNow
             };
 
             // Отправляем сообщение через сервис
@@ -149,7 +149,7 @@ namespace Poslannik.Client.Ui.Controls
             if (currentUserId == null)
                 return;
 
-            var isOwnMessage = message.SenderId == currentUserId;
+            var isOwnMessage = message.SenderId == currentUserId.Value;
             string? senderName = null;
 
             // Получаем имя отправителя, если это не собственное сообщение

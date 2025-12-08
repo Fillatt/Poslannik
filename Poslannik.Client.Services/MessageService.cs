@@ -19,7 +19,7 @@ public class MessageService : IMessageService
     public MessageService(IConfiguration configuration, IAutorizationService authorizationService)
     {
         var apiUrl = configuration.GetRequiredSection("apiUrl").Value!;
-        _url = apiUrl + HubConstants.ChatHubPath;
+        _url = apiUrl + HubConstants.MessageHubPath;
         _autorizationService = authorizationService;
     }
 
