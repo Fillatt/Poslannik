@@ -50,16 +50,13 @@ namespace Poslannik.Client.Ui.Controls
                 this.RaiseAndSetIfChanged(ref _currentChat, value);
                 if (_currentChat?.ChatType == ChatType.Private)
                 {
-                    IsGroupChat = true;
-                    ChatName = _authorizationService.UserId == _currentChat.User1Id
-                        ? _userNamesCache.GetValueOrDefault(_currentChat.User2Id.Value)
-                        : _userNamesCache.GetValueOrDefault(_currentChat.User1Id.Value);
+                    IsGroupChat = false;
                 }
                 else
                 {
-                    IsGroupChat = false;
-                    ChatName = _currentChat?.Name;
+                    IsGroupChat = true;
                 }
+                ChatName = _currentChat?.Name;
             }
         }
 
