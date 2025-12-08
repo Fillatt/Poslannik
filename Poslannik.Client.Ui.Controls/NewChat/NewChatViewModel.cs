@@ -179,7 +179,25 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private void OnNavigateBack()
         {
+            ResetState();
             NavigationService.NavigateBack();
+        }
+
+        /// <summary>
+        /// Сброс состояния формы
+        /// </summary>
+        private void ResetState()
+        {
+            IsPrivateChat = true;
+            ChatName = null;
+            UserSearchQuery = null;
+            ParticipantSearchQuery = null;
+            SelectedUser = null;
+            ErrorMessage = null;
+            FoundUsers.Clear();
+            FoundParticipants.Clear();
+            Participants.Clear();
+            this.RaisePropertyChanged(nameof(HasParticipants));
         }
 
         /// <summary>
@@ -196,10 +214,21 @@ namespace Poslannik.Client.Ui.Controls
             try
             {
                 var users = await _userService.SearchUsersAsync(userName);
+                var existingChats = await _chatService.GetUserChatsAsync();
+
                 FoundUsers.Clear();
                 foreach (var user in users.Where(u => u.Id != _authorizationService.UserId))
                 {
-                    FoundUsers.Add(user);
+                    // Проверяем, нет ли уже личного чата с этим пользователем
+                    var chatExists = existingChats.Any(c =>
+                        c.ChatType == ChatType.Private &&
+                        ((c.User1Id == _authorizationService.UserId && c.User2Id == user.Id) ||
+                         (c.User2Id == _authorizationService.UserId && c.User1Id == user.Id)));
+
+                    if (!chatExists)
+                    {
+                        FoundUsers.Add(user);
+                    }
                 }
             }
             catch (Exception ex)
@@ -293,7 +322,7 @@ namespace Poslannik.Client.Ui.Controls
                         ChatType = ChatType.Private,
                         User1Id = _authorizationService.UserId.Value,
                         User2Id = SelectedUser.Id,
-                        Name = null,
+                        Name = SelectedUser.UserName,
                         EncryptedGroupKey = null,
                         AdminId = null
                     };
@@ -344,7 +373,14 @@ namespace Poslannik.Client.Ui.Controls
 
                 if (createdChat != null)
                 {
+                    // Сбрасываем состояние формы
+                    ResetState();
+
+                    // Очищаем стек и добавляем ChatsViewModel в основу
                     NavigationService.ClearNavigationStack();
+                    NavigationService.NavigateToWithHistory<ChatsViewModel>();
+
+                    // Теперь переходим к чату, чтобы кнопка "назад" вела к списку чатов
                     if (IsPrivateChat)
                     {
                         NavigationService.NavigateToWithHistory<ChatViewModel>();
