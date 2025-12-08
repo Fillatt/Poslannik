@@ -16,5 +16,15 @@ namespace Poslannik.Framework.Hubs.Interfaces
         Task AddAsync(Message model);
         Task UpdateAsync(Message model);
         Task DeleteAsync(long id);
+
+        /// <summary>
+        /// Отправка сообщения в чат
+        /// </summary>
+        Task<Message?> SendMessageAsync(Guid chatId, string messageText);
+
+        /// <summary>
+        /// Получение всех сообщений чата
+        /// </summary>
+        Task<IEnumerable<Message>> GetChatMessagesAsync(Guid chatId);
     }
 }

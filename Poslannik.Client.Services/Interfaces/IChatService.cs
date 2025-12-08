@@ -17,4 +17,5 @@ public interface IChatService
     Task<Chat?> CreateChatAsync(Chat chat, IEnumerable<Guid>? participantUserIds = null, CancellationToken cancellationToken = default);
     Task UpdateChatAsync(Chat chat, CancellationToken cancellationToken = default);
     Task DeleteChatAsync(Guid chatId, CancellationToken cancellationToken = default);
+    Task LeaveChatAsync(Guid chatId, CancellationToken cancellationToken = default);
 }

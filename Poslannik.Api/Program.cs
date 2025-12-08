@@ -47,7 +47,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 if (!string.IsNullOrEmpty(accessToken) &&
                     (path.StartsWithSegments(HubConstants.ChatHubPath) ||
                      path.StartsWithSegments(HubConstants.AuthorizationHubPath) ||
-                     path.StartsWithSegments(HubConstants.UserHubPath)))
+                     path.StartsWithSegments(HubConstants.UserHubPath) ||
+                     path.StartsWithSegments(HubConstants.MessageHubPath)))
                 {
                     context.Token = accessToken;
                 }
@@ -77,5 +78,6 @@ app.UseAuthorization();
 app.MapHub<AuthorizationHub>(HubConstants.AuthorizationHubPath);
 app.MapHub<ChatHub>(HubConstants.ChatHubPath);
 app.MapHub<UserHub>(HubConstants.UserHubPath);
+app.MapHub<MessageHub>(HubConstants.MessageHubPath);
 
 app.Run();

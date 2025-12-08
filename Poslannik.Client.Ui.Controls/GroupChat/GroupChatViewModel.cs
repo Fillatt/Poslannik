@@ -3,6 +3,7 @@ using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
 using Poslannik.Framework.Models;
+using Poslannik.Client.Services.Interfaces;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -11,10 +12,18 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class GroupChatViewModel : ViewModelBase
     {
+        private readonly IChatService _chatService;
+        private readonly IAutorizationService _autorizationService;
         private Chat? _currentChat;
+        private bool _isAdmin;
 
-        public GroupChatViewModel()
+        public GroupChatViewModel(
+            IChatService chatService,
+            IAutorizationService autorizationService)
         {
+            _chatService = chatService;
+            _autorizationService = autorizationService;
+
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToParticipantsCommand = ReactiveCommand.Create(OnNavigateToParticipants);
             DeleteChatCommand = ReactiveCommand.Create(OnDeleteChat);

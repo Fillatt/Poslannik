@@ -25,9 +25,14 @@ namespace Poslannik.Framework.Models
         public required string Password { get; set; }
 
         /// <summary>
-        /// Отображаемое имя пользователя
+        /// Отображаемое имя пользователя (Имя Фамилия)
         /// </summary>
         public string? UserName { get; set; }
+
+        /// <summary>
+        /// Полное отображаемое имя (Имя Фамилия для UI)
+        /// </summary>
+        public string DisplayName => UserName ?? Login;
 
         /// <summary>
         /// Группа пользователя (для системных целей)

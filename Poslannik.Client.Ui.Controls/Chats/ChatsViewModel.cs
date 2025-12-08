@@ -15,14 +15,16 @@ namespace Poslannik.Client.Ui.Controls
     public class ChatsViewModel : ViewModelBase
     {
         private readonly IChatService _chatService;
-       
+        private readonly ChatViewModel _chatViewModel;
+
         private ObservableCollection<Chat> _chats;
         private bool _isLoading;
 
-        public ChatsViewModel(IChatService chatService)
+        public ChatsViewModel(IChatService chatService, ChatViewModel chatViewModel)
         {
             _chatService = chatService;
-       
+            _chatViewModel = chatViewModel;
+
             _chats = new ObservableCollection<Chat>();
 
             NavigateToProfileCommand = ReactiveCommand.Create(OnNavigateToProfile);
@@ -86,6 +88,8 @@ namespace Poslannik.Client.Ui.Controls
         {
             if (chat.ChatType == ChatType.Private)
             {
+                // Устанавливаем текущий чат перед навигацией
+                _chatViewModel.CurrentChat = chat;
                 NavigationService.NavigateToWithHistory<ChatViewModel>();
             }
             else

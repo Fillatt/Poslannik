@@ -14,7 +14,7 @@ namespace Poslannik.Client.Ui.Controls;
 public class LoginViewModel : ViewModelBase
 {
     private IAutorizationService _autorizationService;
-
+    private IMessageService _messageService;
     private ChatsViewModel _chatsViewModel;
     private ProfileViewModel _profileViewModel;
     private string? _login;
@@ -62,13 +62,16 @@ public class LoginViewModel : ViewModelBase
     /// <summary>Команда входа в систему.</summary>
     public ReactiveCommand<Unit, Task> LoginCommand { get; }
 
-    public LoginViewModel(IAutorizationService autorizationService, ChatsViewModel chatsViewModel, ProfileViewModel profileViewModel)
+    public LoginViewModel(
+        IAutorizationService autorizationService,
+        IMessageService messageService,
+        ChatsViewModel chatsViewModel,
+        ProfileViewModel profileViewModel)
     {
         _chatsViewModel = chatsViewModel;
-
         _profileViewModel = profileViewModel;
-
         _autorizationService = autorizationService;
+        _messageService = messageService;
 
         PropertyChanged += (o, e) => CanLogin = CheckCanLogin();
 
@@ -88,6 +91,9 @@ public class LoginViewModel : ViewModelBase
             var result = await _autorizationService.AuthorizeAsync(Login!, Password!, CancellationToken.None);
             if (result.IsSuccess)
             {
+                // Подключаемся к MessageHub
+                await _messageService.ConnectAsync(_autorizationService.JwtToken!, CancellationToken.None);
+
                 await _profileViewModel.InitializeAsync();
                 await _chatsViewModel.InitializeAsync();
                 NavigationService?.NavigateTo<ChatsViewModel>();

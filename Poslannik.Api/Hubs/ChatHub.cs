@@ -15,13 +15,19 @@ public class ChatHub : Hub, IChatHubRepository
 {
     private readonly IChatRepository _chatRepository;
     private readonly IChatParticipantRepository _chatParticipantRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IMessageRepository _messageRepository;
 
     public ChatHub(
         IChatRepository chatRepository,
-        IChatParticipantRepository chatParticipantRepository)
+        IChatParticipantRepository chatParticipantRepository,
+        IUserRepository userRepository,
+        IMessageRepository messageRepository)
     {
         _chatRepository = chatRepository;
         _chatParticipantRepository = chatParticipantRepository;
+        _userRepository = userRepository;
+        _messageRepository = messageRepository;
     }
 
     /// <summary>
@@ -96,14 +102,78 @@ public class ChatHub : Hub, IChatHubRepository
     }
 
     /// <summary>
-    /// Удаляет чат и уведомляет участников
+    /// Удаляет чат и уведомляет участников (только для админа)
     /// </summary>
     public async Task DeleteChatAsync(Guid chatId)
     {
+        var currentUserId = Guid.Parse(Context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new UnauthorizedAccessException());
+        var chat = await _chatRepository.GetByIdAsync(chatId);
+
+        if (chat == null)
+            return;
+
+        // Проверяем, что пользователь - админ группы
+        if (chat.ChatType == ChatType.Group && chat.AdminId != currentUserId)
+            throw new UnauthorizedAccessException("Только администратор может удалить групповой чат");
+
         await _chatRepository.DeleteAsync((long)(object)chatId);
 
         // Уведомляем участников об удалении
         await NotifyDeleteAsync(chatId);
+    }
+
+    /// <summary>
+    /// Выход пользователя из группового чата
+    /// </summary>
+    public async Task LeaveChatAsync(Guid chatId)
+    {
+        var currentUserId = Guid.Parse(Context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new UnauthorizedAccessException());
+        var chat = await _chatRepository.GetByIdAsync(chatId);
+
+        if (chat == null || chat.ChatType != ChatType.Group)
+            return;
+
+        // Получаем данные пользователя для системного сообщения
+        var user = await _userRepository.GetUserByIdAsync(currentUserId);
+        var displayName = user?.UserName ?? user?.Login ?? "Пользователь";
+
+        // Получаем всех участников перед удалением
+        var allParticipants = await _chatParticipantRepository.GetAllAsync();
+        var remainingParticipants = allParticipants
+            .Where(p => p.ChatId == chatId && p.UserId != currentUserId)
+            .ToList();
+
+        // Удаляем участника из чата
+        var participant = allParticipants.FirstOrDefault(p => p.ChatId == chatId && p.UserId == currentUserId);
+        if (participant != null)
+        {
+            await _chatParticipantRepository.DeleteAsync((long)(object)participant.Id);
+        }
+
+        // Создаем системное сообщение о выходе
+        var systemMessage = new Message
+        {
+            Id = Guid.NewGuid(),
+            ChatId = chatId,
+            SenderId = currentUserId,
+            EncryptedMessage = System.Text.Encoding.UTF8.GetBytes($"{displayName} покинул чат"),
+            SentAt = DateTime.UtcNow,
+            MessageType = MessageType.System
+        };
+
+        // Сохраняем системное сообщение
+        await _messageRepository.AddAsync(systemMessage);
+
+        // Отправляем системное сообщение всем оставшимся участникам
+        foreach (var p in remainingParticipants)
+        {
+            await Clients.User(p.UserId.ToString())
+                .SendAsync(HubConstants.MessageEvents.MessageReceived, systemMessage);
+        }
+
+        // Уведомляем пользователя об успешном выходе
+        await Clients.User(currentUserId.ToString())
+            .SendAsync(HubConstants.ChatEvents.ChatDeleted, chatId);
     }
 
     /// <summary>

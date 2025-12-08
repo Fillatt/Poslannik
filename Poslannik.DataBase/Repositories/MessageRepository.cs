@@ -51,6 +51,16 @@ namespace Poslannik.DataBase.Repositories
             }
         }
 
+        public async Task<IEnumerable<Message>> GetMessagesByChatIdAsync(Guid chatId)
+        {
+            var entities = await _context.Messages
+                .Where(m => m.ChatId == chatId)
+                .OrderBy(m => m.SentAt)
+                .ToListAsync();
+
+            return entities.Select(MapToModel);
+        }
+
         private MessageEntity MapToEntity(Message model)
         {
             return new MessageEntity
@@ -58,7 +68,9 @@ namespace Poslannik.DataBase.Repositories
                 Id = model.Id,
                 ChatId = model.ChatId,
                 SenderId = model.SenderId,
-                EncryptedMessage = model.EncryptedMessage
+                EncryptedMessage = model.EncryptedMessage,
+                SentAt = model.SentAt,
+                MessageType = (int)model.MessageType
             };
         }
 
@@ -67,6 +79,8 @@ namespace Poslannik.DataBase.Repositories
             entity.ChatId = model.ChatId;
             entity.SenderId = model.SenderId;
             entity.EncryptedMessage = model.EncryptedMessage;
+            entity.SentAt = model.SentAt;
+            entity.MessageType = (int)model.MessageType;
         }
 
         private Message MapToModel(MessageEntity entity)
@@ -76,7 +90,9 @@ namespace Poslannik.DataBase.Repositories
                 Id = entity.Id,
                 ChatId = entity.ChatId,
                 SenderId = entity.SenderId,
-                EncryptedMessage = entity.EncryptedMessage
+                EncryptedMessage = entity.EncryptedMessage,
+                SentAt = entity.SentAt,
+                MessageType = (MessageType)entity.MessageType
             };
         }
     }

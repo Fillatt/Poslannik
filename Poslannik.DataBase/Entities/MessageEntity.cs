@@ -24,6 +24,12 @@ namespace Poslannik.DataBase.Entities
         [Required]
         public required byte[] EncryptedMessage { get; set; }
 
+        [Required]
+        public DateTime SentAt { get; set; }
+
+        [Required]
+        public int MessageType { get; set; }
+
         // Навигационные свойства
         public virtual ChatEntity Chat { get; set; } = null!;
 

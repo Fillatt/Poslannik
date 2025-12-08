@@ -171,6 +171,26 @@ public class ChatService : IChatService
         }
     }
 
+    public async Task LeaveChatAsync(Guid chatId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+            {
+                throw new InvalidOperationException("Не подключено к ChatHub");
+            }
+
+            await _hubConnection.InvokeAsync(
+                "LeaveChatAsync",
+                chatId,
+                cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка выхода из чата: {ex.Message}");
+        }
+    }
+
     private void RegisterEventHandlers()
     {
         if (_hubConnection == null) return;
