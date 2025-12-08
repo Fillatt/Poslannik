@@ -8,4 +8,6 @@ namespace Poslannik.Framework.Hubs.Interfaces;
 public interface IMessageHub
 {
     Task SendMessageAsync(Message message);
+
+    Task<IReadOnlyList<Message>> GetAllByChatId(Guid chatId);
 }

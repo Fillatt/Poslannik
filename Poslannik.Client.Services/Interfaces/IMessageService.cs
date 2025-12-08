@@ -11,4 +11,6 @@ public interface IMessageService
     Task DisconnectAsync(CancellationToken cancellationToken = default);
 
     Task SendMessageAsync(Message message, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Message>> GetAllMessagesByChatId(Guid chatId, CancellationToken cancellationToken = default);
 }

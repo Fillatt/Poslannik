@@ -19,6 +19,7 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IUserService _userService;
         private readonly IAutorizationService _authorizationService;
         private readonly Dictionary<Guid, string> _userNamesCache = new();
+        private IReadOnlyList<Message> _messages;
 
         public ChatViewModel(
             IMessageService messageService,
@@ -74,6 +75,13 @@ namespace Poslannik.Client.Ui.Controls
         /// Команда отправки сообщения
         /// </summary>
         public ReactiveCommand<Unit, Task> SendMessageCommand { get; }
+
+        public async Task InitializeAsync()
+        {
+            MessageText = string.Empty;
+            _messages = await _messageService.GetAllMessagesByChatId(_currentChat.Id);
+            await ReloadMessagesAsync(_messages);
+        }
 
         /// <summary>
         /// Обработчик возврата назад
@@ -138,6 +146,12 @@ namespace Poslannik.Client.Ui.Controls
                 return;
 
             await AddMessageToList(message);
+        }
+
+        private async Task ReloadMessagesAsync(IReadOnlyList<Message> messages)
+        {
+            Messages.Clear();
+            foreach (var message in messages) await AddMessageToList(message);
         }
 
         /// <summary>

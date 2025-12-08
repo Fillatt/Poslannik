@@ -98,6 +98,25 @@ public class MessageService : IMessageService
         }
     }
 
+    public async Task<IReadOnlyList<Message>> GetAllMessagesByChatId(Guid chatId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+            {
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
+            }
+
+            var messages = await _hubConnection.InvokeAsync<IReadOnlyList<Message>>(nameof(IMessageHub.GetAllByChatId), chatId, cancellationToken);
+            return messages;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка получения чатов: {ex.Message}");
+            return [];
+        }
+    }
+
     private void RegisterEventHandlers()
     {
         if (_hubConnection == null) return;

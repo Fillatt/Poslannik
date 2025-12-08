@@ -6,6 +6,7 @@ using Poslannik.Client.Ui.Controls.ViewModels;
 using Poslannik.Framework.Models;
 using Poslannik.Client.Services.Interfaces;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -29,11 +30,12 @@ namespace Poslannik.Client.Ui.Controls
             _chatService = chatService;
             _chatViewModel = chatViewModel;
             _groupChatViewModel = groupChatViewModel;
-       
+
             _chats = new ObservableCollection<Chat>();
 
             NavigateToProfileCommand = ReactiveCommand.Create(OnNavigateToProfile);
-            NavigateToChatCommand = ReactiveCommand.Create<Chat>(OnNavigateToChat);
+            NavigateToChatCommand = ReactiveCommand.Create<Chat, Task>(OnNavigateToChatAsync);
+            NavigateToGroupChatCommand = ReactiveCommand.Create<Chat>(OnNavigateToGroupChat);
             NavigateToNewChatCommand = ReactiveCommand.Create(OnNavigateToNewChat);
 
             SubscribeToChatEvents();
@@ -65,7 +67,7 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Команда перехода к чату
         /// </summary>
-        public ReactiveCommand<Chat, Unit> NavigateToChatCommand { get; }
+        public ReactiveCommand<Chat, Task> NavigateToChatCommand { get; }
 
         /// <summary>
         /// Команда перехода к созданию нового чата
@@ -83,11 +85,12 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Обработчик перехода к чату
         /// </summary>
-        private void OnNavigateToChat(Chat chat)
+        private async Task OnNavigateToChatAsync(Chat chat)
         {
             if (chat.ChatType == ChatType.Private)
             {
                 _chatViewModel.CurrentChat = chat;
+                await _chatViewModel.InitializeAsync();
                 NavigationService.NavigateToWithHistory<ChatViewModel>();
             }
             else

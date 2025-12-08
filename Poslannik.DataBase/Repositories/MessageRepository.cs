@@ -51,6 +51,12 @@ public class MessageRepository : IMessageRepository
         }
     }
 
+    public async Task<IReadOnlyList<Message>> GetAllMessageByChatId(Guid chatId)
+    {
+        var entities = _context.Messages.Where(x => x.ChatId == chatId);
+        return await entities.Select(x => MapToModel(x)).ToListAsync();
+    }
+
     private MessageEntity MapToEntity(Message model)
     {
         return new MessageEntity

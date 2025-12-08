@@ -16,6 +16,11 @@ public class MessageHub(
     private readonly IChatParticipantRepository _chatParticipantRepository = chatParticipantRepository;
     private readonly IChatRepository _chatRepository = chatRepository;
 
+    public async Task<IReadOnlyList<Message>> GetAllByChatId(Guid chatId)
+    {
+        return await _messageRepository.GetAllMessageByChatId(chatId);
+    }
+
     public async Task SendMessageAsync(Message message)
     {
         await _messageRepository?.AddAsync(message);
