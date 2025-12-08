@@ -48,7 +48,7 @@ public class UserRepository : IUserRepository
 
     public Task<bool> HasUserByLoginAsync(string login) => _context.Users.Where(x => x.Login == login).AnyAsync();
 
-    public async Task<Guid?> GetUserIdByLoginAsync(string login)
+    public async Task<Guid?> GetIdByLoginAsync(string login)
     {
         var entity = await _context.Users.Where(x => x.Login == login).FirstOrDefaultAsync();
         return entity?.Id;
@@ -65,6 +65,14 @@ public class UserRepository : IUserRepository
             .ToListAsync();
 
         return entities.Select(MapToModel);
+    }
+
+    public async Task<User?> GetUserByIdAsync(Guid id)
+    {
+        var entity = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (entity != null) return MapToModel(entity);
+        else return null;
     }
 
     private UserEntity MapToEntity(User user)

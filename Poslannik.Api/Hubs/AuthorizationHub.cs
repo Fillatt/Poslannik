@@ -32,7 +32,7 @@ public class AuthorizationHub : Hub, IAuthorizationHub
         var isVerified = PasswordHasher.VerifyPasswordHash(request.Password, passwordData[PasswordDataType.Hash], passwordData[PasswordDataType.Salt]);
         if (isVerified)
         {
-            var userId = await _userRepository.GetUserIdByLoginAsync(request.Login);
+            var userId = await _userRepository.GetIdByLoginAsync(request.Login);
             if (userId == null) return new AuthorizationResponse { IsSuccess = false };
 
             var claims = new List<Claim>

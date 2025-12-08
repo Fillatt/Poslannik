@@ -33,6 +33,6 @@ public class UserHub : Hub, IUserHubRepository
     /// <returns>Пользователь или null</returns>
     public async Task<User?> GetUserByIdAsync(Guid userId)
     {
-        return await _userRepository.GetByIdAsync(userId);
+        return await _userRepository.GetUserByIdAsync(userId);
     }
 }

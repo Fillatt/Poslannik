@@ -9,7 +9,9 @@ public interface IUserRepository
 
     Task<Dictionary<PasswordDataType, byte[]>?> GetPasswordDataByLoginAsync(string login);
 
-    Task<Guid?> GetUserIdByLoginAsync(string login);
+    Task<Guid?> GetIdByLoginAsync(string login);
 
     Task<IEnumerable<User>> SearchUsersByNameAsync(string userName);
+
+    Task<User?> GetUserByIdAsync(Guid id); 
 }
