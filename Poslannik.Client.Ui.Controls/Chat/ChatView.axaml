@@ -37,7 +37,7 @@
                 </Button>
                 
                 <TextBlock Grid.Column="1"
-                           Text="Иван Иванов"
+                           Text = "{Binding DisplayName}"
                            FontSize="18"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"/>

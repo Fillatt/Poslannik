@@ -18,7 +18,9 @@ public class MessageHub(
 
     public async Task<IReadOnlyList<Message>> GetAllByChatId(Guid chatId)
     {
-        return await _messageRepository.GetAllMessageByChatId(chatId);
+        
+        var test = await _messageRepository.GetAllMessageByChatId(chatId);
+        return test;
     }
 
     public async Task SendMessageAsync(Message message)

@@ -35,7 +35,6 @@ namespace Poslannik.Client.Ui.Controls
 
             NavigateToProfileCommand = ReactiveCommand.Create(OnNavigateToProfile);
             NavigateToChatCommand = ReactiveCommand.Create<Chat, Task>(OnNavigateToChatAsync);
-            NavigateToGroupChatCommand = ReactiveCommand.Create<Chat>(OnNavigateToGroupChat);
             NavigateToNewChatCommand = ReactiveCommand.Create(OnNavigateToNewChat);
 
             SubscribeToChatEvents();
@@ -87,17 +86,9 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private async Task OnNavigateToChatAsync(Chat chat)
         {
-            if (chat.ChatType == ChatType.Private)
-            {
-                _chatViewModel.CurrentChat = chat;
-                await _chatViewModel.InitializeAsync();
-                NavigationService.NavigateToWithHistory<ChatViewModel>();
-            }
-            else
-            {
-                _groupChatViewModel.CurrentChat = chat;
-                NavigationService.NavigateToWithHistory<GroupChatViewModel>();
-            }
+            _chatViewModel.CurrentChat = chat;
+            await _chatViewModel.InitializeAsync();
+            NavigationService.NavigateToWithHistory<ChatViewModel>();
         }
 
         /// <summary>
