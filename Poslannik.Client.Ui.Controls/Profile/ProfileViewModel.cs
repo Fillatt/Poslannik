@@ -13,7 +13,7 @@ namespace Poslannik.Client.Ui.Controls
     {
         private readonly IUserService _userService;
         private readonly IAutorizationService _autorizationService;
-        private string? _userName;
+        private string? _login;
         private string? _displayName;
 
         public ProfileViewModel(IUserService userService, IAutorizationService autorizationService)
@@ -29,10 +29,10 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Имя пользователя (логин)
         /// </summary>
-        public string? UserName
+        public string? Login
         {
-            get => _userName;
-            set => this.RaiseAndSetIfChanged(ref _userName, value);
+            get => _login;
+            set => this.RaiseAndSetIfChanged(ref _login, value);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Poslannik.Client.Ui.Controls
                 var user = await _userService.GetUserByIdAsync(_autorizationService.UserId.Value);
                 if (user != null)
                 {
-                    UserName = user.UserName;
+                    Login = user.Login;
                     DisplayName = user.UserName;
                 }
             }
