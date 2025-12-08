@@ -159,6 +159,13 @@
                              Text="{Binding ParticipantSearchQuery}"
                              IsEnabled="{Binding !IsLoading}"
                              Name="SearchParticipantTextBox">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="KeyDown" SourceObject="{Binding ElementName=SearchParticipantTextBox}">
+                                <ia:InvokeCommandAction Command="{Binding SearchParticipantsCommand}"
+                                                        CommandParameter="{Binding ParticipantSearchQuery}"/>
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+
                         <TextBox.InnerRightContent>
                             <Viewbox Width="20" Height="20" Margin="0,0,8,0">
                                 <Canvas Width="24" Height="24">

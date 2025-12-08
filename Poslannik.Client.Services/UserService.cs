@@ -41,6 +41,25 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+            {
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
+            }
+
+            var user = await _hubConnection.InvokeAsync<User?>(nameof(IUserHubRepository.GetUserByIdAsync), userId, cancellationToken);
+            return user;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка получения пользователя: {ex.Message}");
+            return null;
+        }
+    }
+
     public async Task<bool> ConnectAsync(string jwtToken, CancellationToken cancellationToken = default)
     {
         try

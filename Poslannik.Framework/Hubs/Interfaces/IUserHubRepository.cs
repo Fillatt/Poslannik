@@ -8,4 +8,5 @@ namespace Poslannik.Framework.Hubs.Interfaces;
 public interface IUserHubRepository
 {
     Task<IEnumerable<User>> SearchUsersAsync(string userName);
+    Task<User?> GetUserByIdAsync(Guid userId);
 }

@@ -20,6 +20,8 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IChatService _chatService;
         private readonly IAutorizationService _authorizationService;
         private readonly IUserService _userService;
+        private readonly ChatViewModel _chatViewModel;
+        private readonly GroupChatViewModel _groupChatViewModel;
 
         private bool _isPrivateChat;
         private string? _chatName;
@@ -34,11 +36,13 @@ namespace Poslannik.Client.Ui.Controls
         private ObservableCollection<User> _foundParticipants;
         private ObservableCollection<User> _participants;
 
-        public NewChatViewModel(IChatService chatService, IAutorizationService authorizationService, IUserService userService)
+        public NewChatViewModel(IChatService chatService, IAutorizationService authorizationService, IUserService userService, ChatViewModel chatViewModel, GroupChatViewModel groupChatViewModel)
         {
             _chatService = chatService;
             _authorizationService = authorizationService;
             _userService = userService;
+            _chatViewModel = chatViewModel;
+            _groupChatViewModel = groupChatViewModel;
 
             _foundUsers = new ObservableCollection<User>();
             _foundParticipants = new ObservableCollection<User>();
@@ -50,6 +54,7 @@ namespace Poslannik.Client.Ui.Controls
             SelectUserCommand = ReactiveCommand.Create<User>(OnSelectUser);
             AddParticipantCommand = ReactiveCommand.Create<User>(OnAddParticipant);
             KeyDownCommand = ReactiveCommand.Create<string?, Task>(SearchUsersAsync);
+            SearchParticipantsCommand = ReactiveCommand.Create<string?, Task>(SearchParticipantsAsync);
         }
 
         /// <summary>
@@ -173,6 +178,11 @@ namespace Poslannik.Client.Ui.Controls
         public ReactiveCommand<User, Unit> AddParticipantCommand { get; }
 
         public ReactiveCommand<string?, Task> KeyDownCommand { get; }
+
+        /// <summary>
+        /// Команда поиска участников для группового чата
+        /// </summary>
+        public ReactiveCommand<string?, Task> SearchParticipantsCommand { get; }
 
         /// <summary>
         /// Обработчик возврата назад
@@ -342,6 +352,19 @@ namespace Poslannik.Client.Ui.Controls
                         return;
                     }
 
+                    // Проверяем, нет ли уже группового чата с таким же названием
+                    var existingChats = await _chatService.GetUserChatsAsync();
+                    var groupChatExists = existingChats.Any(c =>
+                        c.ChatType == ChatType.Group &&
+                        c.Name != null &&
+                        c.Name.Trim().Equals(ChatName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                    if (groupChatExists)
+                    {
+                        ErrorMessage = "Групповой чат с таким названием уже существует";
+                        return;
+                    }
+
                     // TODO: Генерация EncryptedGroupKey через Signal-протокол
                     // Пока используем временную заглушку
                     var encryptedGroupKey = new byte[] { 0x00 };
@@ -380,13 +403,15 @@ namespace Poslannik.Client.Ui.Controls
                     NavigationService.ClearNavigationStack();
                     NavigationService.NavigateToWithHistory<ChatsViewModel>();
 
-                    // Теперь переходим к чату, чтобы кнопка "назад" вела к списку чатов
+                    // Передаем созданный чат в соответствующий ViewModel и переходим к нему
                     if (IsPrivateChat)
                     {
+                        _chatViewModel.CurrentChat = createdChat;
                         NavigationService.NavigateToWithHistory<ChatViewModel>();
                     }
                     else
                     {
+                        _groupChatViewModel.CurrentChat = createdChat;
                         NavigationService.NavigateToWithHistory<GroupChatViewModel>();
                     }
                 }

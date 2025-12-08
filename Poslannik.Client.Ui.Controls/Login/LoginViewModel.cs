@@ -5,6 +5,7 @@ using Poslannik.Client.Ui.Controls.ViewModels;
 using ReactiveUI;
 using System.ComponentModel.DataAnnotations;
 using System.Reactive;
+using System.Runtime;
 using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls;
@@ -15,6 +16,7 @@ public class LoginViewModel : ViewModelBase
     private IAutorizationService _autorizationService;
 
     private ChatsViewModel _chatsViewModel;
+    private ProfileViewModel _profileViewModel;
     private string? _login;
     private string? _password;
 
@@ -60,9 +62,11 @@ public class LoginViewModel : ViewModelBase
     /// <summary>Команда входа в систему.</summary>
     public ReactiveCommand<Unit, Task> LoginCommand { get; }
 
-    public LoginViewModel(IAutorizationService autorizationService, ChatsViewModel chatsViewModel)
+    public LoginViewModel(IAutorizationService autorizationService, ChatsViewModel chatsViewModel, ProfileViewModel profileViewModel)
     {
         _chatsViewModel = chatsViewModel;
+
+        _profileViewModel = profileViewModel;
 
         _autorizationService = autorizationService;
 
@@ -84,6 +88,7 @@ public class LoginViewModel : ViewModelBase
             var result = await _autorizationService.AuthorizeAsync(Login!, Password!, CancellationToken.None);
             if (result.IsSuccess)
             {
+                await _profileViewModel.InitializeAsync();
                 await _chatsViewModel.InitializeAsync();
                 NavigationService?.NavigateTo<ChatsViewModel>();
             }

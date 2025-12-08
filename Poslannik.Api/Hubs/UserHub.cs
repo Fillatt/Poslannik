@@ -25,4 +25,14 @@ public class UserHub : Hub, IUserHubRepository
     {
         return await _userRepository.SearchUsersByNameAsync(userName);
     }
+
+    /// <summary>
+    /// Получение пользователя по Id
+    /// </summary>
+    /// <param name="userId">Id пользователя</param>
+    /// <returns>Пользователь или null</returns>
+    public async Task<User?> GetUserByIdAsync(Guid userId)
+    {
+        return await _userRepository.GetByIdAsync(userId);
+    }
 }

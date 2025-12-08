@@ -2,6 +2,7 @@ using System.Reactive;
 using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
+using Poslannik.Framework.Models;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -10,11 +11,22 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class ChatViewModel : ViewModelBase
     {
+        private Chat? _currentChat;
+
         public ChatViewModel()
         {
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
             SendMessageCommand = ReactiveCommand.Create(OnSendMessage);
+        }
+
+        /// <summary>
+        /// Текущий чат
+        /// </summary>
+        public Chat? CurrentChat
+        {
+            get => _currentChat;
+            set => this.RaiseAndSetIfChanged(ref _currentChat, value);
         }
 
         /// <summary>
