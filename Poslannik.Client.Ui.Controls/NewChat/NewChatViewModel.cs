@@ -1,14 +1,9 @@
-using Avalonia.Controls;
-using Avalonia.Input;
 using Poslannik.Client.Services.Interfaces;
-using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
 using Poslannik.Framework.Models;
 using ReactiveUI;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
-using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -21,7 +16,6 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IAutorizationService _authorizationService;
         private readonly IUserService _userService;
         private readonly ChatViewModel _chatViewModel;
-        private readonly GroupChatViewModel _groupChatViewModel;
 
         private bool _isPrivateChat;
         private string? _chatName;
@@ -36,13 +30,12 @@ namespace Poslannik.Client.Ui.Controls
         private ObservableCollection<User> _foundParticipants;
         private ObservableCollection<User> _participants;
 
-        public NewChatViewModel(IChatService chatService, IAutorizationService authorizationService, IUserService userService, ChatViewModel chatViewModel, GroupChatViewModel groupChatViewModel)
+        public NewChatViewModel(IChatService chatService, IAutorizationService authorizationService, IUserService userService, ChatViewModel chatViewModel)
         {
             _chatService = chatService;
             _authorizationService = authorizationService;
             _userService = userService;
             _chatViewModel = chatViewModel;
-            _groupChatViewModel = groupChatViewModel;
 
             _foundUsers = new ObservableCollection<User>();
             _foundParticipants = new ObservableCollection<User>();
@@ -399,21 +392,10 @@ namespace Poslannik.Client.Ui.Controls
 
                     // Очищаем стек и добавляем ChatsViewModel в основу
                     NavigationService.ClearNavigationStack();
-                    await _chatViewModel.InitializeAsync();
-                    NavigationService.NavigateToWithHistory<ChatsViewModel>();
 
-                    // Передаем созданный чат в соответствующий ViewModel и переходим к нему
-                    if (IsPrivateChat)
-                    {
-                        _chatViewModel.CurrentChat = createdChat;
-                        NavigationService.NavigateToWithHistory<ChatViewModel>();
-                    }
-                    else
-                    {
-                        _groupChatViewModel.CurrentChat = createdChat;
-                        await _chatViewModel.InitializeAsync();
-                        NavigationService.NavigateToWithHistory<GroupChatViewModel>();
-                    }
+                    _chatViewModel.CurrentChat = createdChat;
+                    await _chatViewModel.InitializeAsync();
+                    NavigationService.NavigateToWithHistory<ChatViewModel>();
                 }
                 else
                 {

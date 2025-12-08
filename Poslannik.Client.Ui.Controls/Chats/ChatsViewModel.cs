@@ -17,19 +17,17 @@ namespace Poslannik.Client.Ui.Controls
     {
         private readonly IChatService _chatService;
         private readonly ChatViewModel _chatViewModel;
-        private readonly GroupChatViewModel _groupChatViewModel;
+
 
         private ObservableCollection<Chat> _chats;
         private bool _isLoading;
 
         public ChatsViewModel(
             IChatService chatService,
-            ChatViewModel chatViewModel,
-            GroupChatViewModel groupChatViewModel)
+            ChatViewModel chatViewModel)
         {
             _chatService = chatService;
             _chatViewModel = chatViewModel;
-            _groupChatViewModel = groupChatViewModel;
 
             _chats = new ObservableCollection<Chat>();
 

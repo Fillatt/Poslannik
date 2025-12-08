@@ -14,7 +14,6 @@ public sealed class UIModule : Module
         builder.RegisterType<ChatsViewModel>().SingleInstance();
         builder.RegisterType<ProfileViewModel>().SingleInstance();
         builder.RegisterType<ChatViewModel>().SingleInstance();
-        builder.RegisterType<GroupChatViewModel>();
         builder.RegisterType<NewChatViewModel>();
         builder.RegisterType<ParticipantsViewModel>();
         builder.RegisterType<UserProfileViewModel>();
