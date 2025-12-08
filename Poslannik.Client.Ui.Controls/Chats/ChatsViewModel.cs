@@ -15,13 +15,20 @@ namespace Poslannik.Client.Ui.Controls
     public class ChatsViewModel : ViewModelBase
     {
         private readonly IChatService _chatService;
-       
+        private readonly ChatViewModel _chatViewModel;
+        private readonly GroupChatViewModel _groupChatViewModel;
+
         private ObservableCollection<Chat> _chats;
         private bool _isLoading;
 
-        public ChatsViewModel(IChatService chatService)
+        public ChatsViewModel(
+            IChatService chatService,
+            ChatViewModel chatViewModel,
+            GroupChatViewModel groupChatViewModel)
         {
             _chatService = chatService;
+            _chatViewModel = chatViewModel;
+            _groupChatViewModel = groupChatViewModel;
        
             _chats = new ObservableCollection<Chat>();
 
@@ -86,10 +93,12 @@ namespace Poslannik.Client.Ui.Controls
         {
             if (chat.ChatType == ChatType.Private)
             {
+                _chatViewModel.CurrentChat = chat;
                 NavigationService.NavigateToWithHistory<ChatViewModel>();
             }
             else
             {
+                _groupChatViewModel.CurrentChat = chat;
                 NavigationService.NavigateToWithHistory<GroupChatViewModel>();
             }
         }
@@ -99,6 +108,7 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private void OnNavigateToGroupChat(Chat chat)
         {
+            _groupChatViewModel.CurrentChat = chat;
             NavigationService.NavigateToWithHistory<GroupChatViewModel>();
         }
 

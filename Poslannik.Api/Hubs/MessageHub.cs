@@ -19,7 +19,7 @@ public class MessageHub(
     public async Task SendMessageAsync(Message message)
     {
         _messageRepository?.AddAsync(message);
-        var chat = await _chatRepository.GetChatById(message.ChatId);
+        var chat = await _chatRepository.GetChatByIdAsync(message.ChatId);
 
         if (chat.ChatType == ChatType.Private)
         {

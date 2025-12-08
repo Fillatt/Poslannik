@@ -32,5 +32,11 @@ public sealed class ServicesModule : Module
             .As<IUserService>()
             .AsSelf()
             .SingleInstance();
+
+        builder
+            .RegisterType<MessageService>()
+            .As<IMessageService>()
+            .AsSelf()
+            .SingleInstance();
     }
 }

@@ -19,5 +19,10 @@ public interface IChatRepository : IRepository<ChatEntity, Chat>
     /// <param name="participantUserIds">Идентификаторы участников</param>
     Task AddChatWithParticipantsAsync(Chat chat, IEnumerable<Guid> participantUserIds);
 
-    Task<Chat> GetChatById(Guid chatId);
+    /// <summary>
+    /// Получает чат по идентификатору
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <returns>Чат или null, если не найден</returns>
+    Task<Chat?> GetChatByIdAsync(Guid chatId);
 }

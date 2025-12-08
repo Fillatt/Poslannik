@@ -64,98 +64,49 @@
         <ScrollViewer Grid.Row="1"
                       Background="#F5F5F5"
                       Name="MessagesScrollViewer">
-            <StackPanel Margin="10" Spacing="10">
-                
-                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Иван Иванов"
-                               FontSize="12"
-                               Foreground="#666666"
-                               Margin="10,0,0,4"/>
-                    <Border Background="White"
-                            CornerRadius="15,15,15,5"
-                            Padding="12,8">
-                        <TextBlock Text="ААААвввввввввввв?"
-                                   TextWrapping="Wrap"
-                                   FontSize="14"/>
-                    </Border>
-                </StackPanel>
-                
-                <Border HorizontalAlignment="Right"
-                        Background="#EF3C45"
-                        CornerRadius="15,15,5,15"
-                        Padding="12,8"
-                        MaxWidth="200">
-                    <TextBlock Text="Вввввввввввввв."
-                               TextWrapping="Wrap"
-                               Foreground="White"
-                               FontSize="14"/>
-                </Border>
+            <ItemsControl ItemsSource="{Binding Messages}" Margin="10">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Иван Иванов"
-                               FontSize="12"
-                               Foreground="#666666"
-                               Margin="10,0,0,4"/>
-                    <Border Background="White"
-                            CornerRadius="15,15,15,5"
-                            Padding="12,8">
-                        <TextBlock Text="АААААвввввввввввввв вввввввввввввв вввввввввв."
-                                   TextWrapping="Wrap"
-                                   FontSize="14"/>
-                    </Border>
-                </StackPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <!-- Сообщение от другого пользователя -->
+                            <StackPanel HorizontalAlignment="Left"
+                                        MaxWidth="200"
+                                        IsVisible="{Binding !IsOwnMessage}">
+                                <TextBlock Text="{Binding SenderName}"
+                                           FontSize="12"
+                                           Foreground="#666666"
+                                           Margin="10,0,0,4"/>
+                                <Border Background="White"
+                                        CornerRadius="15,15,15,5"
+                                        Padding="12,8">
+                                    <TextBlock Text="{Binding Text}"
+                                               TextWrapping="Wrap"
+                                               FontSize="14"/>
+                                </Border>
+                            </StackPanel>
 
-                <Border HorizontalAlignment="Right"
-                        Background="#EF3C45"
-                        CornerRadius="15,15,5,15"
-                        Padding="12,8"
-                        MaxWidth="200">
-                    <TextBlock Text="Вввввввввввввввввввв вввввввввввввввввввв вввввввввв."
-                               TextWrapping="Wrap"
-                               Foreground="White"
-                               FontSize="14"/>
-                </Border>
-
-                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Иван Иванов"
-                               FontSize="12"
-                               Foreground="#666666"
-                               Margin="10,0,0,4"/>
-                    <Border Background="White"
-                            CornerRadius="15,15,15,5"
-                            Padding="12,8">
-                        <TextBlock Text="ААААААввввввввввв вввввввввввв вввввввввввв вввввввввввввв?"
-                                   TextWrapping="Wrap"
-                                   FontSize="14"/>
-                    </Border>
-                </StackPanel>
-
-                <Border HorizontalAlignment="Right"
-                        Background="#EF3C45"
-                        CornerRadius="15,15,5,15"
-                        Padding="12,8"
-                        MaxWidth="200">
-                    <TextBlock Text="Вв."
-                               TextWrapping="Wrap"
-                               Foreground="White"
-                               FontSize="14"/>
-                </Border>
-                
-                <StackPanel HorizontalAlignment="Left" MaxWidth="200">
-                    <TextBlock Text="Иван Иванов"
-                               FontSize="12"
-                               Foreground="#666666"
-                               Margin="10,0,0,4"/>
-                    <Border Background="White"
-                            CornerRadius="15,15,15,5"
-                            Padding="12,8">
-                        <TextBlock Text="Вввввввввввввввв."
-                                   TextWrapping="Wrap"
-                                   FontSize="14"/>
-                    </Border>
-                </StackPanel>
-                
-            </StackPanel>
+                            <!-- Собственное сообщение -->
+                            <Border HorizontalAlignment="Right"
+                                    Background="#EF3C45"
+                                    CornerRadius="15,15,5,15"
+                                    Padding="12,8"
+                                    MaxWidth="200"
+                                    IsVisible="{Binding IsOwnMessage}">
+                                <TextBlock Text="{Binding Text}"
+                                           TextWrapping="Wrap"
+                                           Foreground="White"
+                                           FontSize="14"/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
         
         <Border Grid.Row="2"
@@ -166,6 +117,7 @@
             <Grid ColumnDefinitions="*,Auto">
                 
                 <TextBox Grid.Column="0"
+                         Text="{Binding MessageText}"
                          Watermark="Сообщение..."
                          Background="#F5F5F5"
                          BorderBrush="#EF3C45"
