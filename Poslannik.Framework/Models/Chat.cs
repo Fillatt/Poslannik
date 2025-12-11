@@ -28,7 +28,7 @@ public record Chat
     /// <summary>
     /// Название чата (для групповых чатов)
     /// </summary>
-    public string? Name { get; init; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Идентификатор администратора группы (для групповых чатов)

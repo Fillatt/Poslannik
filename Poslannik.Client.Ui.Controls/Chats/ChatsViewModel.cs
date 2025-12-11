@@ -1,11 +1,12 @@
-using System.Collections.ObjectModel;
-using System.Reactive;
-using ReactiveUI;
+using Poslannik.Client.Services;
+using Poslannik.Client.Services.Interfaces;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
 using Poslannik.Framework.Models;
-using Poslannik.Client.Services.Interfaces;
+using ReactiveUI;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls
@@ -17,17 +18,22 @@ namespace Poslannik.Client.Ui.Controls
     {
         private readonly IChatService _chatService;
         private readonly ChatViewModel _chatViewModel;
-
+        private readonly IAutorizationService _autorizationService;
+        private readonly IUserService _userService;
 
         private ObservableCollection<Chat> _chats;
         private bool _isLoading;
 
         public ChatsViewModel(
             IChatService chatService,
+            IUserService userService,
+            IAutorizationService autorizationService,
             ChatViewModel chatViewModel)
         {
             _chatService = chatService;
             _chatViewModel = chatViewModel;
+            _autorizationService = autorizationService;
+            _userService = userService;
 
             _chats = new ObservableCollection<Chat>();
 
@@ -116,6 +122,12 @@ namespace Poslannik.Client.Ui.Controls
             try
             {
                 var chats = await _chatService.GetUserChatsAsync();
+                var privateChats = chats.Where(x => x.ChatType == ChatType.Private);
+                foreach (var chat in privateChats)
+                {
+                    var user = _autorizationService.UserId == chat.User1Id ? await _userService.GetUserByIdAsync(chat.User2Id.Value) : await _userService.GetUserByIdAsync(chat.User1Id.Value);
+                    chat.Name = user.UserName;
+                }
 
                 Chats.Clear();
                 foreach (var chat in chats)
@@ -146,27 +158,17 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Обработчик создания нового чата
         /// </summary>
-        private void OnChatCreated(Chat chat)
+        private async void OnChatCreated(Chat chat)
         {
-            // Добавляем новый чат в список, если его там нет
-            if (!Chats.Any(c => c.Id == chat.Id))
-            {
-                Chats.Add(chat);
-            }
+            await LoadChatsAsync();
         }
 
         /// <summary>
         /// Обработчик обновления чата
         /// </summary>
-        private void OnChatUpdated(Chat chat)
+        private async void OnChatUpdated(Chat chat)
         {
-            // Находим и обновляем чат в списке
-            var existingChat = Chats.FirstOrDefault(c => c.Id == chat.Id);
-            if (existingChat != null)
-            {
-                var index = Chats.IndexOf(existingChat);
-                Chats[index] = chat;
-            }
+            await LoadChatsAsync();
         }
 
         /// <summary>

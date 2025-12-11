@@ -325,7 +325,6 @@ namespace Poslannik.Client.Ui.Controls
                         ChatType = ChatType.Private,
                         User1Id = _authorizationService.UserId.Value,
                         User2Id = SelectedUser.Id,
-                        Name = SelectedUser.UserName,
                         AdminId = null
                     };
                 }
@@ -356,10 +355,6 @@ namespace Poslannik.Client.Ui.Controls
                         ErrorMessage = "Групповой чат с таким названием уже существует";
                         return;
                     }
-
-                    // TODO: Генерация EncryptedGroupKey через Signal-протокол
-                    // Пока используем временную заглушку
-                    var encryptedGroupKey = new byte[] { 0x00 };
 
                     newChat = new Chat
                     {
@@ -395,7 +390,9 @@ namespace Poslannik.Client.Ui.Controls
 
                     _chatViewModel.CurrentChat = createdChat;
                     await _chatViewModel.InitializeAsync();
-                    NavigationService.NavigateToWithHistory<ChatViewModel>();
+
+                    NavigationService.PushToNavigateStack<ChatsViewModel>();
+                    NavigationService.NavigateTo<ChatViewModel>();
                 }
                 else
                 {

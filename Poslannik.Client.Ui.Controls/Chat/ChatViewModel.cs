@@ -48,15 +48,6 @@ namespace Poslannik.Client.Ui.Controls
             set
             {
                 this.RaiseAndSetIfChanged(ref _currentChat, value);
-                if (_currentChat?.ChatType == ChatType.Private)
-                {
-                    IsGroupChat = false;
-                }
-                else
-                {
-                    IsGroupChat = true;
-                }
-                ChatName = _currentChat?.Name;
             }
         }
 
@@ -105,6 +96,17 @@ namespace Poslannik.Client.Ui.Controls
         {
             MessageText = string.Empty;
             _messages = await _messageService.GetAllMessagesByChatId(_currentChat.Id);
+            if (_currentChat?.ChatType == ChatType.Private)
+            {
+                IsGroupChat = false;
+                var userId = _authorizationService.UserId == _currentChat.User1Id ? _currentChat.User2Id.Value : _currentChat.User1Id.Value;
+                ChatName = await GetUserName(userId);
+            }
+            else
+            {
+                IsGroupChat = true;
+                ChatName = _currentChat?.Name;
+            }
             await ReloadMessagesAsync(_messages);
         }
 

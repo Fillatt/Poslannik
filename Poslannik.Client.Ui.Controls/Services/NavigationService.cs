@@ -115,5 +115,10 @@ namespace Poslannik.Client.Ui.Controls.Services
         {
             _navigationStack.Clear();
         }
+
+        public void PushToNavigateStack<TViewModel>() where TViewModel : class
+        {
+            _navigationStack.Push(_viewModelFactory[typeof(TViewModel)].Invoke());
+        }
     }
 }
