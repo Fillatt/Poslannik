@@ -15,11 +15,8 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task AddTestUserAsync()
+    public async Task AddTestUserAsync(string login, string name, string password)
     {
-        var password = "123";
-        var login = "maxim";
-
         byte[] passwordHash;
         byte[] passwordSalt;
         PasswordHasher.CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -29,6 +26,7 @@ public class UserRepository : IUserRepository
             Login = login,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
+            UserName = name,
         };
 
         await _context.Users.AddAsync(user);
@@ -47,7 +45,33 @@ public class UserRepository : IUserRepository
     }
 
     public Task<bool> HasUserByLoginAsync(string login) => _context.Users.Where(x => x.Login == login).AnyAsync();
-    
+
+    public async Task<Guid?> GetIdByLoginAsync(string login)
+    {
+        var entity = await _context.Users.Where(x => x.Login == login).FirstOrDefaultAsync();
+        return entity?.Id;
+    }
+
+    public async Task<IEnumerable<User>> SearchUsersByNameAsync(string userName)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+            return Enumerable.Empty<User>();
+
+        var entities = await _context.Users
+            .Where(x => x.UserName != null && x.UserName.ToLower().Contains(userName.ToLower()))
+            .Take(10)
+            .ToListAsync();
+
+        return entities.Select(MapToModel);
+    }
+
+    public async Task<User?> GetUserByIdAsync(Guid id)
+    {
+        var entity = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (entity != null) return MapToModel(entity);
+        else return null;
+    }
 
     private UserEntity MapToEntity(User user)
     {
@@ -63,7 +87,18 @@ public class UserRepository : IUserRepository
             PasswordSalt = passwordSalt,
             UserName = user.UserName,
             GroupUser = user.GroupUser,
-            PublicKey = user.PublicKey
+        };
+    }
+
+    private User MapToModel(UserEntity entity)
+    {
+        return new User
+        {
+            Id = entity.Id,
+            Login = entity.Login,
+            Password = "", // Не возвращаем пароль
+            UserName = entity.UserName,
+            GroupUser = entity.GroupUser,
         };
     }
 }

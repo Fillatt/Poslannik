@@ -18,6 +18,25 @@ public sealed class ServicesModule : Module
         builder
             .RegisterType<AuthorizationService>()
             .As<IAutorizationService>()
-            .AsSelf();
+            .AsSelf()
+            .SingleInstance();
+
+        builder
+            .RegisterType<ChatService>()
+            .As<IChatService>()
+            .AsSelf()
+            .SingleInstance();
+
+        builder
+            .RegisterType<UserService>()
+            .As<IUserService>()
+            .AsSelf()
+            .SingleInstance();
+
+        builder
+            .RegisterType<MessageService>()
+            .As<IMessageService>()
+            .AsSelf()
+            .SingleInstance();
     }
 }

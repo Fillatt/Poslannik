@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,10 +25,5 @@ namespace Poslannik.Framework.Models
         /// Идентификатор пользователя-участника чата
         /// </summary>
         public Guid UserId { get; set; }
-
-        /// <summary>
-        /// Зашифрованный ключ чата для данного пользователя (для групповых чатов)
-        /// </summary>
-        public byte[]? UserEncryptedKey { get; set; }
     }
 }

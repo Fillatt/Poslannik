@@ -18,7 +18,6 @@ namespace Poslannik.Client.Ui.Controls.Services
             ChatsViewModel chatsViewModel,
             ProfileViewModel profileViewModel,
             ChatViewModel chatViewModel,
-            GroupChatViewModel groupChatViewModel,
             NewChatViewModel newChatViewModel,
             ParticipantsViewModel participantsViewModel,
             UserProfileViewModel userProfileViewModel,
@@ -31,7 +30,6 @@ namespace Poslannik.Client.Ui.Controls.Services
             chatsViewModel.NavigationService = this;
             profileViewModel.NavigationService = this;
             chatViewModel.NavigationService = this;
-            groupChatViewModel.NavigationService = this;
             newChatViewModel.NavigationService = this;
             participantsViewModel.NavigationService = this;
             userProfileViewModel.NavigationService = this;
@@ -41,7 +39,6 @@ namespace Poslannik.Client.Ui.Controls.Services
             RegisterViewModel<ChatsViewModel>(() => chatsViewModel);
             RegisterViewModel<ProfileViewModel>(() => profileViewModel);
             RegisterViewModel<ChatViewModel>(() => chatViewModel);
-            RegisterViewModel<GroupChatViewModel>(() => groupChatViewModel);
             RegisterViewModel<NewChatViewModel>(() => newChatViewModel);
             RegisterViewModel<ParticipantsViewModel>(() => participantsViewModel);
             RegisterViewModel<UserProfileViewModel>(() => userProfileViewModel);
@@ -117,6 +114,11 @@ namespace Poslannik.Client.Ui.Controls.Services
         public void ClearNavigationStack()
         {
             _navigationStack.Clear();
+        }
+
+        public void PushToNavigateStack<TViewModel>() where TViewModel : class
+        {
+            _navigationStack.Push(_viewModelFactory[typeof(TViewModel)].Invoke());
         }
     }
 }

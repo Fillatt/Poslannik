@@ -1,7 +1,7 @@
 using System.Reactive;
 using ReactiveUI;
-using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
+using Poslannik.Client.Services.Interfaces;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -10,11 +10,68 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class ProfileViewModel : ViewModelBase
     {
-        public ProfileViewModel()
+        private readonly IUserService _userService;
+        private readonly IAutorizationService _autorizationService;
+        private string? _login;
+        private string? _displayName;
+
+        public ProfileViewModel(IUserService userService, IAutorizationService autorizationService)
         {
+            _userService = userService;
+            _autorizationService = autorizationService;
+
             LogoutCommand = ReactiveCommand.Create(OnLogout);
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToChatsCommand = ReactiveCommand.Create(OnNavigateToChats);
+        }
+
+        /// <summary>
+        /// Имя пользователя (логин)
+        /// </summary>
+        public string? Login
+        {
+            get => _login;
+            set => this.RaiseAndSetIfChanged(ref _login, value);
+        }
+
+        /// <summary>
+        /// Отображаемое имя пользователя
+        /// </summary>
+        public string? DisplayName
+        {
+            get => _displayName;
+            set => this.RaiseAndSetIfChanged(ref _displayName, value);
+        }
+
+        /// <summary>
+        /// Инициализация и загрузка данных профиля
+        /// </summary>
+        public async Task InitializeAsync()
+        {
+            await LoadUserDataAsync();
+        }
+
+        /// <summary>
+        /// Загрузка данных пользователя
+        /// </summary>
+        private async Task LoadUserDataAsync()
+        {
+            if (_autorizationService.UserId == null)
+                return;
+
+            try
+            {
+                var user = await _userService.GetUserByIdAsync(_autorizationService.UserId.Value);
+                if (user != null)
+                {
+                    Login = user.Login;
+                    DisplayName = user.UserName;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки данных пользователя: {ex.Message}");
+            }
         }
 
         /// <summary>

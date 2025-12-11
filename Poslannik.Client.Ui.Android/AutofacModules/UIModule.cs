@@ -14,11 +14,10 @@ public sealed class UIModule : Module
         builder.RegisterType<ChatsViewModel>().SingleInstance();
         builder.RegisterType<ProfileViewModel>().SingleInstance();
         builder.RegisterType<ChatViewModel>().SingleInstance();
-        builder.RegisterType<GroupChatViewModel>().SingleInstance();
-        builder.RegisterType<NewChatViewModel>().SingleInstance();
-        builder.RegisterType<ParticipantsViewModel>().SingleInstance();
-        builder.RegisterType<UserProfileViewModel>().SingleInstance();
-        builder.RegisterType<AddParticipantsViewModel>().SingleInstance();
+        builder.RegisterType<NewChatViewModel>();
+        builder.RegisterType<ParticipantsViewModel>();
+        builder.RegisterType<UserProfileViewModel>();
+        builder.RegisterType<AddParticipantsViewModel>();
 
         builder.RegisterType<MainViewModel>().SingleInstance();
     }

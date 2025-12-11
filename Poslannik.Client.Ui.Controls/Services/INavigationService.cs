@@ -22,6 +22,8 @@ namespace Poslannik.Client.Ui.Controls.Services
         /// </summary>
         void NavigateToWithHistory<TViewModel>() where TViewModel : class;
 
+        void PushToNavigateStack<TViewModel>() where TViewModel : class;
+
         /// <summary>
         /// Возврат к предыдущему представлению
         /// </summary>

@@ -8,6 +8,8 @@ public interface IAutorizationService
 
     bool IsAuthorizated { get; set; }
 
+    Guid? UserId { get; }
+
     Task<AuthorizationResponse> AuthorizeAsync(string login, string password, CancellationToken cancellationToken);
 
     Task LogoutAsync(CancellationToken cancellationToken);
