@@ -13,4 +13,8 @@ public class ChatParticipantHubRepository (IChatParticipantRepository chatPartic
     public Task<IEnumerable<ChatParticipant>> GetAllAsync()  => chatParticipantRepository.GetAllAsync();
 
     public Task UpdateAsync(ChatParticipant model) => chatParticipantRepository.UpdateAsync(model);
+
+    public Task<IEnumerable<ChatParticipant>> GetByChatIdAsync(Guid chatId) => chatParticipantRepository.GetByChatIdAsync(chatId);
+
+    public Task DeleteByUserAndChatAsync(Guid chatId, Guid userId) => chatParticipantRepository.DeleteByUserAndChatAsync(chatId, userId);
 }

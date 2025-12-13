@@ -19,6 +19,8 @@ public class ChatService : IChatService
     public event Action<Chat>? OnChatCreated;
     public event Action<Chat>? OnChatUpdated;
     public event Action<Guid>? OnChatDeleted;
+    public event Action<Guid, Guid>? OnParticipantRemoved;
+    public event Action<Guid, Guid>? OnAdminRightsTransferred;
 
     public ChatService(IConfiguration configuration, IAutorizationService authorizationService)
     {
@@ -172,6 +174,50 @@ public class ChatService : IChatService
         }
     }
 
+    public async Task<IEnumerable<ChatParticipant>> GetChatParticipantsAsync(Guid chatId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+            {
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
+            }
+
+            var participants = await _hubConnection.InvokeAsync<IEnumerable<ChatParticipant>>(
+                nameof(IChatHub.GetChatParticipantsAsync),
+                chatId,
+                cancellationToken);
+
+            return participants ?? Enumerable.Empty<ChatParticipant>();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка получения участников чата: {ex.Message}");
+            return Enumerable.Empty<ChatParticipant>();
+        }
+    }
+
+    public async Task RemoveParticipantAsync(Guid chatId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+            {
+                throw new InvalidOperationException("Не подключено к ChatHub");
+            }
+
+            await _hubConnection.InvokeAsync(
+                nameof(IChatHub.RemoveParticipantAsync),
+                chatId,
+                userId,
+                cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка удаления участника: {ex.Message}");
+        }
+    }
+
     private void RegisterEventHandlers()
     {
         if (_hubConnection == null) return;
@@ -189,6 +235,16 @@ public class ChatService : IChatService
         _hubConnection.On<Guid>(HubConstants.ChatEvents.ChatDeleted, chatId =>
         {
             OnChatDeleted?.Invoke(chatId);
+        });
+
+        _hubConnection.On<Guid, Guid>(HubConstants.ChatEvents.ParticipantRemoved, (chatId, userId) =>
+        {
+            OnParticipantRemoved?.Invoke(chatId, userId);
+        });
+
+        _hubConnection.On<Guid, Guid>(HubConstants.ChatEvents.AdminRightsTransferred, (chatId, newAdminId) =>
+        {
+            OnAdminRightsTransferred?.Invoke(chatId, newAdminId);
         });
 
         _hubConnection.Reconnecting += error =>

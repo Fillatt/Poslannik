@@ -1,7 +1,10 @@
 using System.Reactive;
+using System.Collections.ObjectModel;
 using ReactiveUI;
 using Poslannik.Client.Ui.Controls.Services;
 using Poslannik.Client.Ui.Controls.ViewModels;
+using Poslannik.Client.Services.Interfaces;
+using Poslannik.Framework.Models;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -10,15 +13,64 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class ParticipantsViewModel : ViewModelBase
     {
-        public ParticipantsViewModel()
+        private readonly IChatService _chatService;
+        private readonly IUserService _userService;
+        private readonly IAutorizationService _authorizationService;
+        private Chat? _currentChat;
+        private bool _isAdmin;
+
+        public ParticipantsViewModel(
+            IChatService chatService,
+            IUserService userService,
+            IAutorizationService authorizationService)
         {
+            _chatService = chatService;
+            _userService = userService;
+            _authorizationService = authorizationService;
+
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
             AddParticipantCommand = ReactiveCommand.Create(OnAddParticipant);
-            RemoveParticipantCommand = ReactiveCommand.Create(OnRemoveParticipant);
+            RemoveParticipantCommand = ReactiveCommand.Create<Guid>(OnRemoveParticipant);
             DeleteChatCommand = ReactiveCommand.Create(OnDeleteChat);
             LeaveChatCommand = ReactiveCommand.Create(OnLeaveChat);
+
+            // Подписываемся на события
+            _chatService.OnParticipantRemoved += OnParticipantRemovedEvent;
+            _chatService.OnAdminRightsTransferred += OnAdminRightsTransferredEvent;
         }
+
+        /// <summary>
+        /// Текущий чат
+        /// </summary>
+        public Chat? CurrentChat
+        {
+            get => _currentChat;
+            set => this.RaiseAndSetIfChanged(ref _currentChat, value);
+        }
+
+        /// <summary>
+        /// Является ли текущий пользователь администратором
+        /// </summary>
+        public bool IsAdmin
+        {
+            get => _isAdmin;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isAdmin, value);
+                this.RaisePropertyChanged(nameof(IsNotAdmin));
+            }
+        }
+
+        /// <summary>
+        /// НЕ является ли текущий пользователь администратором (для UI binding)
+        /// </summary>
+        public bool IsNotAdmin => !IsAdmin;
+
+        /// <summary>
+        /// Коллекция участников чата
+        /// </summary>
+        public ObservableCollection<ParticipantViewModel> Participants { get; } = new();
 
         /// <summary>
         /// Команда возврата назад
@@ -38,7 +90,7 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Команда удаления участника
         /// </summary>
-        public ReactiveCommand<Unit, Unit> RemoveParticipantCommand { get; }
+        public ReactiveCommand<Guid, Unit> RemoveParticipantCommand { get; }
 
         /// <summary>
         /// Команда удаления чата
@@ -49,6 +101,77 @@ namespace Poslannik.Client.Ui.Controls
         /// Команда выхода из чата
         /// </summary>
         public ReactiveCommand<Unit, Unit> LeaveChatCommand { get; }
+
+        /// <summary>
+        /// Инициализация ViewModel - загрузка участников чата
+        /// </summary>
+        public async Task InitializeAsync()
+        {
+            if (CurrentChat == null)
+            {
+                System.Diagnostics.Debug.WriteLine("ParticipantsViewModel.InitializeAsync: CurrentChat is null");
+                return;
+            }
+
+            var currentUserId = _authorizationService.UserId;
+            if (currentUserId == null)
+            {
+                System.Diagnostics.Debug.WriteLine("ParticipantsViewModel.InitializeAsync: currentUserId is null");
+                return;
+            }
+
+            // Проверяем, является ли текущий пользователь администратором
+            IsAdmin = CurrentChat.AdminId == currentUserId.Value;
+            System.Diagnostics.Debug.WriteLine($"ParticipantsViewModel.InitializeAsync: ChatId={CurrentChat.Id}, AdminId={CurrentChat.AdminId}, CurrentUserId={currentUserId}, IsAdmin={IsAdmin}");
+
+            // Загружаем участников чата
+            await LoadParticipantsAsync();
+        }
+
+        /// <summary>
+        /// Загружает список участников чата
+        /// </summary>
+        private async Task LoadParticipantsAsync()
+        {
+            if (CurrentChat == null)
+                return;
+
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"ParticipantsViewModel.LoadParticipantsAsync: Loading participants for chat {CurrentChat.Id}");
+                var participants = await _chatService.GetChatParticipantsAsync(CurrentChat.Id);
+                var currentUserId = _authorizationService.UserId;
+
+                System.Diagnostics.Debug.WriteLine($"ParticipantsViewModel.LoadParticipantsAsync: Received {participants.Count()} participants");
+
+                Participants.Clear();
+
+                foreach (var participant in participants)
+                {
+                    var user = await _userService.GetUserByIdAsync(participant.UserId);
+                    var isCurrentUser = participant.UserId == currentUserId;
+
+                    var participantViewModel = new ParticipantViewModel
+                    {
+                        UserId = participant.UserId,
+                        UserName = user?.UserName ?? user?.Login ?? "Неизвестный пользователь",
+                        IsCurrentUser = isCurrentUser,
+                        CanBeRemoved = IsAdmin && !isCurrentUser
+                    };
+
+                    System.Diagnostics.Debug.WriteLine($"ParticipantsViewModel.LoadParticipantsAsync: Added participant {participantViewModel.UserName} (IsCurrentUser={isCurrentUser}, CanBeRemoved={participantViewModel.CanBeRemoved})");
+
+                    Participants.Add(participantViewModel);
+                }
+
+                System.Diagnostics.Debug.WriteLine($"ParticipantsViewModel.LoadParticipantsAsync: Total participants in collection: {Participants.Count}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки участников: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+            }
+        }
 
         /// <summary>
         /// Обработчик возврата назад
@@ -77,26 +200,102 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Обработчик удаления участника
         /// </summary>
-        private void OnRemoveParticipant()
+        private async void OnRemoveParticipant(Guid userId)
         {
+            if (CurrentChat == null || !IsAdmin)
+                return;
+
+            try
+            {
+                await _chatService.RemoveParticipantAsync(CurrentChat.Id, userId);
+                // Обновление списка произойдет через событие OnParticipantRemovedEvent
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка удаления участника: {ex.Message}");
+            }
         }
 
         /// <summary>
         /// Обработчик удаления чата
         /// </summary>
-        private void OnDeleteChat()
+        private async void OnDeleteChat()
         {
-            NavigationService.ClearNavigationStack();
-            NavigationService.NavigateTo<ChatsViewModel>();
+            if (CurrentChat == null || !IsAdmin)
+                return;
+
+            try
+            {
+                await _chatService.DeleteChatAsync(CurrentChat.Id);
+                NavigationService.ClearNavigationStack();
+                NavigationService.NavigateTo<ChatsViewModel>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка удаления чата: {ex.Message}");
+            }
         }
 
         /// <summary>
         /// Обработчик выхода из чата
         /// </summary>
-        private void OnLeaveChat()
+        private async void OnLeaveChat()
         {
-            NavigationService.ClearNavigationStack();
-            NavigationService.NavigateTo<ChatsViewModel>();
+            if (CurrentChat == null)
+                return;
+
+            var currentUserId = _authorizationService.UserId;
+            if (currentUserId == null)
+                return;
+
+            try
+            {
+                await _chatService.RemoveParticipantAsync(CurrentChat.Id, currentUserId.Value);
+                NavigationService.ClearNavigationStack();
+                NavigationService.NavigateTo<ChatsViewModel>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка выхода из чата: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Обработчик события удаления участника
+        /// </summary>
+        private async void OnParticipantRemovedEvent(Guid chatId, Guid userId)
+        {
+            if (CurrentChat == null || CurrentChat.Id != chatId)
+                return;
+
+            // Если удалили текущего пользователя, возвращаемся в список чатов
+            if (userId == _authorizationService.UserId)
+            {
+                NavigationService.ClearNavigationStack();
+                NavigationService.NavigateTo<ChatsViewModel>();
+                return;
+            }
+
+            // Иначе просто обновляем список участников
+            await LoadParticipantsAsync();
+        }
+
+        /// <summary>
+        /// Обработчик события передачи прав администратора
+        /// </summary>
+        private async void OnAdminRightsTransferredEvent(Guid chatId, Guid newAdminId)
+        {
+            if (CurrentChat == null || CurrentChat.Id != chatId)
+                return;
+
+            // Обновляем информацию о чате
+            CurrentChat = CurrentChat with { AdminId = newAdminId };
+
+            // Проверяем, стали ли мы админом
+            IsAdmin = newAdminId == _authorizationService.UserId;
+
+            // Обновляем список участников (чтобы обновить флаги CanBeRemoved)
+            await LoadParticipantsAsync();
         }
     }
 }

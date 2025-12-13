@@ -51,6 +51,27 @@ namespace Poslannik.DataBase.Repositories
             }
         }
 
+        public async Task<IEnumerable<ChatParticipant>> GetByChatIdAsync(Guid chatId)
+        {
+            var entities = await _context.ChatParticipants
+                .Include(cp => cp.User)
+                .Where(cp => cp.ChatId == chatId)
+                .ToListAsync();
+            return entities.Select(MapToModel);
+        }
+
+        public async Task DeleteByUserAndChatAsync(Guid chatId, Guid userId)
+        {
+            var entity = await _context.ChatParticipants
+                .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == userId);
+
+            if (entity != null)
+            {
+                _context.ChatParticipants.Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         private ChatParticipantEntity MapToEntity(ChatParticipant model)
         {
             return new ChatParticipantEntity

@@ -67,7 +67,7 @@ public class MessageRepository : IMessageRepository
             ChatId = model.ChatId,
             SenderId = model.SenderId,
             DateTime = model.DateTime,
-            Data = model.Data,
+            Data = model.Data
         };
     }
 

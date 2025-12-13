@@ -33,4 +33,25 @@ public interface IChatHub
     /// <param name="chatId">Идентификатор чата</param>
     /// <param name="chat">Данные чата для отправки</param>
     Task NotifyChatParticipantsAsync(Chat chat);
+
+    /// <summary>
+    /// Получает список участников чата
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <returns>Список участников</returns>
+    Task<IEnumerable<ChatParticipant>> GetChatParticipantsAsync(Guid chatId);
+
+    /// <summary>
+    /// Удаляет участника из чата
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <param name="userId">Идентификатор пользователя</param>
+    Task RemoveParticipantAsync(Guid chatId, Guid userId);
+
+    /// <summary>
+    /// Передает права администратора другому участнику
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <param name="newAdminId">Идентификатор нового администратора</param>
+    Task TransferAdminRightsAsync(Guid chatId, Guid newAdminId);
 }

@@ -17,5 +17,14 @@ namespace Poslannik.Framework.Hubs.Interfaces
         Task UpdateAsync(ChatParticipant model);
         Task DeleteAsync(long id);
 
+        /// <summary>
+        /// Получает всех участников чата по ID чата
+        /// </summary>
+        Task<IEnumerable<ChatParticipant>> GetByChatIdAsync(Guid chatId);
+
+        /// <summary>
+        /// Удаляет конкретного участника из чата
+        /// </summary>
+        Task DeleteByUserAndChatAsync(Guid chatId, Guid userId);
     }
 }

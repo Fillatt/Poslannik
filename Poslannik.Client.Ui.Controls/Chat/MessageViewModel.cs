@@ -66,5 +66,10 @@ namespace Poslannik.Client.Ui.Controls
         /// ID отправителя
         /// </summary>
         public Guid SenderId { get; set; }
+
+        /// <summary>
+        /// Является ли сообщение системным (SenderId == Guid.Empty)
+        /// </summary>
+        public bool IsSystemMessage => SenderId == Guid.Empty;
     }
 }

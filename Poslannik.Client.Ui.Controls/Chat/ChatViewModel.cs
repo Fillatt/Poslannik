@@ -17,6 +17,7 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
         private readonly IAutorizationService _authorizationService;
+        private readonly ParticipantsViewModel _participantsViewModel;
         private readonly Dictionary<Guid, string> _userNamesCache = new();
         private IReadOnlyList<Message> _messages;
         private string? _chatName;
@@ -25,14 +26,17 @@ namespace Poslannik.Client.Ui.Controls
         public ChatViewModel(
             IMessageService messageService,
             IUserService userService,
-            IAutorizationService authorizationService)
+            IAutorizationService authorizationService,
+            ParticipantsViewModel participantsViewModel)
         {
             _messageService = messageService;
             _userService = userService;
             _authorizationService = authorizationService;
+            _participantsViewModel = participantsViewModel;
 
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
+            NavigateToParticipantsCommand = ReactiveCommand.Create(OnNavigateToParticipants);
             SendMessageCommand = ReactiveCommand.Create(OnSendMessageAsync);
 
             // Подписываемся на событие получения нового сообщения
@@ -88,6 +92,11 @@ namespace Poslannik.Client.Ui.Controls
         public ReactiveCommand<Unit, Unit> NavigateToUserProfileCommand { get; }
 
         /// <summary>
+        /// Команда перехода к списку участников
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> NavigateToParticipantsCommand { get; }
+
+        /// <summary>
         /// Команда отправки сообщения
         /// </summary>
         public ReactiveCommand<Unit, Task> SendMessageCommand { get; }
@@ -124,6 +133,18 @@ namespace Poslannik.Client.Ui.Controls
         private void OnNavigateToUserProfile()
         {
             NavigationService.NavigateToWithHistory<UserProfileViewModel>();
+        }
+
+        /// <summary>
+        /// Обработчик перехода к списку участников
+        /// </summary>
+        private void OnNavigateToParticipants()
+        {
+            if (CurrentChat != null && IsGroupChat)
+            {
+                _participantsViewModel.CurrentChat = CurrentChat;
+                NavigationService.NavigateToWithHistory<ParticipantsViewModel>();
+            }
         }
 
         /// <summary>
