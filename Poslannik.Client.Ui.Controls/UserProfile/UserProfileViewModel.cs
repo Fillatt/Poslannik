@@ -19,6 +19,7 @@ namespace Poslannik.Client.Ui.Controls
         private Guid? _userId;
         private string _userName = string.Empty;
         private string _userLogin = string.Empty;
+        private string _stasus = string.Empty;
         private bool _showDeleteButton;
 
         public UserProfileViewModel(
@@ -68,6 +69,12 @@ namespace Poslannik.Client.Ui.Controls
         {
             get => _userLogin;
             set => this.RaiseAndSetIfChanged(ref _userLogin, value);
+        }
+
+        public string Status
+        {
+            get => _stasus;
+            set => this.RaiseAndSetIfChanged(ref _stasus, value);
         }
 
         /// <summary>
@@ -128,6 +135,7 @@ namespace Poslannik.Client.Ui.Controls
                 {
                     UserName = user.UserName ?? "Неизвестный пользователь";
                     UserLogin = user.Login ?? string.Empty;
+                    Status = user.Status = user.Status ?? string.Empty;
                 }
             }
             catch (Exception ex)

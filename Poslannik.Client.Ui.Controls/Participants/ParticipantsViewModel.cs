@@ -190,6 +190,7 @@ namespace Poslannik.Client.Ui.Controls
         private async void OnNavigateToUserProfile(Guid userId)
         {
             _userProfileViewModel.UserId = userId;
+            _userProfileViewModel.CurrentChat = null;
             await _userProfileViewModel.InitializeAsync();
             NavigationService.NavigateToWithHistory<UserProfileViewModel>();
         }

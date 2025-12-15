@@ -14,6 +14,7 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IAutorizationService _autorizationService;
         private string? _login;
         private string? _displayName;
+        private string? _status;
 
         public ProfileViewModel(IUserService userService, IAutorizationService autorizationService)
         {
@@ -43,6 +44,12 @@ namespace Poslannik.Client.Ui.Controls
             set => this.RaiseAndSetIfChanged(ref _displayName, value);
         }
 
+        public string? Status
+        {
+            get => _status;
+            set => this.RaiseAndSetIfChanged(ref _status, value);
+        }
+
         /// <summary>
         /// Инициализация и загрузка данных профиля
         /// </summary>
@@ -66,6 +73,7 @@ namespace Poslannik.Client.Ui.Controls
                 {
                     Login = user.Login;
                     DisplayName = user.UserName;
+                    Status = user.Status;
                 }
             }
             catch (Exception ex)

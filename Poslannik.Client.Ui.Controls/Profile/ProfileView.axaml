@@ -59,6 +59,16 @@
                         </StackPanel>
                     </Border>
 
+                    <Border Background="#F5F5F5"
+                            CornerRadius="10"
+                            Padding="15,12">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="{Binding Status}"
+                                       FontSize="16"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
                 </StackPanel>
 
             </StackPanel>

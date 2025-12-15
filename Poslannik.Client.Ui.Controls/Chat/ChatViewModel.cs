@@ -146,6 +146,7 @@ namespace Poslannik.Client.Ui.Controls
             if (CurrentChat != null && !IsGroupChat)
             {
                 _userProfileViewModel.CurrentChat = CurrentChat;
+                _userProfileViewModel.UserId = null;
                 await _userProfileViewModel.InitializeAsync();
                 NavigationService?.NavigateToWithHistory<UserProfileViewModel>();
             }

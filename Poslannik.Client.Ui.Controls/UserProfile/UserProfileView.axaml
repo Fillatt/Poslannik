@@ -63,6 +63,12 @@
                                HorizontalAlignment="Center"
                                Margin="0,-15,0,0"/>
 
+                    <TextBlock Text="{Binding Status}"
+                               FontSize="14"
+                               Foreground="#999999"
+                               HorizontalAlignment="Center"
+                               Margin="0,-15,0,0"/>
+
                 </StackPanel>
             </ScrollViewer>
 
