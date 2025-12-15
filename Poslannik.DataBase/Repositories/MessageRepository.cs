@@ -41,9 +41,9 @@ public class MessageRepository : IMessageRepository
         }
     }
 
-    public async Task DeleteAsync(long id)
+    public async Task DeleteAsync(Guid id)
     {
-        var entity = await _context.Messages.FindAsync((Guid)(object)id);
+        var entity = await _context.Messages.FindAsync(id);
         if (entity != null)
         {
             _context.Messages.Remove(entity);
@@ -67,7 +67,7 @@ public class MessageRepository : IMessageRepository
             ChatId = model.ChatId,
             SenderId = model.SenderId,
             DateTime = model.DateTime,
-            Data = model.Data,
+            Data = model.Data
         };
     }
 

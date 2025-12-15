@@ -25,7 +25,7 @@ public interface IChatHub
 
     Task UpdateChatAsync(Chat chat);
 
-    Task DeleteChatAsync(Guid chatId);
+    Task DeleteChatAsync(Chat chat);
 
     /// <summary>
     /// Уведомляет участников чата о событии
@@ -33,4 +33,25 @@ public interface IChatHub
     /// <param name="chatId">Идентификатор чата</param>
     /// <param name="chat">Данные чата для отправки</param>
     Task NotifyChatParticipantsAsync(Chat chat);
+
+    /// <summary>
+    /// Получает список участников чата
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <returns>Список участников</returns>
+    Task<IEnumerable<ChatParticipant>> GetChatParticipantsAsync(Guid chatId);
+
+    /// <summary>
+    /// Удаляет участника из чата
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <param name="userId">Идентификатор пользователя</param>
+    Task RemoveParticipantAsync(Guid chatId, Guid userId);
+
+    /// <summary>
+    /// Добавляет участников в существующий групповой чат
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <param name="participantUserIds">Идентификаторы добавляемых участников</param>
+    Task AddParticipantsAsync(Guid chatId, IEnumerable<Guid> participantUserIds);
 }

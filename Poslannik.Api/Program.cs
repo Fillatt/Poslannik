@@ -67,15 +67,14 @@ builder.Services.AddTransient<IChatParticipantRepository, ChatParticipantReposit
 
 var app = builder.Build();
 
-//var userRepo = app.Services.CreateScope().ServiceProvider.GetRequiredService<IUserRepository>();
-//var userRepoImp = (UserRepository)userRepo;
-//await userRepoImp.AddTestUserAsync("vlad", "Влад Александров", "123");
-//await userRepoImp.AddTestUserAsync("maxim", "Максим Овчинников", "123");
-//await userRepoImp.AddTestUserAsync("dima", "Дима Милавин", "123");
-//await userRepoImp.AddTestUserAsync("andrey", "Андрей Остроумов", "123");
-//await userRepoImp.AddTestUserAsync("sanya", "Александр Симаньков", "123");
-//await userRepoImp.AddTestUserAsync("nadya", "Надежда Александрова", "123");
-//await userRepoImp.AddTestUserAsync("vika", "Вика Тимошина", "123");
+var userRepo = app.Services.CreateScope().ServiceProvider.GetRequiredService<IUserRepository>();
+var userRepoImp = (UserRepository)userRepo;
+await userRepoImp.AddTestUserAsync("vlad", "Влад Александров", "123", "1Пиб-02-2оп-22");
+await userRepoImp.AddTestUserAsync("maxim", "Максим Овчинников", "123", "1Пиб-02-2оп-22");
+await userRepoImp.AddTestUserAsync("dima", "Дима Милавин", "123", "1Пиб-02-2оп-22");
+await userRepoImp.AddTestUserAsync("andrey", "Андрей Остроумов", "123", "1Пиб-02-2оп-22");
+await userRepoImp.AddTestUserAsync("sanya", "Александр Симаньков", "123", "1Пиб-02-2оп-22");
+await userRepoImp.AddTestUserAsync("sol", "Олег Леонидович ★", "123", "Преподаватель");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -13,14 +13,11 @@ namespace Poslannik.DataBase.Entities
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
         public required string Login { get; set; }
 
-        [MaxLength(200)]
         public string? UserName { get; set; }
 
-        [MaxLength(50)]
-        public string? GroupUser { get; set; }
+        public string? Status { get; set; }
 
         [Required]
         public required byte[] PasswordHash { get; set; }

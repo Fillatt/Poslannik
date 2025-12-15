@@ -15,13 +15,50 @@ public class ChatHub : Hub, IChatHub
 {
     private readonly IChatRepository _chatRepository;
     private readonly IChatParticipantRepository _chatParticipantRepository;
+    private readonly IMessageRepository _messageRepository;
+    private readonly IUserRepository _userRepository;
 
     public ChatHub(
         IChatRepository chatRepository,
-        IChatParticipantRepository chatParticipantRepository)
+        IChatParticipantRepository chatParticipantRepository,
+        IMessageRepository messageRepository,
+        IUserRepository userRepository)
     {
         _chatRepository = chatRepository;
         _chatParticipantRepository = chatParticipantRepository;
+        _messageRepository = messageRepository;
+        _userRepository = userRepository;
+    }
+
+    /// <summary>
+    /// Получает список участников чата
+    /// </summary>
+    public async Task<IEnumerable<ChatParticipant>> GetChatParticipantsAsync(Guid chatId)
+    {
+        return await _chatParticipantRepository.GetByChatIdAsync(chatId);
+    }
+
+    /// <summary>
+    /// Удаляет участника из чата
+    /// </summary>
+    public async Task RemoveParticipantAsync(Guid chatId, Guid userId)
+    {
+        // Получаем чат для проверки прав
+        var chats = await _chatRepository.GetAllAsync();
+        var chat = chats.FirstOrDefault(c => c.Id == chatId);
+
+        if (chat == null)
+            return;
+
+        // Получаем информацию об удаляемом пользователе для системного сообщения
+        var removedUser = await _userRepository.GetUserByIdAsync(userId);
+        var userName = removedUser?.UserName ?? removedUser?.Login ?? "Пользователь";
+
+        // Удаляем участника
+        await _chatParticipantRepository.DeleteByUserAndChatAsync(chatId, userId);
+
+        // Уведомляем всех участников об удалении
+        await NotifyParticipantRemovedAsync(chatId, userId);
     }
 
     /// <summary>
@@ -98,12 +135,31 @@ public class ChatHub : Hub, IChatHub
     /// <summary>
     /// Удаляет чат и уведомляет участников
     /// </summary>
-    public async Task DeleteChatAsync(Guid chatId)
+    public async Task DeleteChatAsync(Chat chat)
     {
-        await _chatRepository.DeleteAsync((long)(object)chatId);
+        var chatId = chat.Id;
+        if (chat.ChatType == ChatType.Group)
+        {
+            var participants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
+            var participantsList = participants.ToList();
 
-        // Уведомляем участников об удалении
-        await NotifyDeleteAsync(chatId);
+            // Удаляем всех участников чата
+            foreach (var participant in participantsList)
+            {
+                await _chatParticipantRepository.DeleteByUserAndChatAsync(chatId, participant.UserId);
+            }
+
+            // Удаляем сам чат
+            await _chatRepository.DeleteAsync(chatId);
+
+            // Уведомляем участников об удалении
+            await NotifyGroupChatDeleteAsync(chatId, participants);
+        }
+        else
+        {
+            await _chatRepository.DeleteAsync(chatId);
+            await NotifyPrivateChatDeleteAsync(chat);
+        }
     }
 
     /// <summary>
@@ -124,16 +180,22 @@ public class ChatHub : Hub, IChatHub
     /// <summary>
     /// Уведомляет участников об удалении чата
     /// </summary>
-    private async Task NotifyDeleteAsync(Guid chatId)
+    private async Task NotifyGroupChatDeleteAsync(Guid chatId, IEnumerable<ChatParticipant> chatParticipants)
     {
-        var participants = await _chatParticipantRepository.GetAllAsync();
-        var chatParticipants = participants.Where(p => p.ChatId == chatId).ToList();
-
         foreach (var participant in chatParticipants)
         {
             await Clients.User(participant.UserId.ToString())
                 .SendAsync(HubConstants.ChatEvents.ChatDeleted, chatId);
         }
+    }
+
+    private async Task NotifyPrivateChatDeleteAsync(Chat chat)
+    {
+        await Clients.User(chat.User1Id.ToString())
+               .SendAsync(HubConstants.ChatEvents.ChatDeleted, chat.Id);
+
+        await Clients.User(chat.User2Id.ToString())
+              .SendAsync(HubConstants.ChatEvents.ChatDeleted, chat.Id);
     }
 
     /// <summary>
@@ -150,5 +212,61 @@ public class ChatHub : Hub, IChatHub
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
+    }
+
+    /// <summary>
+    /// Уведомляет участников об удалении участника из чата
+    /// </summary>
+    private async Task NotifyParticipantRemovedAsync(Guid chatId, Guid removedUserId)
+    {
+        var participants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
+
+        foreach (var participant in participants)
+        {
+            await Clients.User(participant.UserId.ToString())
+                .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
+        }
+
+        // Уведомляем также удаленного пользователя
+        await Clients.User(removedUserId.ToString())
+            .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
+        
+    }
+
+    /// <summary>
+    /// Добавляет участников в существующий групповой чат
+    /// </summary>
+    public async Task AddParticipantsAsync(Guid chatId, IEnumerable<Guid> participantUserIds)
+    {
+        // Получаем чат для проверки
+        var chats = await _chatRepository.GetAllAsync();
+        var chat = chats.FirstOrDefault(c => c.Id == chatId);
+
+        if (chat == null || chat.ChatType != ChatType.Group)
+            return;
+
+        // Получаем текущих участников чата
+        var existingParticipants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
+        var existingUserIds = existingParticipants.Select(p => p.UserId).ToHashSet();
+
+        // Добавляем новых участников
+        foreach (var userId in participantUserIds)
+        {
+            // Проверяем, что участник еще не добавлен
+            if (!existingUserIds.Contains(userId))
+            {
+                var participant = new ChatParticipant
+                {
+                    Id = Guid.NewGuid(),
+                    ChatId = chatId,
+                    UserId = userId
+                };
+
+                await _chatParticipantRepository.AddAsync(participant);
+            }
+        }
+
+        // Уведомляем всех участников (старых и новых) о создании чата для новых пользователей
+        await NotifyChatParticipantsAsync(chat);
     }
 }

@@ -1,9 +1,11 @@
+using Poslannik.Client.Services;
+using Poslannik.Client.Services.Interfaces;
+using Poslannik.Client.Ui.Controls.ViewModels;
+using Poslannik.Framework.Models;
+using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using ReactiveUI;
-using Poslannik.Client.Ui.Controls.ViewModels;
-using Poslannik.Client.Services.Interfaces;
-using Poslannik.Framework.Models;
+using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -13,10 +15,13 @@ namespace Poslannik.Client.Ui.Controls
     public class ChatViewModel : ViewModelBase
     {
         private Chat? _currentChat;
+        private UserProfileViewModel _userProfileViewModel;
         private string _messageText = string.Empty;
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
         private readonly IAutorizationService _authorizationService;
+        private readonly IChatService _chatService;
+        private readonly ParticipantsViewModel _participantsViewModel;
         private readonly Dictionary<Guid, string> _userNamesCache = new();
         private IReadOnlyList<Message> _messages;
         private string? _chatName;
@@ -25,18 +30,28 @@ namespace Poslannik.Client.Ui.Controls
         public ChatViewModel(
             IMessageService messageService,
             IUserService userService,
-            IAutorizationService authorizationService)
+            IChatService chatService,
+            IAutorizationService authorizationService,
+            ParticipantsViewModel participantsViewModel,
+            UserProfileViewModel userProfileViewModel)
+            
         {
+
             _messageService = messageService;
             _userService = userService;
             _authorizationService = authorizationService;
+            _participantsViewModel = participantsViewModel;
+            _chatService = chatService;
+            _userProfileViewModel = userProfileViewModel;
 
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
-            NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
+            NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfileAsync);
+            NavigateToParticipantsCommand = ReactiveCommand.Create(OnNavigateToParticipants);
             SendMessageCommand = ReactiveCommand.Create(OnSendMessageAsync);
 
             // Подписываемся на событие получения нового сообщения
             _messageService.OnMessageSended += OnMessageReceived;
+            _chatService.OnChatDeleted += OnChatDeleted;
         }
 
         /// <summary>
@@ -85,7 +100,12 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Команда перехода к профилю пользователя
         /// </summary>
-        public ReactiveCommand<Unit, Unit> NavigateToUserProfileCommand { get; }
+        public ReactiveCommand<Unit, Task> NavigateToUserProfileCommand { get; }
+
+        /// <summary>
+        /// Команда перехода к списку участников
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> NavigateToParticipantsCommand { get; }
 
         /// <summary>
         /// Команда отправки сообщения
@@ -115,15 +135,33 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private void OnNavigateBack()
         {
-            NavigationService.NavigateBack();
+            NavigationService?.NavigateBack();
         }
 
         /// <summary>
         /// Обработчик перехода к профилю пользователя
         /// </summary>
-        private void OnNavigateToUserProfile()
+        private async Task OnNavigateToUserProfileAsync()
         {
-            NavigationService.NavigateToWithHistory<UserProfileViewModel>();
+            if (CurrentChat != null && !IsGroupChat)
+            {
+                _userProfileViewModel.CurrentChat = CurrentChat;
+                _userProfileViewModel.UserId = null;
+                await _userProfileViewModel.InitializeAsync();
+                NavigationService?.NavigateToWithHistory<UserProfileViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Обработчик перехода к списку участников
+        /// </summary>
+        private void OnNavigateToParticipants()
+        {
+            if (CurrentChat != null && IsGroupChat)
+            {
+                _participantsViewModel.CurrentChat = CurrentChat;
+                NavigationService?.NavigateToWithHistory<ParticipantsViewModel>();
+            }
         }
 
         /// <summary>
@@ -248,6 +286,16 @@ namespace Poslannik.Client.Ui.Controls
             catch
             {
                 return "Неизвестный пользователь";
+            }
+        }
+
+        private async void OnChatDeleted(Guid chatId)
+        {
+            if(chatId == CurrentChat?.Id)
+            {
+                NavigationService?.ClearNavigationStack();
+                NavigationService?.NavigateTo<ChatsViewModel>();
+                return;
             }
         }
     }

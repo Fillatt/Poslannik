@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task AddTestUserAsync(string login, string name, string password)
+    public async Task AddTestUserAsync(string login, string name, string password, string status)
     {
         byte[] passwordHash;
         byte[] passwordSalt;
@@ -27,6 +27,7 @@ public class UserRepository : IUserRepository
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             UserName = name,
+            Status = status
         };
 
         await _context.Users.AddAsync(user);
@@ -86,7 +87,7 @@ public class UserRepository : IUserRepository
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             UserName = user.UserName,
-            GroupUser = user.GroupUser,
+            Status = user.Status,
         };
     }
 
@@ -98,7 +99,7 @@ public class UserRepository : IUserRepository
             Login = entity.Login,
             Password = "", // Не возвращаем пароль
             UserName = entity.UserName,
-            GroupUser = entity.GroupUser,
+            Status = entity.Status,
         };
     }
 }

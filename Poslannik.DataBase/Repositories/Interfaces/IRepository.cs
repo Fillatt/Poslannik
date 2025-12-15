@@ -7,5 +7,5 @@ public interface IRepository<TEntity, TModel>
     Task<IEnumerable<TModel>> GetAllAsync();
     Task AddAsync(TModel model);
     Task UpdateAsync(TModel model);
-    Task DeleteAsync(long id);
+    Task DeleteAsync(Guid id);
 }

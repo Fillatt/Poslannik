@@ -153,6 +153,7 @@ namespace Poslannik.Client.Ui.Controls
             _chatService.OnChatCreated += OnChatCreated;
             _chatService.OnChatUpdated += OnChatUpdated;
             _chatService.OnChatDeleted += OnChatDeleted;
+            _chatService.OnParticipantRemoved += OnParticipantRemoved;
         }
 
         /// <summary>
@@ -181,6 +182,22 @@ namespace Poslannik.Client.Ui.Controls
             if (chat != null)
             {
                 Chats.Remove(chat);
+            }
+        }
+
+        /// <summary>
+        /// Обработчик удаления участника из чата
+        /// </summary>
+        private void OnParticipantRemoved(Guid chatId, Guid userId)
+        {
+            // Если удалили текущего пользователя, удаляем чат из списка
+            if (userId == _autorizationService.UserId)
+            {
+                var chat = Chats.FirstOrDefault(c => c.Id == chatId);
+                if (chat != null)
+                {
+                    Chats.Remove(chat);
+                }
             }
         }
     }

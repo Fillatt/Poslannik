@@ -41,9 +41,9 @@ public class ChatRepository : IChatRepository
         }
     }
 
-    public async Task DeleteAsync(long id)
+    public async Task DeleteAsync(Guid id)
     {
-        var entity = await _context.Chats.FindAsync((Guid)(object)id);
+        var entity = await _context.Chats.FindAsync(id);
         if (entity != null)
         {
             _context.Chats.Remove(entity);
