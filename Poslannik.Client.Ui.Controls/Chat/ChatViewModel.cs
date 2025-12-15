@@ -5,6 +5,7 @@ using Poslannik.Framework.Models;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -44,7 +45,7 @@ namespace Poslannik.Client.Ui.Controls
             _userProfileViewModel = userProfileViewModel;
 
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
-            NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
+            NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfileAsync);
             NavigateToParticipantsCommand = ReactiveCommand.Create(OnNavigateToParticipants);
             SendMessageCommand = ReactiveCommand.Create(OnSendMessageAsync);
 
@@ -99,7 +100,7 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Команда перехода к профилю пользователя
         /// </summary>
-        public ReactiveCommand<Unit, Unit> NavigateToUserProfileCommand { get; }
+        public ReactiveCommand<Unit, Task> NavigateToUserProfileCommand { get; }
 
         /// <summary>
         /// Команда перехода к списку участников
@@ -134,18 +135,19 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private void OnNavigateBack()
         {
-            NavigationService.NavigateBack();
+            NavigationService?.NavigateBack();
         }
 
         /// <summary>
         /// Обработчик перехода к профилю пользователя
         /// </summary>
-        private void OnNavigateToUserProfile()
+        private async Task OnNavigateToUserProfileAsync()
         {
             if (CurrentChat != null && !IsGroupChat)
             {
                 _userProfileViewModel.CurrentChat = CurrentChat;
-                NavigationService.NavigateToWithHistory<UserProfileViewModel>();
+                await _userProfileViewModel.InitializeAsync();
+                NavigationService?.NavigateToWithHistory<UserProfileViewModel>();
             }
         }
 
@@ -157,7 +159,7 @@ namespace Poslannik.Client.Ui.Controls
             if (CurrentChat != null && IsGroupChat)
             {
                 _participantsViewModel.CurrentChat = CurrentChat;
-                NavigationService.NavigateToWithHistory<ParticipantsViewModel>();
+                NavigationService?.NavigateToWithHistory<ParticipantsViewModel>();
             }
         }
 

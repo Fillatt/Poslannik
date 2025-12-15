@@ -81,6 +81,7 @@
                         BorderThickness="0"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Command="{Binding DeleteChatCommand}"
                         Name="DeleteChatButton"/>
             </Border>

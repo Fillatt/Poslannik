@@ -109,7 +109,7 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private void OnNavigateBack()
         {
-            NavigationService.NavigateBack();
+            NavigationService?.NavigateBack();
         }
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace Poslannik.Client.Ui.Controls
             try
             {
                 await _chatService.DeleteChatAsync(CurrentChat);
-                NavigationService.ClearNavigationStack();
-                NavigationService.NavigateTo<ChatsViewModel>();
+                NavigationService?.ClearNavigationStack();
+                NavigationService?.NavigateTo<ChatsViewModel>();
             }
             catch (Exception ex)
             {
