@@ -218,6 +218,27 @@ public class ChatService : IChatService
         }
     }
 
+    public async Task AddParticipantsAsync(Guid chatId, IEnumerable<Guid> participantUserIds, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+            {
+                await ConnectAsync(_autorizationService.JwtToken, cancellationToken);
+            }
+
+            await _hubConnection.InvokeAsync(
+                nameof(IChatHub.AddParticipantsAsync),
+                chatId,
+                participantUserIds,
+                cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка добавления участников: {ex.Message}");
+        }
+    }
+
     private void RegisterEventHandlers()
     {
         if (_hubConnection == null) return;

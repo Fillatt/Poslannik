@@ -54,4 +54,11 @@ public interface IChatHub
     /// <param name="chatId">Идентификатор чата</param>
     /// <param name="newAdminId">Идентификатор нового администратора</param>
     Task TransferAdminRightsAsync(Guid chatId, Guid newAdminId);
+
+    /// <summary>
+    /// Добавляет участников в существующий групповой чат
+    /// </summary>
+    /// <param name="chatId">Идентификатор чата</param>
+    /// <param name="participantUserIds">Идентификаторы добавляемых участников</param>
+    Task AddParticipantsAsync(Guid chatId, IEnumerable<Guid> participantUserIds);
 }

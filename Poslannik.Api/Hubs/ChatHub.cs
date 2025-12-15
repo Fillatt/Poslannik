@@ -273,4 +273,41 @@ public class ChatHub : Hub, IChatHub
                 .SendAsync(HubConstants.ChatEvents.AdminRightsTransferred, chatId, newAdminId);
         }
     }
+
+    /// <summary>
+    /// Добавляет участников в существующий групповой чат
+    /// </summary>
+    public async Task AddParticipantsAsync(Guid chatId, IEnumerable<Guid> participantUserIds)
+    {
+        // Получаем чат для проверки
+        var chats = await _chatRepository.GetAllAsync();
+        var chat = chats.FirstOrDefault(c => c.Id == chatId);
+
+        if (chat == null || chat.ChatType != ChatType.Group)
+            return;
+
+        // Получаем текущих участников чата
+        var existingParticipants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
+        var existingUserIds = existingParticipants.Select(p => p.UserId).ToHashSet();
+
+        // Добавляем новых участников
+        foreach (var userId in participantUserIds)
+        {
+            // Проверяем, что участник еще не добавлен
+            if (!existingUserIds.Contains(userId))
+            {
+                var participant = new ChatParticipant
+                {
+                    Id = Guid.NewGuid(),
+                    ChatId = chatId,
+                    UserId = userId
+                };
+
+                await _chatParticipantRepository.AddAsync(participant);
+            }
+        }
+
+        // Уведомляем всех участников (старых и новых) о создании чата для новых пользователей
+        await NotifyChatParticipantsAsync(chat);
+    }
 }

@@ -22,4 +22,5 @@ public interface IChatService
 
     Task<IEnumerable<ChatParticipant>> GetChatParticipantsAsync(Guid chatId, CancellationToken cancellationToken = default);
     Task RemoveParticipantAsync(Guid chatId, Guid userId, CancellationToken cancellationToken = default);
+    Task AddParticipantsAsync(Guid chatId, IEnumerable<Guid> participantUserIds, CancellationToken cancellationToken = default);
 }

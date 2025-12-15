@@ -2,7 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+             xmlns:local="using:Poslannik.Client.Ui.Controls"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="428"
+
+             x:DataType="local:AddParticipantsViewModel"
              x:Class="Poslannik.Client.Ui.Controls.AddParticipantsView">
 
     <Grid RowDefinitions="Auto,*,Auto" Background="#FAFAFA">
@@ -43,13 +50,22 @@
                     <TextBlock Text="Добавить участника:"
                                FontSize="14"
                                FontWeight="SemiBold"/>
-                    <TextBox Watermark="Иван Иванов"
+                    <TextBox Watermark="Поиск участника..."
                              Background="White"
                              BorderBrush="#E0E0E0"
                              BorderThickness="1"
                              CornerRadius="8"
                              Padding="12,10"
+                             Text="{Binding ParticipantSearchQuery}"
+                             IsEnabled="{Binding !IsLoading}"
                              Name="SearchParticipantTextBox">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="KeyDown" SourceObject="{Binding ElementName=SearchParticipantTextBox}">
+                                <ia:InvokeCommandAction Command="{Binding SearchParticipantsCommand}"
+                                                        CommandParameter="{Binding ParticipantSearchQuery}"/>
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+
                         <TextBox.InnerRightContent>
                             <Viewbox Width="20" Height="20" Margin="0,0,8,0">
                                 <Canvas Width="24" Height="24">
@@ -59,6 +75,27 @@
                             </Viewbox>
                         </TextBox.InnerRightContent>
                     </TextBox>
+
+                    <!-- Список найденных участников -->
+                    <ItemsControl ItemsSource="{Binding FoundParticipants}" Name="FoundParticipantsPanel">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Background="White"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="12,8"
+                                        Margin="0,2"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        Command="{Binding $parent[UserControl].DataContext.AddParticipantCommand}"
+                                        CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding UserName}"
+                                               FontSize="13"/>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
 
                 <StackPanel Spacing="5">
@@ -66,75 +103,75 @@
                                FontSize="14"
                                FontWeight="SemiBold"/>
 
-                    <Border Background="White"
-                            BorderBrush="#E0E0E0"
-                            BorderThickness="1"
-                            CornerRadius="8"
-                            Padding="12,8">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Иван Иванов ТПИМ6-02-2оп-22 id321412412"
-                                       FontSize="13"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                            <Button Grid.Column="1"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Padding="5"
-                                    Command="{Binding RemoveParticipantCommand}"
-                                    Name="RemoveParticipant1Button">
-                                <Viewbox Width="20" Height="20">
-                                    <Canvas Width="24" Height="24">
-                                        <Path Fill="#EF3C45"
-                                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
-                                    </Canvas>
-                                </Viewbox>
-                            </Button>
-                        </Grid>
-                    </Border>
+                    <ItemsControl ItemsSource="{Binding Participants}" Name="ParticipantsListPanel">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="White"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="12,8"
+                                        Margin="0,2">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Text="{Binding UserName}"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
+                                        <Button Grid.Column="1"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Padding="5"
+                                                Command="{Binding $parent[UserControl].DataContext.RemoveParticipantCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Viewbox Width="20" Height="20">
+                                                <Canvas Width="24" Height="24">
+                                                    <Path Fill="#EF3C45"
+                                                          Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
+                                                </Canvas>
+                                            </Viewbox>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                    <Border Background="White"
-                            BorderBrush="#E0E0E0"
-                            BorderThickness="1"
-                            CornerRadius="8"
-                            Padding="12,8">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Сидр Сидоров ТПИМ5-02-2оп-22 id518025123"
-                                       FontSize="13"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                            <Button Grid.Column="1"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Padding="5"
-                                    Command="{Binding RemoveParticipantCommand}"
-                                    Name="RemoveParticipant2Button">
-                                <Viewbox Width="20" Height="20">
-                                    <Canvas Width="24" Height="24">
-                                        <Path Fill="#EF3C45"
-                                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/>
-                                    </Canvas>
-                                </Viewbox>
-                            </Button>
-                        </Grid>
-                    </Border>
-
+                    <TextBlock Text="Добавьте хотя бы одного участника"
+                               FontSize="12"
+                               Foreground="#999999"
+                               HorizontalAlignment="Center"
+                               Margin="0,10"
+                               IsVisible="{Binding !HasParticipants}"/>
                 </StackPanel>
 
             </StackPanel>
         </ScrollViewer>
 
         <Border Grid.Row="2" Padding="15,10">
-            <Button Background="#EF3C45"
-                    Foreground="White"
-                    Content="Добавить"
-                    FontSize="16"
-                    FontWeight="SemiBold"
-                    CornerRadius="20"
-                    Padding="0,12"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Command="{Binding AddCommand}"
-                    Name="AddButton"/>
+            <StackPanel Spacing="10">
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#EF3C45"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                <Button Background="#EF3C45"
+                        Foreground="White"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        CornerRadius="20"
+                        Padding="0,12"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        IsEnabled="{Binding !IsLoading}"
+                        Command="{Binding AddCommand}"
+                        Name="AddButton">
+                    <Panel>
+                        <TextBlock Text="Добавить" IsVisible="{Binding !IsLoading}"/>
+                        <TextBlock Text="Добавление..." IsVisible="{Binding IsLoading}"/>
+                    </Panel>
+                </Button>
+            </StackPanel>
         </Border>
 
     </Grid>
