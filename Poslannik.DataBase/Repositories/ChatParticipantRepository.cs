@@ -41,9 +41,9 @@ namespace Poslannik.DataBase.Repositories
             }
         }
 
-        public async Task DeleteAsync(long id)
+        public async Task DeleteAsync(Guid id)
         {
-            var entity = await _context.ChatParticipants.FindAsync((Guid)(object)id);
+            var entity = await _context.ChatParticipants.FindAsync(id);
             if (entity != null)
             {
                 _context.ChatParticipants.Remove(entity);

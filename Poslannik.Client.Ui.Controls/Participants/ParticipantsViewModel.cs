@@ -37,7 +37,7 @@ namespace Poslannik.Client.Ui.Controls
 
             // Подписываемся на события
             _chatService.OnParticipantRemoved += OnParticipantRemovedEvent;
-            _chatService.OnAdminRightsTransferred += OnAdminRightsTransferredEvent;
+            _chatService.OnChatDeleted += OnChatDeleted;
         }
 
         /// <summary>
@@ -279,22 +279,14 @@ namespace Poslannik.Client.Ui.Controls
             await LoadParticipantsAsync();
         }
 
-        /// <summary>
-        /// Обработчик события передачи прав администратора
-        /// </summary>
-        private async void OnAdminRightsTransferredEvent(Guid chatId, Guid newAdminId)
+        private async void OnChatDeleted(Guid chatId)
         {
-            if (CurrentChat == null || CurrentChat.Id != chatId)
+            if (chatId == CurrentChat?.Id)
+            {
+                NavigationService?.ClearNavigationStack();
+                NavigationService?.NavigateTo<ChatsViewModel>();
                 return;
-
-            // Обновляем информацию о чате
-            CurrentChat = CurrentChat with { AdminId = newAdminId };
-
-            // Проверяем, стали ли мы админом
-            IsAdmin = newAdminId == _authorizationService.UserId;
-
-            // Обновляем список участников (чтобы обновить флаги CanBeRemoved)
-            await LoadParticipantsAsync();
+            }
         }
     }
 }

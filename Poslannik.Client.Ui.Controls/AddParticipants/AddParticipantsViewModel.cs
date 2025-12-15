@@ -13,11 +13,11 @@ namespace Poslannik.Client.Ui.Controls
     /// </summary>
     public class AddParticipantsViewModel : ViewModelBase
     {
+        private ChatViewModel _chatViewModel;
         private readonly IChatService _chatService;
         private readonly IAutorizationService _authorizationService;
         private readonly IUserService _userService;
 
-        private Guid? _chatId;
         private string? _participantSearchQuery;
         private bool _isLoading;
         private string? _errorMessage;
@@ -25,7 +25,7 @@ namespace Poslannik.Client.Ui.Controls
         private ObservableCollection<User> _foundParticipants;
         private ObservableCollection<User> _participants;
 
-        public AddParticipantsViewModel(IChatService chatService, IAutorizationService authorizationService, IUserService userService)
+        public AddParticipantsViewModel(IChatService chatService, IAutorizationService authorizationService, IUserService userService, ChatViewModel chatViewModel)
         {
             _chatService = chatService;
             _authorizationService = authorizationService;
@@ -34,20 +34,13 @@ namespace Poslannik.Client.Ui.Controls
             _foundParticipants = new ObservableCollection<User>();
             _participants = new ObservableCollection<User>();
 
+            _chatViewModel = chatViewModel;
+
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             RemoveParticipantCommand = ReactiveCommand.Create<User>(OnRemoveParticipant);
             AddCommand = ReactiveCommand.Create(OnAddAsync);
             AddParticipantCommand = ReactiveCommand.Create<User>(OnAddParticipant);
             SearchParticipantsCommand = ReactiveCommand.Create<string?, Task>(SearchParticipantsAsync);
-        }
-
-        /// <summary>
-        /// ID текущего чата
-        /// </summary>
-        public Guid? ChatId
-        {
-            get => _chatId;
-            set => this.RaiseAndSetIfChanged(ref _chatId, value);
         }
 
         /// <summary>
@@ -151,7 +144,7 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private async Task SearchParticipantsAsync(string? query)
         {
-            if (string.IsNullOrWhiteSpace(query) || !ChatId.HasValue)
+            if (string.IsNullOrWhiteSpace(query))
             {
                 FoundParticipants.Clear();
                 return;
@@ -160,7 +153,7 @@ namespace Poslannik.Client.Ui.Controls
             try
             {
                 // Получаем текущих участников чата
-                var currentParticipants = await _chatService.GetChatParticipantsAsync(ChatId.Value);
+                var currentParticipants = await _chatService.GetChatParticipantsAsync(_chatViewModel.CurrentChat.Id);
                 var currentUserIds = currentParticipants.Select(p => p.UserId).ToHashSet();
 
                 // Ищем пользователей
@@ -217,20 +210,8 @@ namespace Poslannik.Client.Ui.Controls
 
             try
             {
-                if (!ChatId.HasValue)
-                {
-                    ErrorMessage = "Чат не выбран";
-                    return;
-                }
-
-                if (Participants.Count == 0)
-                {
-                    ErrorMessage = "Добавьте хотя бы одного участника";
-                    return;
-                }
-
                 var participantIds = Participants.Select(p => p.Id).ToList();
-                await _chatService.AddParticipantsAsync(ChatId.Value, participantIds);
+                await _chatService.AddParticipantsAsync(_chatViewModel.CurrentChat.Id, participantIds);
 
                 // Сбрасываем состояние и возвращаемся назад
                 ResetState();

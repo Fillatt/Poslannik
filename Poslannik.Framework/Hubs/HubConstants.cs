@@ -13,7 +13,6 @@ public static class HubConstants
         public const string ChatUpdated = "ChatUpdated";
         public const string ChatDeleted = "ChatDeleted";
         public const string ParticipantRemoved = "ParticipantRemoved";
-        public const string AdminRightsTransferred = "AdminRightsTransferred";
     }
 
     public static class MessageEvents

@@ -8,7 +8,7 @@ public class ChatParticipantHubRepository (IChatParticipantRepository chatPartic
 {
     public Task AddAsync(ChatParticipant model) => chatParticipantRepository.AddAsync(model);
 
-    public Task DeleteAsync(long id) => chatParticipantRepository.DeleteAsync(id);
+    public Task DeleteAsync(Guid id) => chatParticipantRepository.DeleteAsync(id);
 
     public Task<IEnumerable<ChatParticipant>> GetAllAsync()  => chatParticipantRepository.GetAllAsync();
 

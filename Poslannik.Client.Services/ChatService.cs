@@ -263,11 +263,6 @@ public class ChatService : IChatService
             OnParticipantRemoved?.Invoke(chatId, userId);
         });
 
-        _hubConnection.On<Guid, Guid>(HubConstants.ChatEvents.AdminRightsTransferred, (chatId, newAdminId) =>
-        {
-            OnAdminRightsTransferred?.Invoke(chatId, newAdminId);
-        });
-
         _hubConnection.Reconnecting += error =>
         {
             _isConnected = false;

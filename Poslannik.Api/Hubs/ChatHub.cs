@@ -57,47 +57,8 @@ public class ChatHub : Hub, IChatHub
         // Удаляем участника
         await _chatParticipantRepository.DeleteByUserAndChatAsync(chatId, userId);
 
-        // Проверяем, был ли это админ
-        if (chat.AdminId == userId)
-        {
-            // Получаем оставшихся участников
-            var remainingParticipants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
-            var participantsList = remainingParticipants.ToList();
-
-            if (participantsList.Any())
-            {
-                // Передаем права первому оставшемуся участнику
-                var newAdminId = participantsList.First().UserId;
-                await TransferAdminRightsAsync(chatId, newAdminId);
-            }
-            else
-            {
-                // Если участников не осталось, удаляем чат
-                await DeleteChatAsync(chatId);
-                return;
-            }
-        }
-
         // Уведомляем всех участников об удалении
         await NotifyParticipantRemovedAsync(chatId, userId);
-    }
-
-    /// <summary>
-    /// Передает права администратора другому участнику
-    /// </summary>
-    public async Task TransferAdminRightsAsync(Guid chatId, Guid newAdminId)
-    {
-        var chats = await _chatRepository.GetAllAsync();
-        var chat = chats.FirstOrDefault(c => c.Id == chatId);
-
-        if (chat == null)
-            return;
-
-        var updatedChat = chat with { AdminId = newAdminId };
-        await _chatRepository.UpdateAsync(updatedChat);
-
-        // Уведомляем всех участников о смене администратора
-        await NotifyAdminRightsTransferredAsync(chatId, newAdminId);
     }
 
     /// <summary>
@@ -187,10 +148,10 @@ public class ChatHub : Hub, IChatHub
         }
 
         // Удаляем сам чат
-        await _chatRepository.DeleteAsync((long)(object)chatId);
+        await _chatRepository.DeleteAsync(chatId);
 
         // Уведомляем участников об удалении
-        await NotifyDeleteAsync(chatId);
+        await NotifyDeleteAsync(chatId, participants);
     }
 
     /// <summary>
@@ -211,11 +172,8 @@ public class ChatHub : Hub, IChatHub
     /// <summary>
     /// Уведомляет участников об удалении чата
     /// </summary>
-    private async Task NotifyDeleteAsync(Guid chatId)
+    private async Task NotifyDeleteAsync(Guid chatId, IEnumerable<ChatParticipant> chatParticipants)
     {
-        var participants = await _chatParticipantRepository.GetAllAsync();
-        var chatParticipants = participants.Where(p => p.ChatId == chatId).ToList();
-
         foreach (var participant in chatParticipants)
         {
             await Clients.User(participant.UserId.ToString())
@@ -252,26 +210,10 @@ public class ChatHub : Hub, IChatHub
                 .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
         }
 
-        foreach(var participant in participants)
-        {
-            // Уведомляем также удаленного пользователя
-            await Clients.User(participant.UserId.ToString())
-                .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
-        }
-    }
-
-    /// <summary>
-    /// Уведомляет участников о передаче прав администратора
-    /// </summary>
-    private async Task NotifyAdminRightsTransferredAsync(Guid chatId, Guid newAdminId)
-    {
-        var participants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
-
-        foreach (var participant in participants)
-        {
-            await Clients.User(participant.UserId.ToString())
-                .SendAsync(HubConstants.ChatEvents.AdminRightsTransferred, chatId, newAdminId);
-        }
+        // Уведомляем также удаленного пользователя
+        await Clients.User(removedUserId.ToString())
+            .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
+        
     }
 
     /// <summary>

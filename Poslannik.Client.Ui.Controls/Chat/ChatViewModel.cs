@@ -1,9 +1,10 @@
+using Poslannik.Client.Services;
+using Poslannik.Client.Services.Interfaces;
+using Poslannik.Client.Ui.Controls.ViewModels;
+using Poslannik.Framework.Models;
+using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using ReactiveUI;
-using Poslannik.Client.Ui.Controls.ViewModels;
-using Poslannik.Client.Services.Interfaces;
-using Poslannik.Framework.Models;
 
 namespace Poslannik.Client.Ui.Controls
 {
@@ -17,6 +18,7 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
         private readonly IAutorizationService _authorizationService;
+        private readonly IChatService _chatService;
         private readonly ParticipantsViewModel _participantsViewModel;
         private readonly Dictionary<Guid, string> _userNamesCache = new();
         private IReadOnlyList<Message> _messages;
@@ -26,6 +28,7 @@ namespace Poslannik.Client.Ui.Controls
         public ChatViewModel(
             IMessageService messageService,
             IUserService userService,
+            IChatService chatService,
             IAutorizationService authorizationService,
             ParticipantsViewModel participantsViewModel)
         {
@@ -33,6 +36,7 @@ namespace Poslannik.Client.Ui.Controls
             _userService = userService;
             _authorizationService = authorizationService;
             _participantsViewModel = participantsViewModel;
+            _chatService = chatService;
 
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
@@ -41,6 +45,7 @@ namespace Poslannik.Client.Ui.Controls
 
             // Подписываемся на событие получения нового сообщения
             _messageService.OnMessageSended += OnMessageReceived;
+            _chatService.OnChatDeleted += OnChatDeleted;
         }
 
         /// <summary>
@@ -269,6 +274,16 @@ namespace Poslannik.Client.Ui.Controls
             catch
             {
                 return "Неизвестный пользователь";
+            }
+        }
+
+        private async void OnChatDeleted(Guid chatId)
+        {
+            if(chatId == CurrentChat?.Id)
+            {
+                NavigationService?.ClearNavigationStack();
+                NavigationService?.NavigateTo<ChatsViewModel>();
+                return;
             }
         }
     }

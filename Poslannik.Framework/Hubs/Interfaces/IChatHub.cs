@@ -49,13 +49,6 @@ public interface IChatHub
     Task RemoveParticipantAsync(Guid chatId, Guid userId);
 
     /// <summary>
-    /// Передает права администратора другому участнику
-    /// </summary>
-    /// <param name="chatId">Идентификатор чата</param>
-    /// <param name="newAdminId">Идентификатор нового администратора</param>
-    Task TransferAdminRightsAsync(Guid chatId, Guid newAdminId);
-
-    /// <summary>
     /// Добавляет участников в существующий групповой чат
     /// </summary>
     /// <param name="chatId">Идентификатор чата</param>

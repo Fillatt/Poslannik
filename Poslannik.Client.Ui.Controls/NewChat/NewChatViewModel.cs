@@ -48,6 +48,8 @@ namespace Poslannik.Client.Ui.Controls
             AddParticipantCommand = ReactiveCommand.Create<User>(OnAddParticipant);
             KeyDownCommand = ReactiveCommand.Create<string?, Task>(SearchUsersAsync);
             SearchParticipantsCommand = ReactiveCommand.Create<string?, Task>(SearchParticipantsAsync);
+
+            _chatService.OnChatDeleted += OnChatDeleted;
         }
 
         /// <summary>
@@ -417,6 +419,16 @@ namespace Poslannik.Client.Ui.Controls
         {
             Participants.Remove(user);
             this.RaisePropertyChanged(nameof(HasParticipants));
+        }
+
+        private async void OnChatDeleted(Guid chatId)
+        {
+            if (chatId == _chatViewModel.CurrentChat?.Id)
+            {
+                NavigationService?.ClearNavigationStack();
+                NavigationService?.NavigateTo<ChatsViewModel>();
+                return;
+            }
         }
     }
 }

@@ -10,7 +10,6 @@ public interface IChatService
     event Action<Chat>? OnChatUpdated;
     event Action<Guid>? OnChatDeleted;
     event Action<Guid, Guid>? OnParticipantRemoved;
-    event Action<Guid, Guid>? OnAdminRightsTransferred;
 
     Task<bool> ConnectAsync(string jwtToken, CancellationToken cancellationToken = default);
     Task DisconnectAsync(CancellationToken cancellationToken = default);
