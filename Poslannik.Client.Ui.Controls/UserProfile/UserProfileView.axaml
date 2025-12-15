@@ -35,39 +35,56 @@
             </Grid>
         </Border>
         
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="20" Margin="20,40">
-                
-                <Border Width="120" Height="120"
-                        CornerRadius="60"
-                        BorderBrush="#E0E0E0"
-                        BorderThickness="2"
-                        HorizontalAlignment="Center">
-                    <Viewbox Width="60" Height="60">
-                        <Canvas Width="24" Height="24">
-                            <Path Fill="#999999" 
-                                  Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                        </Canvas>
-                    </Viewbox>
-                </Border>
-                
-                <TextBlock Text="Иван Иванов"
-                           FontSize="24"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
-                
-                <TextBlock Text="id32Xx12412"
-                           FontSize="14"
-                           Foreground="#999999"
-                           HorizontalAlignment="Center"
-                           Margin="0,-15,0,0"/>
-                
-                <TextBlock Text="Группа: ПИМ6-02-1оп-22"
-                           FontSize="16"
-                           HorizontalAlignment="Center"/>
-                
-            </StackPanel>
-        </ScrollViewer>
+        <Grid Grid.Row="1" RowDefinitions="*,Auto">
+            <ScrollViewer Grid.Row="0">
+                <StackPanel Spacing="20" Margin="20,40">
+
+                    <Border Width="120" Height="120"
+                            CornerRadius="60"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="2"
+                            HorizontalAlignment="Center">
+                        <Viewbox Width="60" Height="60">
+                            <Canvas Width="24" Height="24">
+                                <Path Fill="#999999"
+                                      Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Border>
+
+                    <TextBlock Text="{Binding UserName}"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding UserLogin}"
+                               FontSize="14"
+                               Foreground="#999999"
+                               HorizontalAlignment="Center"
+                               Margin="0,-15,0,0"/>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <Border Grid.Row="1"
+                    Background="White"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="0,1,0,0"
+                    Padding="20">
+                <Button Background="#EF3C45"
+                        Foreground="White"
+                        Content="Удалить чат"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Height="45"
+                        CornerRadius="10"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding DeleteChatCommand}"
+                        Name="DeleteChatButton"/>
+            </Border>
+        </Grid>
 
     </Grid>
 </UserControl>

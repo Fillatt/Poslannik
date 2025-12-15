@@ -14,6 +14,7 @@ namespace Poslannik.Client.Ui.Controls
     public class ChatViewModel : ViewModelBase
     {
         private Chat? _currentChat;
+        private UserProfileViewModel _userProfileViewModel;
         private string _messageText = string.Empty;
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
@@ -30,13 +31,17 @@ namespace Poslannik.Client.Ui.Controls
             IUserService userService,
             IChatService chatService,
             IAutorizationService authorizationService,
-            ParticipantsViewModel participantsViewModel)
+            ParticipantsViewModel participantsViewModel,
+            UserProfileViewModel userProfileViewModel)
+            
         {
+
             _messageService = messageService;
             _userService = userService;
             _authorizationService = authorizationService;
             _participantsViewModel = participantsViewModel;
             _chatService = chatService;
+            _userProfileViewModel = userProfileViewModel;
 
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
             NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
@@ -137,7 +142,11 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private void OnNavigateToUserProfile()
         {
-            NavigationService.NavigateToWithHistory<UserProfileViewModel>();
+            if (CurrentChat != null && !IsGroupChat)
+            {
+                _userProfileViewModel.CurrentChat = CurrentChat;
+                NavigationService.NavigateToWithHistory<UserProfileViewModel>();
+            }
         }
 
         /// <summary>
