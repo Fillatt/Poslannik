@@ -225,7 +225,7 @@ namespace Poslannik.Client.Ui.Controls
 
             try
             {
-                await _chatService.DeleteChatAsync(CurrentChat.Id);
+                await _chatService.DeleteChatAsync(CurrentChat);
                 NavigationService.ClearNavigationStack();
                 NavigationService.NavigateTo<ChatsViewModel>();
             }

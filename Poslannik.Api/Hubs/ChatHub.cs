@@ -135,23 +135,31 @@ public class ChatHub : Hub, IChatHub
     /// <summary>
     /// Удаляет чат и уведомляет участников
     /// </summary>
-    public async Task DeleteChatAsync(Guid chatId)
+    public async Task DeleteChatAsync(Chat chat)
     {
-        // Сначала получаем всех участников для уведомления
-        var participants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
-        var participantsList = participants.ToList();
-
-        // Удаляем всех участников чата
-        foreach (var participant in participantsList)
+        var chatId = chat.Id;
+        if (chat.ChatType == ChatType.Group)
         {
-            await _chatParticipantRepository.DeleteByUserAndChatAsync(chatId, participant.UserId);
+            var participants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
+            var participantsList = participants.ToList();
+
+            // Удаляем всех участников чата
+            foreach (var participant in participantsList)
+            {
+                await _chatParticipantRepository.DeleteByUserAndChatAsync(chatId, participant.UserId);
+            }
+
+            // Удаляем сам чат
+            await _chatRepository.DeleteAsync(chatId);
+
+            // Уведомляем участников об удалении
+            await NotifyGroupChatDeleteAsync(chatId, participants);
         }
-
-        // Удаляем сам чат
-        await _chatRepository.DeleteAsync(chatId);
-
-        // Уведомляем участников об удалении
-        await NotifyDeleteAsync(chatId, participants);
+        else
+        {
+            await _chatRepository.DeleteAsync(chatId);
+            await NotifyPrivateChatDeleteAsync(chat);
+        }
     }
 
     /// <summary>
@@ -172,13 +180,22 @@ public class ChatHub : Hub, IChatHub
     /// <summary>
     /// Уведомляет участников об удалении чата
     /// </summary>
-    private async Task NotifyDeleteAsync(Guid chatId, IEnumerable<ChatParticipant> chatParticipants)
+    private async Task NotifyGroupChatDeleteAsync(Guid chatId, IEnumerable<ChatParticipant> chatParticipants)
     {
         foreach (var participant in chatParticipants)
         {
             await Clients.User(participant.UserId.ToString())
                 .SendAsync(HubConstants.ChatEvents.ChatDeleted, chatId);
         }
+    }
+
+    private async Task NotifyPrivateChatDeleteAsync(Chat chat)
+    {
+        await Clients.User(chat.User1Id.ToString())
+               .SendAsync(HubConstants.ChatEvents.ChatDeleted, chat.Id);
+
+        await Clients.User(chat.User2Id.ToString())
+              .SendAsync(HubConstants.ChatEvents.ChatDeleted, chat.Id);
     }
 
     /// <summary>

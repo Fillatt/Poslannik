@@ -154,7 +154,7 @@ public class ChatService : IChatService
         }
     }
 
-    public async Task DeleteChatAsync(Guid chatId, CancellationToken cancellationToken = default)
+    public async Task DeleteChatAsync(Chat chat, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -165,7 +165,7 @@ public class ChatService : IChatService
 
             await _hubConnection.InvokeAsync(
                 nameof(IChatHub.DeleteChatAsync),
-                chatId,
+                chat,
                 cancellationToken);
         }
         catch (Exception ex)

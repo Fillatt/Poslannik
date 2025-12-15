@@ -25,7 +25,7 @@ public interface IChatHub
 
     Task UpdateChatAsync(Chat chat);
 
-    Task DeleteChatAsync(Guid chatId);
+    Task DeleteChatAsync(Chat chat);
 
     /// <summary>
     /// Уведомляет участников чата о событии
