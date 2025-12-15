@@ -28,7 +28,7 @@
                         Command="{Binding NavigateBackCommand}"
                         Name="BackButton">
                     <Viewbox Width="24" Height="24">
-                        <Canvas Width="24" Height="25">
+                        <Canvas Width="24" Height="24">
                             <Path Fill="#000000"
                                   Data="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                         </Canvas>
