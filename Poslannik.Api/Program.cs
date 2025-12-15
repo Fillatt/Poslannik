@@ -74,8 +74,6 @@ var app = builder.Build();
 //await userRepoImp.AddTestUserAsync("dima", "Дима Милавин", "123");
 //await userRepoImp.AddTestUserAsync("andrey", "Андрей Остроумов", "123");
 //await userRepoImp.AddTestUserAsync("sanya", "Александр Симаньков", "123");
-//await userRepoImp.AddTestUserAsync("nadya", "Надежда Александрова", "123");
-//await userRepoImp.AddTestUserAsync("vika", "Вика Тимошина", "123");
 
 app.UseAuthentication();
 app.UseAuthorization();

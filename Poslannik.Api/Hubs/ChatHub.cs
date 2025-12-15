@@ -57,10 +57,6 @@ public class ChatHub : Hub, IChatHub
         // Удаляем участника
         await _chatParticipantRepository.DeleteByUserAndChatAsync(chatId, userId);
 
-        // Создаем системное сообщение
-        var systemMessage = $"{userName} покинул(а) чат";
-        await CreateSystemMessageAsync(chatId, systemMessage);
-
         // Проверяем, был ли это админ
         if (chat.AdminId == userId)
         {
@@ -73,11 +69,6 @@ public class ChatHub : Hub, IChatHub
                 // Передаем права первому оставшемуся участнику
                 var newAdminId = participantsList.First().UserId;
                 await TransferAdminRightsAsync(chatId, newAdminId);
-
-                // Создаем системное сообщение о передаче прав
-                var newAdmin = await _userRepository.GetUserByIdAsync(newAdminId);
-                var newAdminName = newAdmin?.UserName ?? newAdmin?.Login ?? "Пользователь";
-                await CreateSystemMessageAsync(chatId, $"{newAdminName} теперь администратор чата");
             }
             else
             {
@@ -261,9 +252,12 @@ public class ChatHub : Hub, IChatHub
                 .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
         }
 
-        // Уведомляем также удаленного пользователя
-        await Clients.User(removedUserId.ToString())
-            .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
+        foreach(var participant in participants)
+        {
+            // Уведомляем также удаленного пользователя
+            await Clients.User(participant.UserId.ToString())
+                .SendAsync(HubConstants.ChatEvents.ParticipantRemoved, chatId, removedUserId);
+        }
     }
 
     /// <summary>
@@ -277,32 +271,6 @@ public class ChatHub : Hub, IChatHub
         {
             await Clients.User(participant.UserId.ToString())
                 .SendAsync(HubConstants.ChatEvents.AdminRightsTransferred, chatId, newAdminId);
-        }
-    }
-
-    /// <summary>
-    /// Создает системное сообщение в чате и отправляет его всем участникам
-    /// </summary>
-    private async Task CreateSystemMessageAsync(Guid chatId, string messageText)
-    {
-        var systemMessage = new Message
-        {
-            Id = Guid.NewGuid(),
-            ChatId = chatId,
-            SenderId = Guid.Empty, // Guid.Empty означает системное сообщение
-            Data = messageText,
-            DateTime = DateTime.UtcNow
-        };
-
-        // Сохраняем в БД
-        await _messageRepository.AddAsync(systemMessage);
-
-        // Отправляем всем участникам чата через SignalR
-        var participants = await _chatParticipantRepository.GetByChatIdAsync(chatId);
-        foreach (var participant in participants)
-        {
-            await Clients.User(participant.UserId.ToString())
-                .SendAsync(HubConstants.MessageEvents.MessageSended, systemMessage);
         }
     }
 }

@@ -208,7 +208,6 @@ namespace Poslannik.Client.Ui.Controls
             try
             {
                 await _chatService.RemoveParticipantAsync(CurrentChat.Id, userId);
-                // Обновление списка произойдет через событие OnParticipantRemovedEvent
             }
             catch (Exception ex)
             {
