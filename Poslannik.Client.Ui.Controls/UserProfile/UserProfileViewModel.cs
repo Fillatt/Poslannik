@@ -16,8 +16,10 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IUserService _userService;
         private readonly IAutorizationService _authorizationService;
         private Chat? _currentChat;
+        private Guid? _userId;
         private string _userName = string.Empty;
         private string _userLogin = string.Empty;
+        private bool _showDeleteButton;
 
         public UserProfileViewModel(
             IChatService chatService,
@@ -42,6 +44,15 @@ namespace Poslannik.Client.Ui.Controls
         }
 
         /// <summary>
+        /// ID пользователя для отображения профиля
+        /// </summary>
+        public Guid? UserId
+        {
+            get => _userId;
+            set => this.RaiseAndSetIfChanged(ref _userId, value);
+        }
+
+        /// <summary>
         /// Имя пользователя
         /// </summary>
         public string UserName
@@ -60,6 +71,15 @@ namespace Poslannik.Client.Ui.Controls
         }
 
         /// <summary>
+        /// Показывать ли кнопку удаления чата
+        /// </summary>
+        public bool ShowDeleteButton
+        {
+            get => _showDeleteButton;
+            set => this.RaiseAndSetIfChanged(ref _showDeleteButton, value);
+        }
+
+        /// <summary>
         /// Команда возврата назад
         /// </summary>
         public ReactiveCommand<Unit, Unit> NavigateBackCommand { get; }
@@ -74,22 +94,36 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         public async Task InitializeAsync()
         {
-            if (CurrentChat == null)
-                return;
+            Guid targetUserId;
 
-            var currentUserId = _authorizationService.UserId;
-            if (currentUserId == null)
-                return;
+            // Определяем ID пользователя для отображения
+            if (UserId.HasValue)
+            {
+                // Если задан UserId, используем его (для просмотра профиля участника группового чата)
+                targetUserId = UserId.Value;
+                ShowDeleteButton = false;
+            }
+            else if (CurrentChat != null)
+            {
+                // Если задан чат, определяем собеседника (для личного чата)
+                var currentUserId = _authorizationService.UserId;
+                if (currentUserId == null)
+                    return;
 
-            // Определяем ID собеседника
-            var otherUserId = currentUserId == CurrentChat.User1Id
-                ? CurrentChat.User2Id.Value
-                : CurrentChat.User1Id.Value;
+                targetUserId = currentUserId == CurrentChat.User1Id
+                    ? CurrentChat.User2Id.Value
+                    : CurrentChat.User1Id.Value;
+                ShowDeleteButton = true;
+            }
+            else
+            {
+                return;
+            }
 
             // Загружаем информацию о пользователе
             try
             {
-                var user = await _userService.GetUserByIdAsync(otherUserId);
+                var user = await _userService.GetUserByIdAsync(targetUserId);
                 if (user != null)
                 {
                     UserName = user.UserName ?? "Неизвестный пользователь";

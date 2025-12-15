@@ -70,7 +70,8 @@
                     Background="White"
                     BorderBrush="#E0E0E0"
                     BorderThickness="0,1,0,0"
-                    Padding="20">
+                    Padding="20"
+                    IsVisible="{Binding ShowDeleteButton}">
                 <Button Background="#EF3C45"
                         Foreground="White"
                         Content="Удалить чат"

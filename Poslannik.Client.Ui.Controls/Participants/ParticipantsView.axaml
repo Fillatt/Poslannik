@@ -67,7 +67,8 @@
                                 Padding="15,12"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
-                                Command="{Binding $parent[UserControl].DataContext.NavigateToUserProfileCommand}">
+                                Command="{Binding $parent[UserControl].DataContext.NavigateToUserProfileCommand}"
+                                CommandParameter="{Binding UserId}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <Border Width="40" Height="40"
                                         CornerRadius="20"

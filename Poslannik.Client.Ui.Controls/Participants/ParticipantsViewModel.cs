@@ -16,20 +16,23 @@ namespace Poslannik.Client.Ui.Controls
         private readonly IChatService _chatService;
         private readonly IUserService _userService;
         private readonly IAutorizationService _authorizationService;
+        private readonly UserProfileViewModel _userProfileViewModel;
         private Chat? _currentChat;
         private bool _isAdmin;
 
         public ParticipantsViewModel(
             IChatService chatService,
             IUserService userService,
-            IAutorizationService authorizationService)
+            IAutorizationService authorizationService,
+            UserProfileViewModel userProfileViewModel)
         {
             _chatService = chatService;
             _userService = userService;
             _authorizationService = authorizationService;
+            _userProfileViewModel = userProfileViewModel;
 
             NavigateBackCommand = ReactiveCommand.Create(OnNavigateBack);
-            NavigateToUserProfileCommand = ReactiveCommand.Create(OnNavigateToUserProfile);
+            NavigateToUserProfileCommand = ReactiveCommand.Create<Guid>(OnNavigateToUserProfile);
             AddParticipantCommand = ReactiveCommand.Create(OnAddParticipant);
             RemoveParticipantCommand = ReactiveCommand.Create<Guid>(OnRemoveParticipant);
             DeleteChatCommand = ReactiveCommand.Create(OnDeleteChat);
@@ -80,7 +83,7 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Команда перехода к профилю пользователя
         /// </summary>
-        public ReactiveCommand<Unit, Unit> NavigateToUserProfileCommand { get; }
+        public ReactiveCommand<Guid, Unit> NavigateToUserProfileCommand { get; }
 
         /// <summary>
         /// Команда добавления участника
@@ -184,8 +187,10 @@ namespace Poslannik.Client.Ui.Controls
         /// <summary>
         /// Обработчик перехода к профилю пользователя
         /// </summary>
-        private void OnNavigateToUserProfile()
+        private async void OnNavigateToUserProfile(Guid userId)
         {
+            _userProfileViewModel.UserId = userId;
+            await _userProfileViewModel.InitializeAsync();
             NavigationService.NavigateToWithHistory<UserProfileViewModel>();
         }
 
