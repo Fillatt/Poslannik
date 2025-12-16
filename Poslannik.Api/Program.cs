@@ -74,7 +74,7 @@ await userRepoImp.AddTestUserAsync("maxim", "Максим Овчинников",
 await userRepoImp.AddTestUserAsync("dima", "Дима Милавин", "123", "1Пиб-02-2оп-22");
 await userRepoImp.AddTestUserAsync("andrey", "Андрей Остроумов", "123", "1Пиб-02-2оп-22");
 await userRepoImp.AddTestUserAsync("sanya", "Александр Симаньков", "123", "1Пиб-02-2оп-22");
-await userRepoImp.AddTestUserAsync("sol", "Олег Леонидович ★", "123", "Преподаватель");
+await userRepoImp.AddTestUserAsync("sol", "Селяничев Олег Леонидович ★", "123", "Преподаватель");
 
 app.UseAuthentication();
 app.UseAuthorization();

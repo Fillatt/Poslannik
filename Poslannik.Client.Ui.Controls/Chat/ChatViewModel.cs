@@ -52,6 +52,7 @@ namespace Poslannik.Client.Ui.Controls
             // Подписываемся на событие получения нового сообщения
             _messageService.OnMessageSended += OnMessageReceived;
             _chatService.OnChatDeleted += OnChatDeleted;
+            _chatService.OnParticipantRemoved += OnParticipiantRemoved;
         }
 
         /// <summary>
@@ -296,6 +297,16 @@ namespace Poslannik.Client.Ui.Controls
                 NavigationService?.ClearNavigationStack();
                 NavigationService?.NavigateTo<ChatsViewModel>();
                 return;
+            }
+        }
+
+        private async void OnParticipiantRemoved(Guid chatId, Guid participiantId)
+        {
+            var userId = _authorizationService.UserId;
+            if(userId == participiantId && CurrentChat.Id == chatId)
+            {
+                NavigationService?.ClearNavigationStack();
+                NavigationService?.NavigateTo<ChatsViewModel>();
             }
         }
     }

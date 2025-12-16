@@ -151,7 +151,6 @@ namespace Poslannik.Client.Ui.Controls
         private void SubscribeToChatEvents()
         {
             _chatService.OnChatCreated += OnChatCreated;
-            _chatService.OnChatUpdated += OnChatUpdated;
             _chatService.OnChatDeleted += OnChatDeleted;
             _chatService.OnParticipantRemoved += OnParticipantRemoved;
         }
@@ -161,7 +160,15 @@ namespace Poslannik.Client.Ui.Controls
         /// </summary>
         private async void OnChatCreated(Chat chat)
         {
-            await LoadChatsAsync();
+            if(!Chats.Any(x => x.Id == chat.Id))
+            {
+                if (chat.ChatType == ChatType.Private)
+                {
+                    var user = _autorizationService.UserId == chat.User1Id ? await _userService.GetUserByIdAsync(chat.User2Id.Value) : await _userService.GetUserByIdAsync(chat.User1Id.Value);
+                    chat.Name = user.UserName;
+                }
+                Chats.Add(chat);
+            }
         }
 
         /// <summary>
